@@ -31,38 +31,37 @@ SkolarisInstance::SkolarisInstance(PP_Instance instance)
 :
 	pp::Instance(instance)
 {
+	m_EventHandler = make_unique<PluginEventHandler>(this);
+}
+
+SkolarisInstance::~SkolarisInstance()
+{
 }
 
 string SkolarisInstance::StringifySolution(const shared_ptr<Algorithm::ISolution> &solution)
 {
-	using namespace boost::property_tree;
-
 	if (!solution)
 		return string();
 
-	ptree data;
 	try {
+		ptree data;
 		solution->Save(data);
-	}
-	catch (exception &e) {
-		post_error(string("Error occurred while serializing solution: ") + e.what());
-		return;
-	}
-	try {
 		stringstream s;
 		json_parser::write_json(s, data);
 		return s.str();
 	}
-	catch(...) {
+	catch (exception &e) {
 		post_error(string("Unable to stringify solution: ") + e.what());
-		return;
+		return string();
+	}
+	catch(...) {
+		post_error(string("Unable to stringify solution: unknown exception"));
+		return string();
 	}
 }
 
 string SkolarisInstance::StringifyMessages() const
 {
-	using namespace boost::property_tree;
-
 	ptree errors;
 	for (auto const &e : m_Errors) {
 		ptree child;
@@ -123,8 +122,7 @@ void SkolarisInstance::LoadSchedules(const string &jsonSchedules)
 		auto storedFeasibleSolution = Store()->GetFeasibleSolution();
 		if (!storedFeasibleSolution || currentSolutionPtr->GetFitness() < storedFeasibleSolution->GetFitness()) {
 			Store()->SetFeasibleSolution();
-			auto const &apiPtr = boost::static_pointer_cast<SkolarisAPI>(getRootJSAPI());
-			apiPtr->fire_feasiblesolutionfound();
+			post_feasiblesolutionfound();
 		}
 	}
 }
@@ -157,27 +155,17 @@ void SkolarisInstance::LoadConstraints(const string &jsonConstraints)
 		Store()->GetFeasibleSolution()->MarkDirty();
 }
 
-const SkolarisInstance::controller_ptr_type &SkolarisInstance::Controller()
+IController *SkolarisInstance::Controller()
 {
 	if (!m_Controller) {
 		post_error("Skolaris plugin controller has not been initialized. Open the errors/warnings console for details.");
-		return;
+		return nullptr;
 	}
-
-	//make sure event handler is ready when controller is first requested
-	if (!m_EventHandler) {
-		auto const &apiPtr = boost::static_pointer_cast<SkolarisAPI>(getRootJSAPI());
-		m_EventHandler = make_unique<PluginEventHandler>(apiPtr);
-	}
-	return m_Controller;
+	return m_Controller.get();
 }
 
 Ctoolhu::Thread::LockingProxy<Storage::Store> SkolarisInstance::Store() const
 {
-	if (!m_Store) {
-		post_error("Skolaris plugin solution store has not been initialized. Open the errors/warnings console for details.");
-		return;
-	}
 	return Storage::LockStore(m_Store.get());
 }
 
@@ -192,7 +180,7 @@ void SkolarisInstance::Start(const string &jsonAlgorithm, bool benchmark)
 			engine.seed(rd());
 		}
 		auto algorithm = PluginAlgorithmBuilder::BuildAlgorithm(jsonAlgorithm);
-		if (Controller()->Start(move(algorithm)));
+		if (Controller()->Start(move(algorithm)))
 			post_started();
 	}
 	catch(...) {

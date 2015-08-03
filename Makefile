@@ -15,9 +15,7 @@ ifeq ($(OS),Windows_NT)
 endif
 
 PROJECTS := \
-  part1 \
-  part2 \
-
+  src 
 
 HTTPD_PY := python ../nacl_sdk/pepper_44/tools/httpd.py --no-dir-check
 

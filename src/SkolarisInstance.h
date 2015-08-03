@@ -1,6 +1,7 @@
+#include "event_handler.h"
 #include "ppapi/cpp/instance.h"
 #include "ppapi/cpp/var.h"
-#include "event_handler.h"
+#include "ppapi/cpp/var_dictionary.h"
 #include <algorithm/isolution.h>
 #include <ctoolhu/thread/proxy.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
@@ -33,7 +34,7 @@ class SkolarisInstance : public pp::Instance {
 	/// The constructor creates the plugin-side instance.
 	/// @param[in] instance the handle to the browser-side plugin instance.
 	explicit SkolarisInstance(PP_Instance instance); 
-	virtual ~SkolarisInstance() {}
+	virtual ~SkolarisInstance(); 
 
 	/// Handler for messages coming in from the browser via postMessage().  The
 	/// @a var_message can contain be any pp:Var type; for example int, string
@@ -83,14 +84,14 @@ class SkolarisInstance : public pp::Instance {
     void resume();
     void isRunning();
 
-	static std::string StringifySolution(const std::shared_ptr<Algorithm::ISolution> &);
+	std::string StringifySolution(const std::shared_ptr<Algorithm::ISolution> &);
 	std::string StringifyMessages() const; //puts errors and check fails into JSON string
-	const controller_ptr_type &Controller();
+	IController *Controller();
 	Ctoolhu::Thread::LockingProxy<Storage::Store> Store() const; //do NOT call this twice in one expression, it will cause an exception. It is an object auto-locking call!
 	void LoadData(const std::string &);
 	void LoadSchedules(const std::string &);
 	void LoadConstraints(const std::string &);
-	bool Start(const std::string &jsonAlgorithm, bool benchmark);
+	void Start(const std::string &jsonAlgorithm, bool benchmark);
 
 	controller_ptr_type m_Controller;
 	std::shared_ptr<Storage::Store> m_Store;
@@ -98,5 +99,11 @@ class SkolarisInstance : public pp::Instance {
 	std::unique_ptr<PluginEventHandler> m_EventHandler;
 	std::vector<std::string> m_Errors;
 	std::vector<boost::property_tree::ptree> m_CheckFails;
+
+	std::string m_jsonData;
+	std::string m_jsonSchedules;
+	std::string m_jsonConstraints;
+	std::string m_jsonAlgorithm;
+	bool m_benchmarkMode;
 };
 

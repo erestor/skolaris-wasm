@@ -1,4 +1,5 @@
 #include "SkolarisModule.h"
+#include "SkolarisInstance.h"
 
 SkolarisModule::SkolarisModule()
 :

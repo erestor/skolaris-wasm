@@ -1,6 +1,9 @@
 //----------------------------------------------------------------------------
 // Author:		Martin Klemsa
 //----------------------------------------------------------------------------
+#ifndef _event_handler_included_
+#define _event_handler_included_
+
 #include "gascheduler/src/timetable/timetable_events.h"
 #include "gascheduler/src/timetable/schedule_events.h"
 #include "gascheduler/src/timetable/constraint_events.h"
@@ -28,7 +31,7 @@ class PluginEventHandler :
 
   public:
 
-	PluginEventHandler(const boost::shared_ptr<SkolarisInstance> &);
+	PluginEventHandler(SkolarisInstance *);
 
 	void on(Algorithm::Events::Started *);
 	void on(Algorithm::Events::Finished *);
@@ -43,5 +46,8 @@ class PluginEventHandler :
 
   private:
 
-	boost::weak_ptr<SkolarisInstance> _browserAPI;
+	SkolarisInstance *_api;
 };
+
+#endif //file guard
+
