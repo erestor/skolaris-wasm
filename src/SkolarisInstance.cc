@@ -1,21 +1,39 @@
-#include "Skolaris.h"
-#include "SkolarisAPI.h"
-#include "../GAScheduler/src/interface/icontroller.h"
-#include "../GAScheduler/src/plugin/algorithm_builder.h"
-#include "../GAScheduler/src/plugin/controller_builder.h"
-#include "../GAScheduler/src/plugin/event_handler.h"
-#include "../GAScheduler/src/storage/store.h"
-#include "../GAScheduler/src/timetable/constraint_holder.h"
+#include "SkolarisInstance.h"
+#include "event_handler.h"
+#include "algorithm_builder.h"
+#include "controller_builder.h"
+#include "gascheduler/src/timetable/constraint_holder.h"
+#include "gascheduler/src/interface/icontroller.h"
+#include "gascheduler/src/storage/store.h"
 #include <algorithm/isolution.h>
 #include <ctoolhu/random/engine.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <sstream>
+#include <string>
 
 using namespace std;
 using namespace boost::property_tree;
 
-string Skolaris::StringifySolution(const shared_ptr<Algorithm::ISolution> &solution)
+/// The Instance class.  One of these exists for each instance of your NaCl
+/// module on the web page.  The browser will ask the Module object to create
+/// a new Instance for each occurrence of the <embed> tag that has these
+/// attributes:
+///     src="hello_tutorial.nmf"
+///     type="application/x-pnacl"
+/// To communicate with the browser, you must override HandleMessage() to
+/// receive messages from the browser, and use PostMessage() to send messages
+/// back to the browser.  Note that this interface is asynchronous.
+  
+/// The constructor creates the plugin-side instance.
+  /// @param[in] instance the handle to the browser-side plugin instance.
+SkolarisInstance::SkolarisInstance(PP_Instance instance)
+:
+	pp::Instance(instance)
+{
+}
+
+string SkolarisInstance::StringifySolution(const shared_ptr<Algorithm::ISolution> &solution)
 {
 	using namespace boost::property_tree;
 
@@ -27,7 +45,8 @@ string Skolaris::StringifySolution(const shared_ptr<Algorithm::ISolution> &solut
 		solution->Save(data);
 	}
 	catch (exception &e) {
-		throw FB::script_error(string("Error occurred while serializing solution: ") + e.what());
+		post_error(string("Error occurred while serializing solution: ") + e.what());
+		return;
 	}
 	try {
 		stringstream s;
@@ -35,11 +54,12 @@ string Skolaris::StringifySolution(const shared_ptr<Algorithm::ISolution> &solut
 		return s.str();
 	}
 	catch(...) {
-		throw FB::script_error("Unable to stringify solution");
+		post_error(string("Unable to stringify solution: ") + e.what());
+		return;
 	}
 }
 
-string Skolaris::StringifyMessages() const
+string SkolarisInstance::StringifyMessages() const
 {
 	using namespace boost::property_tree;
 
@@ -62,7 +82,7 @@ string Skolaris::StringifyMessages() const
 }
 
 //====================================================================================================================
-void Skolaris::LoadData(const string &jsonData)
+void SkolarisInstance::LoadData(const string &jsonData)
 {
 	m_Errors.clear();
 	m_CheckFails.clear();
@@ -71,18 +91,20 @@ void Skolaris::LoadData(const string &jsonData)
 	m_Controller = b.BuildController(m_Store, m_ConstraintHolder, m_CheckFails);
 }
 
-void Skolaris::LoadSchedules(const string &jsonSchedules)
+void SkolarisInstance::LoadSchedules(const string &jsonSchedules)
 {
-	if (Controller()->IsRunning())
-		throw FB::script_error("Cannot load schedules while search is running");
-
+	if (Controller()->IsRunning()) {
+		post_error("Cannot load schedules while search is running");
+		return;
+	}
 	ptree schedules;
 	try {
 		stringstream s(jsonSchedules);
 		json_parser::read_json(s, schedules);
 	}
 	catch(...) {
-		throw FB::script_error("Unable to parse schedules");
+		post_error("Unable to parse schedules");
+		return;
 	}
 	auto currentSolutionPtr = Store()->GetCurrentSolution();
 	auto backup = currentSolutionPtr->Clone();
@@ -91,7 +113,8 @@ void Skolaris::LoadSchedules(const string &jsonSchedules)
 	}
 	catch(...) {
 		backup->CopyTo(currentSolutionPtr.get());
-		throw FB::script_error("Unable to load schedules");
+		post_error("Unable to load schedules");
+		return;
 	}
 	if (currentSolutionPtr->GetFitness() < Store()->GetBestSolution()->GetFitness())
 		Store()->SetBestSolution();
@@ -106,24 +129,27 @@ void Skolaris::LoadSchedules(const string &jsonSchedules)
 	}
 }
 
-void Skolaris::LoadConstraints(const string &jsonConstraints)
+void SkolarisInstance::LoadConstraints(const string &jsonConstraints)
 {
-	if (Controller()->IsRunning())
-		throw FB::script_error("Cannot load constraints while search is running");
-
+	if (Controller()->IsRunning()) {
+		post_error("Cannot load constraints while search is running");
+		return;
+	}
 	ptree constraints;
 	try {
 		stringstream s(jsonConstraints);
 		json_parser::read_json(s, constraints);
 	}
 	catch(...) {
-		throw FB::script_error("Unable to parse constraints");
+		post_error("Unable to parse constraints");
+		return;
 	}
 	try {
 		m_ConstraintHolder->LoadConstraints(constraints);
 	}
 	catch(...) {
-		throw FB::script_error("Unable to load constraints");
+		post_error("Unable to load constraints");
+		return;
 	}
 	Store()->GetCurrentSolution()->MarkDirty();
 	Store()->GetBestSolution()->MarkDirty();
@@ -131,10 +157,12 @@ void Skolaris::LoadConstraints(const string &jsonConstraints)
 		Store()->GetFeasibleSolution()->MarkDirty();
 }
 
-const Skolaris::controller_ptr_type &Skolaris::Controller()
+const SkolarisInstance::controller_ptr_type &SkolarisInstance::Controller()
 {
-	if (!m_Controller)
-		throw FB::script_error("Skolaris plugin controller has not been initialized. Open the errors/warnings console for details.");
+	if (!m_Controller) {
+		post_error("Skolaris plugin controller has not been initialized. Open the errors/warnings console for details.");
+		return;
+	}
 
 	//make sure event handler is ready when controller is first requested
 	if (!m_EventHandler) {
@@ -144,15 +172,16 @@ const Skolaris::controller_ptr_type &Skolaris::Controller()
 	return m_Controller;
 }
 
-Ctoolhu::Thread::LockingProxy<Storage::Store> Skolaris::Store() const
+Ctoolhu::Thread::LockingProxy<Storage::Store> SkolarisInstance::Store() const
 {
-	if (!m_Store)
-		throw FB::script_error("Skolaris plugin solution store has not been initialized. Open the errors/warnings console for details.");
-
+	if (!m_Store) {
+		post_error("Skolaris plugin solution store has not been initialized. Open the errors/warnings console for details.");
+		return;
+	}
 	return Storage::LockStore(m_Store.get());
 }
 
-bool Skolaris::Start(const string &jsonAlgorithm, bool benchmark)
+void SkolarisInstance::Start(const string &jsonAlgorithm, bool benchmark)
 {
 	try {
 		auto &engine = Ctoolhu::Random::Private::SingleRandomEngine::Instance();
@@ -163,9 +192,10 @@ bool Skolaris::Start(const string &jsonAlgorithm, bool benchmark)
 			engine.seed(rd());
 		}
 		auto algorithm = PluginAlgorithmBuilder::BuildAlgorithm(jsonAlgorithm);
-		return Controller()->Start(move(algorithm));
+		if (Controller()->Start(move(algorithm)));
+			post_started();
 	}
 	catch(...) {
-		throw FB::script_error("Unable to start search");
+		post_error("Unable to start search");
 	}
 }

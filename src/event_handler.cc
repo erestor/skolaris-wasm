@@ -20,36 +20,36 @@ void PluginEventHandler::on(Algorithm::Events::Started *ev)
 		stringstream s;
 		s << endl << "Executing " << ev->algorithmName << "..." << endl
 				<< "Initial fitness: " << ev->currentSolutionPtr->GetFitness() << (ev->currentSolutionPtr->IsFeasible() ? "F " : "") << endl;
-		api->fire_textoutput(s.str());
+		api->post_text(s.str());
 	}
 }
 
 void PluginEventHandler::on(Algorithm::Events::Finished *)
 {
 	if (auto api = _browserAPI.lock())
-		api->fire_textoutput("\n");
+		api->post_text("\n");
 }
 
 void PluginEventHandler::on(Algorithm::Events::BestSolutionFound *ev)
 {
 	if (auto api = _browserAPI.lock()) {
-		api->fire_bestsolutionfound();
+		api->post_bestsolutionfound();
 		stringstream s;
 		s << " " << ev->solutionPtr->GetFitness() << (ev->solutionPtr->IsFeasible() ? "F " : " ");
-		api->fire_textoutput(s.str());
+		api->post_text(s.str());
 	}
 }
 
 void PluginEventHandler::on(Algorithm::Events::FeasibleSolutionFound *ev)
 {
 	if (auto api = _browserAPI.lock())
-		api->fire_feasiblesolutionfound();
+		api->post_feasiblesolutionfound();
 }
 
 void PluginEventHandler::on(Algorithm::RNA::Events::Tick *)
 {
 	if (auto api = _browserAPI.lock())
-		api->fire_textoutput("*");
+		api->post_text("*");
 }
 
 void PluginEventHandler::on(Algorithm::TabuSearch::Events::AfterTabuSearchStep *ev)
@@ -57,7 +57,7 @@ void PluginEventHandler::on(Algorithm::TabuSearch::Events::AfterTabuSearchStep *
 	if (auto api = _browserAPI.lock()) {
 		stringstream s;
 		s << ev->stepDescription.data() << " (" << ev->currentSolutionPtr->GetFitness() << ")" << endl;
-		api->fire_textoutput(s.str());
+		api->post_text(s.str());
 	}
 }
 
@@ -72,19 +72,19 @@ void PluginEventHandler::on(Control::Events::ThreadFinished *ev)
 	char formatted[13];
 	sprintf(formatted, "%02d:%02d:%02d.%03d", h, m, s, ms);
 	if (auto api = _browserAPI.lock())
-		api->fire_searchfinished(h, m, s, ms, formatted);
+		api->post_stopped(h, m, s, ms, formatted);
 }
 
 void PluginEventHandler::on(Control::Events::Paused *)
 {
 	if (auto api = _browserAPI.lock())
-		api->fire_paused();
+		api->post_paused();
 }
 
 void PluginEventHandler::on(Control::Events::Resumed *)
 {
 	if (auto api = _browserAPI.lock())
-		api->fire_resumed();
+		api->post_resumed();
 }
 
 void PluginEventHandler::on(Timetabling::Constraints::Events::AlphaChanged *ev)
@@ -92,6 +92,6 @@ void PluginEventHandler::on(Timetabling::Constraints::Events::AlphaChanged *ev)
 	if (auto api = _browserAPI.lock()) {
 		char formatted[256];
 		snprintf(formatted, 255, "Constraint: %s, alpha: %0.2f -> %0.2f\n", ev->constraintPtr->GetName().data(), ev->oldAlpha, ev->newAlpha);
-		api->fire_textoutput(formatted);
+		api->post_text(formatted);
 	}
 }
