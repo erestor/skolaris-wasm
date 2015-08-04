@@ -58,40 +58,37 @@ class SkolarisInstance : public pp::Instance {
 	void post_message(const std::string &type);
 	void post_message(const std::string &type, const pp::Var &payload);
 
-	void post_error(const std::string &what);
+	void post_message(int requestId, const std::string &type);
+	void post_message(int requestId, const std::string &type, const pp::Var &payload);
+
+	void post_complete(int requestId);
+	void post_error(int requestId, const std::string &what);
 	void post_version();
-	void post_majorversion();
-	void post_minorversion();
-	void post_patchversion();
-    void post_currentsolution();
-    void post_bestsolution();
-    void post_feasiblesolution();
+    void post_currentsolution(int requestId);
+    void post_bestsolution(int requestId);
+    void post_feasiblesolution(int requestId);
     void post_messages();
 
-	void post_started();
-	void post_isrunning();
+	void post_started(int requestId);
+//	void post_isrunning();
 
-    void set_jsonData(const std::string &);
-    void set_jsonSchedules(const std::string &);
-    void set_jsonConstraints(const std::string &);
-    void set_jsonAlgorithm(const std::string &);
-    void set_benchmarkMode(bool);
+    void set_jsonData(const std::string &, int requestId);
+    void set_jsonSchedules(const std::string &, int requestId);
+    void set_jsonConstraints(const std::string &, int requestId);
+    void set_algorithm(const pp:Var &);
 
     //algorithm control
-    void start();
+    void start(int requestId);
     void stop();
     void pause();
     void resume();
-    void isRunning();
+//	void isRunning();
 
-	std::string StringifySolution(const std::shared_ptr<Algorithm::ISolution> &);
+	bool StringifySolution(string &result, const std::shared_ptr<Algorithm::ISolution> &);
 	std::string StringifyMessages() const; //puts errors and check fails into JSON string
 	IController *Controller();
 	Ctoolhu::Thread::LockingProxy<Storage::Store> Store() const; //do NOT call this twice in one expression, it will cause an exception. It is an object auto-locking call!
-	void LoadData(const std::string &);
-	void LoadSchedules(const std::string &);
-	void LoadConstraints(const std::string &);
-	void Start(const std::string &jsonAlgorithm, bool benchmark);
+	bool Start();
 
 	controller_ptr_type m_Controller;
 	std::shared_ptr<Storage::Store> m_Store;
@@ -100,9 +97,6 @@ class SkolarisInstance : public pp::Instance {
 	std::vector<std::string> m_Errors;
 	std::vector<boost::property_tree::ptree> m_CheckFails;
 
-	std::string m_jsonData;
-	std::string m_jsonSchedules;
-	std::string m_jsonConstraints;
 	std::string m_jsonAlgorithm;
 	bool m_benchmarkMode;
 };

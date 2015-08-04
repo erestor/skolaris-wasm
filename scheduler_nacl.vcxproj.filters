@@ -33,7 +33,16 @@
     <ClCompile Include="src\SkolarisModule.cc">
       <Filter>Source Files\src</Filter>
     </ClCompile>
-    <ClCompile Include="src\SkolarisInstanceAPI.cc">
+    <ClCompile Include="src\SkolarisInstance_post.cc">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SkolarisInstance_control.cc">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SkolarisInstance_handle.cc">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SkolarisInstance_set.cc">
       <Filter>Source Files\src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -45,12 +54,6 @@
       <Filter>Source Files\src</Filter>
     </ClInclude>
     <ClInclude Include="src\event_handler.h">
-      <Filter>Source Files\src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Skolaris.h">
-      <Filter>Source Files\src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\SkolarisAPI.h">
       <Filter>Source Files\src</Filter>
     </ClInclude>
     <ClInclude Include="src\SkolarisInstance.h">

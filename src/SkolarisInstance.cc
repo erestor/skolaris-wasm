@@ -1,7 +1,6 @@
 #include "SkolarisInstance.h"
 #include "event_handler.h"
 #include "algorithm_builder.h"
-#include "controller_builder.h"
 #include "gascheduler/src/timetable/constraint_holder.h"
 #include "gascheduler/src/interface/icontroller.h"
 #include "gascheduler/src/storage/store.h"
@@ -38,26 +37,27 @@ SkolarisInstance::~SkolarisInstance()
 {
 }
 
-string SkolarisInstance::StringifySolution(const shared_ptr<Algorithm::ISolution> &solution)
+bool SkolarisInstance::StringifySolution(string &result, const shared_ptr<Algorithm::ISolution> &solution)
 {
-	if (!solution)
-		return string();
-
+	if (!solution) {
+		result = "Unable to stringify solution: input is null";
+		return false;
+	}
 	try {
 		ptree data;
 		solution->Save(data);
 		stringstream s;
 		json_parser::write_json(s, data);
-		return s.str();
+		result = s.str();
+		return true;
 	}
 	catch (exception &e) {
-		post_error(string("Unable to stringify solution: ") + e.what());
-		return string();
+		result = "Unable to stringify solution: " + e.what();
 	}
 	catch(...) {
-		post_error(string("Unable to stringify solution: unknown exception"));
-		return string();
+		result = "Unable to stringify solution: unknown exception";
 	}
+	return false;
 }
 
 string SkolarisInstance::StringifyMessages() const
@@ -81,84 +81,10 @@ string SkolarisInstance::StringifyMessages() const
 }
 
 //====================================================================================================================
-void SkolarisInstance::LoadData(const string &jsonData)
-{
-	m_Errors.clear();
-	m_CheckFails.clear();
-	int maxTime = 5; //has no effect at the moment
-	PluginControllerBuilder b { jsonData, maxTime, m_Errors };
-	m_Controller = b.BuildController(m_Store, m_ConstraintHolder, m_CheckFails);
-}
-
-void SkolarisInstance::LoadSchedules(const string &jsonSchedules)
-{
-	if (Controller()->IsRunning()) {
-		post_error("Cannot load schedules while search is running");
-		return;
-	}
-	ptree schedules;
-	try {
-		stringstream s(jsonSchedules);
-		json_parser::read_json(s, schedules);
-	}
-	catch(...) {
-		post_error("Unable to parse schedules");
-		return;
-	}
-	auto currentSolutionPtr = Store()->GetCurrentSolution();
-	auto backup = currentSolutionPtr->Clone();
-	try {
-		currentSolutionPtr->Load(schedules);
-	}
-	catch(...) {
-		backup->CopyTo(currentSolutionPtr.get());
-		post_error("Unable to load schedules");
-		return;
-	}
-	if (currentSolutionPtr->GetFitness() < Store()->GetBestSolution()->GetFitness())
-		Store()->SetBestSolution();
-
-	if (currentSolutionPtr->IsFeasible()) {
-		auto storedFeasibleSolution = Store()->GetFeasibleSolution();
-		if (!storedFeasibleSolution || currentSolutionPtr->GetFitness() < storedFeasibleSolution->GetFitness()) {
-			Store()->SetFeasibleSolution();
-			post_feasiblesolutionfound();
-		}
-	}
-}
-
-void SkolarisInstance::LoadConstraints(const string &jsonConstraints)
-{
-	if (Controller()->IsRunning()) {
-		post_error("Cannot load constraints while search is running");
-		return;
-	}
-	ptree constraints;
-	try {
-		stringstream s(jsonConstraints);
-		json_parser::read_json(s, constraints);
-	}
-	catch(...) {
-		post_error("Unable to parse constraints");
-		return;
-	}
-	try {
-		m_ConstraintHolder->LoadConstraints(constraints);
-	}
-	catch(...) {
-		post_error("Unable to load constraints");
-		return;
-	}
-	Store()->GetCurrentSolution()->MarkDirty();
-	Store()->GetBestSolution()->MarkDirty();
-	if (Store()->GetFeasibleSolution())
-		Store()->GetFeasibleSolution()->MarkDirty();
-}
-
 IController *SkolarisInstance::Controller()
 {
 	if (!m_Controller) {
-		post_error("Skolaris plugin controller has not been initialized. Open the errors/warnings console for details.");
+		post_error(0, "Skolaris plugin controller has not been initialized. Open the errors/warnings console for details.");
 		return nullptr;
 	}
 	return m_Controller.get();
@@ -169,21 +95,20 @@ Ctoolhu::Thread::LockingProxy<Storage::Store> SkolarisInstance::Store() const
 	return Storage::LockStore(m_Store.get());
 }
 
-void SkolarisInstance::Start(const string &jsonAlgorithm, bool benchmark)
+bool SkolarisInstance::Start()
 {
 	try {
 		auto &engine = Ctoolhu::Random::Private::SingleRandomEngine::Instance();
-		if (benchmark)
+		if (m_benchmarkMode)
 			engine.seed(0);
 		else {
 			random_device rd;
 			engine.seed(rd());
 		}
-		auto algorithm = PluginAlgorithmBuilder::BuildAlgorithm(jsonAlgorithm);
-		if (Controller()->Start(move(algorithm)))
-			post_started();
+		auto algorithm = PluginAlgorithmBuilder::BuildAlgorithm(m_jsonAlgorithm);
+		return Controller()->Start(move(algorithm));
 	}
 	catch(...) {
-		post_error("Unable to start search");
+		return false;
 	}
 }
