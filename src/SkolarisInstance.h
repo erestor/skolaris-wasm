@@ -63,7 +63,7 @@ class SkolarisInstance : public pp::Instance {
 
 	void post_complete(int requestId);
 	void post_error(int requestId, const std::string &what);
-	void post_version();
+	void post_version(int requestId);
     void post_currentsolution(int requestId);
     void post_bestsolution(int requestId);
     void post_feasiblesolution(int requestId);

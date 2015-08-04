@@ -30,15 +30,13 @@ void SkolarisInstance::handleGetMessage(const pp::VarDictionary &dict)
 	auto t = target.AsString();
 	auto requestId = dict.Get(pp::Var("reqId")).AsInt();
 	if (t == "version")
-		post_version();
+		post_version(requestId);
 	else if (t == "currentsolution")
 		post_currentsolution(requestId);
 	else if (t == "bestsolution")
 		post_bestsolution(requestId);
 	else if (t == "feasiblesolution")
 		post_feasiblesolution(requestId);
-//	else if (t == "isRunning")
-//		post_isrunning();
 }
 
 void SkolarisInstance::handleSetMessage(const pp::VarDictionary &dict)
@@ -74,3 +72,4 @@ void SkolarisInstance::handleControlMessage(const pp::VarDictionary &dict)
 	else if (t == "stop")
 		stop();
 }
+

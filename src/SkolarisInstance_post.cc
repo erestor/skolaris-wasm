@@ -14,6 +14,13 @@ const string SKOLARIS_VERSION_MAJOR("1");
 const string SKOLARIS_VERSION_MINOR("5");
 const string SKOLARIS_VERSION_PATCH("1");
 
+void SkolarisInstance::post_complete(int requestId)
+{
+	pp::VarDictionary dictionary;
+	dictionary.Set("reqId", requestId);
+	PostMessage(dictionary);
+}
+
 void SkolarisInstance::post_message(const std::string &type)
 {
 	pp::VarDictionary dictionary;
@@ -56,21 +63,14 @@ void SkolarisInstance::post_text(const std::string &what)
 	post_message("text", pp::Var(what));
 }
 
-void SkolarisInstance::post_complete(int requestId)
-{
-	pp::VarDictionary dictionary;
-	dictionary.Set("reqId", requestId);
-	PostMessage(dictionary);
-}
-
-void SkolarisInstance::post_version()
+void SkolarisInstance::post_version(int requestId)
 {
 	pp::VarDictionary dict;
 	dict.Set("version", SKOLARIS_VERSION);
 	dict.Set("major", SKOLARIS_VERSION_MAJOR);
 	dict.Set("minor", SKOLARIS_VERSION_MINOR);
 	dict.Set("patch", SKOLARIS_VERSION_PATCH);
-	post_message("version", dict);
+	post_message(requestId, "version", dict);
 }
 
 
