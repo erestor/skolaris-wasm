@@ -28,16 +28,17 @@ void SkolarisInstance::handleGetMessage(const pp::VarDictionary &dict)
 {
 	auto target = dict.Get(pp::Var("target"));
 	auto t = target.AsString();
+	auto requestId = dict.Get(pp::Var("reqId")).AsInt();
 	if (t == "version")
 		post_version();
 	else if (t == "currentsolution")
-		post_currentsolution();
+		post_currentsolution(requestId);
 	else if (t == "bestsolution")
-		post_bestsolution();
+		post_bestsolution(requestId);
 	else if (t == "feasiblesolution")
-		post_feasiblesolution();
-	else if (t == "isRunning")
-		post_isrunning();
+		post_feasiblesolution(requestId);
+//	else if (t == "isRunning")
+//		post_isrunning();
 }
 
 void SkolarisInstance::handleSetMessage(const pp::VarDictionary &dict)
@@ -46,16 +47,16 @@ void SkolarisInstance::handleSetMessage(const pp::VarDictionary &dict)
 	auto payload = dict.Get(pp::Var("payload"));
 	auto t = target.AsString();
 	auto p = payload.AsString();
+	auto requestId = dict.Get(pp::Var("reqId")).AsInt();
 	if (t == "jsonData")
 		set_jsonData(p);
 	else if (t == "jsonSchedules")
-		set_jsonSchedules(p);
+		set_jsonSchedules(p, requestId);
 	else if (t == "jsonConstraints")
-		set_jsonConstraints(p);
+		set_jsonConstraints(p, requestId);
 	else if (t == "algorithm")
 		set_algorithm(payload);
 
-	auto requestId = dict.Get(pp::Var("reqId")).AsInt();
 	post_complete(requestId);
 }
 
@@ -63,8 +64,9 @@ void SkolarisInstance::handleControlMessage(const pp::VarDictionary &dict)
 {
 	auto target = dict.Get(pp::Var("target"));
 	auto t = target.AsString();
+	auto requestId = dict.Get(pp::Var("reqId")).AsInt();
 	if (t == "start")
-		start();
+		start(requestId);
 	else if (t == "pause")
 		pause();
 	else if (t == "resume")

@@ -72,10 +72,10 @@ class SkolarisInstance : public pp::Instance {
 	void post_started(int requestId);
 //	void post_isrunning();
 
-    void set_jsonData(const std::string &, int requestId);
+    void set_jsonData(const std::string &);
     void set_jsonSchedules(const std::string &, int requestId);
     void set_jsonConstraints(const std::string &, int requestId);
-    void set_algorithm(const pp:Var &);
+    void set_algorithm(const pp::Var &);
 
     //algorithm control
     void start(int requestId);
@@ -84,7 +84,7 @@ class SkolarisInstance : public pp::Instance {
     void resume();
 //	void isRunning();
 
-	bool StringifySolution(string &result, const std::shared_ptr<Algorithm::ISolution> &);
+	bool StringifySolution(std::string &result, const std::shared_ptr<Algorithm::ISolution> &);
 	std::string StringifyMessages() const; //puts errors and check fails into JSON string
 	IController *Controller();
 	Ctoolhu::Thread::LockingProxy<Storage::Store> Store() const; //do NOT call this twice in one expression, it will cause an exception. It is an object auto-locking call!

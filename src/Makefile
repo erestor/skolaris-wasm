@@ -49,3 +49,6 @@ endif
 
 $(eval $(call NMF_RULE,$(TARGET),))
 
+copy:
+	cp pnacl/Release/skolaris.* ~/Public
+

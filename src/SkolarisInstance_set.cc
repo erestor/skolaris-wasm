@@ -2,6 +2,7 @@
 #include "controller_builder.h"
 #include "gascheduler/src/interface/icontroller.h"
 #include "gascheduler/src/storage/store.h"
+#include "gascheduler/src/timetable/constraint_holder.h"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <string>
@@ -84,8 +85,9 @@ void SkolarisInstance::set_jsonConstraints(const string &jsonConstraints, int re
 		Store()->GetFeasibleSolution()->MarkDirty();
 }
 
-void SkolarisInstance::set_algorithm(const pp:Var &payload)
+void SkolarisInstance::set_algorithm(const pp::Var &payload)
 {
-	m_jsonAlgorithm = payload.Get("algorithm").AsString();
-    m_benchmarkMode = payload.Get("benchmark").AsBool();
+	pp::VarDictionary dict(payload);
+	m_jsonAlgorithm = dict.Get("algorithm").AsString();
+    m_benchmarkMode = dict.Get("benchmark").AsBool();
 }

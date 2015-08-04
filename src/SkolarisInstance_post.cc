@@ -17,32 +17,32 @@ const string SKOLARIS_VERSION_PATCH("1");
 void SkolarisInstance::post_message(const std::string &type)
 {
 	pp::VarDictionary dictionary;
-	dictionary.Set(pp::Var("type"), type);
+	dictionary.Set("type", type);
 	PostMessage(dictionary);
 }
 
 void SkolarisInstance::post_message(const std::string &type, const pp::Var &payload)
 {
 	pp::VarDictionary dictionary;
-	dictionary.Set(pp::Var("type"), type);
-	dictionary.Set(pp::Var("payload"), payload);
+	dictionary.Set("type", type);
+	dictionary.Set("payload", payload);
 	PostMessage(dictionary);
 }
 
 void SkolarisInstance::post_message(int requestId, const std::string &type)
 {
 	pp::VarDictionary dictionary;
-	dictionary.Set(pp::Var("reqId"), requestId);
-	dictionary.Set(pp::Var("type"), type);
+	dictionary.Set("reqId", requestId);
+	dictionary.Set("type", type);
 	PostMessage(dictionary);
 }
 
 void SkolarisInstance::post_message(int requestId, const std::string &type, const pp::Var &payload)
 {
 	pp::VarDictionary dictionary;
-	dictionary.Set(pp::Var("reqId"), requestId);
-	dictionary.Set(pp::Var("type"), type);
-	dictionary.Set(pp::Var("payload"), payload);
+	dictionary.Set("reqId", requestId);
+	dictionary.Set("type", type);
+	dictionary.Set("payload", payload);
 	PostMessage(dictionary);
 }
 
@@ -59,17 +59,17 @@ void SkolarisInstance::post_text(const std::string &what)
 void SkolarisInstance::post_complete(int requestId)
 {
 	pp::VarDictionary dictionary;
-	dictionary.Set(pp::Var("reqId"), requestId);
+	dictionary.Set("reqId", requestId);
 	PostMessage(dictionary);
 }
 
 void SkolarisInstance::post_version()
 {
 	pp::VarDictionary dict;
-	dict.Set(pp::Var("version"), SKOLARIS_VERSION);
-	dict.Set(pp::Var("major"), SKOLARIS_VERSION_MAJOR);
-	dict.Set(pp::Var("minor"), SKOLARIS_VERSION_MINOR);
-	dict.Set(pp::Var("patch"), SKOLARIS_VERSION_PATCH);
+	dict.Set("version", SKOLARIS_VERSION);
+	dict.Set("major", SKOLARIS_VERSION_MAJOR);
+	dict.Set("minor", SKOLARIS_VERSION_MINOR);
+	dict.Set("patch", SKOLARIS_VERSION_PATCH);
 	post_message("version", dict);
 }
 
@@ -141,10 +141,10 @@ void SkolarisInstance::post_resumed()
 void SkolarisInstance::post_stopped(int h, int m, int s, int ms, const std::string &formatted)
 {
 	pp::VarDictionary timeDict;
-	timeDict.Set(pp::Var("h"), h);
-	timeDict.Set(pp::Var("m"), m);
-	timeDict.Set(pp::Var("s"), s);
-	timeDict.Set(pp::Var("ms"), ms);
-	timeDict.Set(pp::Var("formatted"), formatted);
+	timeDict.Set("h", h);
+	timeDict.Set("m", m);
+	timeDict.Set("s", s);
+	timeDict.Set("ms", ms);
+	timeDict.Set("formatted", formatted);
 	post_message("stopped", timeDict);
 }

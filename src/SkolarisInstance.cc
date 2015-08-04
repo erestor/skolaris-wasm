@@ -52,7 +52,7 @@ bool SkolarisInstance::StringifySolution(string &result, const shared_ptr<Algori
 		return true;
 	}
 	catch (exception &e) {
-		result = "Unable to stringify solution: " + e.what();
+		result = string("Unable to stringify solution: ") + e.what();
 	}
 	catch(...) {
 		result = "Unable to stringify solution: unknown exception";
