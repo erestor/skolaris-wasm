@@ -31,6 +31,10 @@ void SkolarisInstance::set_jsonSchedules(const string &jsonSchedules, int reques
 		stringstream s(jsonSchedules);
 		json_parser::read_json(s, schedules);
 	}
+	catch (const exception &e) {
+		post_error(requestId, string("Unable to parse schedules: ") + e.what());
+		return;
+	}
 	catch(...) {
 		post_error(requestId, "Unable to parse schedules");
 		return;
@@ -39,6 +43,11 @@ void SkolarisInstance::set_jsonSchedules(const string &jsonSchedules, int reques
 	auto backup = currentSolutionPtr->Clone();
 	try {
 		currentSolutionPtr->Load(schedules);
+	}
+	catch (const exception &e) {
+		backup->CopyTo(currentSolutionPtr.get());
+		post_error(requestId, string("Unable to load schedules: ") + e.what());
+		return;
 	}
 	catch(...) {
 		backup->CopyTo(currentSolutionPtr.get());
