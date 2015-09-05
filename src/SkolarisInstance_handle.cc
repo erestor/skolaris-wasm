@@ -48,10 +48,14 @@ void SkolarisInstance::handleSetMessage(const pp::VarDictionary &dict)
 	auto requestId = dict.Get(pp::Var("reqId")).AsInt();
 	if (t == "jsonData")
 		set_jsonData(p);
-	else if (t == "jsonSchedules")
-		set_jsonSchedules(p, requestId);
-	else if (t == "jsonConstraints")
-		set_jsonConstraints(p, requestId);
+	else if (t == "jsonSchedules") {
+		if (!set_jsonSchedules(p, requestId))
+			return;
+	}
+	else if (t == "jsonConstraints") {
+		if (!set_jsonConstraints(p, requestId))
+			return;
+	}
 	else if (t == "algorithm")
 		set_algorithm(payload);
 

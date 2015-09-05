@@ -20,11 +20,11 @@ void SkolarisInstance::set_jsonData(const string &jsonData)
 	post_messages();
 }
 
-void SkolarisInstance::set_jsonSchedules(const string &jsonSchedules, int requestId)
+bool SkolarisInstance::set_jsonSchedules(const string &jsonSchedules, int requestId)
 {
 	if (Controller()->IsRunning()) {
 		post_error(requestId, "Cannot load schedules while search is running");
-		return;
+		return false;
 	}
 	ptree schedules;
 	try {
@@ -33,11 +33,11 @@ void SkolarisInstance::set_jsonSchedules(const string &jsonSchedules, int reques
 	}
 	catch (const exception &e) {
 		post_error(requestId, string("Unable to parse schedules: ") + e.what());
-		return;
+		return false;
 	}
 	catch(...) {
 		post_error(requestId, "Unable to parse schedules");
-		return;
+		return false;
 	}
 	auto currentSolutionPtr = Store()->GetCurrentSolution();
 	auto backup = currentSolutionPtr->Clone();
@@ -47,12 +47,12 @@ void SkolarisInstance::set_jsonSchedules(const string &jsonSchedules, int reques
 	catch (const exception &e) {
 		backup->CopyTo(currentSolutionPtr.get());
 		post_error(requestId, string("Unable to load schedules: ") + e.what());
-		return;
+		return false;
 	}
 	catch(...) {
 		backup->CopyTo(currentSolutionPtr.get());
 		post_error(requestId, "Unable to load schedules");
-		return;
+		return false;
 	}
 	if (currentSolutionPtr->GetFitness() < Store()->GetBestSolution()->GetFitness())
 		Store()->SetBestSolution();
@@ -64,13 +64,14 @@ void SkolarisInstance::set_jsonSchedules(const string &jsonSchedules, int reques
 			post_feasiblesolutionfound();
 		}
 	}
+	return true;
 }
 
-void SkolarisInstance::set_jsonConstraints(const string &jsonConstraints, int requestId)
+bool SkolarisInstance::set_jsonConstraints(const string &jsonConstraints, int requestId)
 {
 	if (Controller()->IsRunning()) {
 		post_error(requestId, "Cannot load constraints while search is running");
-		return;
+		return false;
 	}
 	ptree constraints;
 	try {
@@ -79,19 +80,21 @@ void SkolarisInstance::set_jsonConstraints(const string &jsonConstraints, int re
 	}
 	catch(...) {
 		post_error(requestId, "Unable to parse constraints");
-		return;
+		return false;
 	}
 	try {
 		m_ConstraintHolder->LoadConstraints(constraints);
 	}
 	catch(...) {
 		post_error(requestId, "Unable to load constraints");
-		return;
+		return false;
 	}
 	Store()->GetCurrentSolution()->MarkDirty();
 	Store()->GetBestSolution()->MarkDirty();
 	if (Store()->GetFeasibleSolution())
 		Store()->GetFeasibleSolution()->MarkDirty();
+
+	return true;
 }
 
 void SkolarisInstance::set_algorithm(const pp::Var &payload)

@@ -73,8 +73,8 @@ class SkolarisInstance : public pp::Instance {
 //	void post_isrunning();
 
     void set_jsonData(const std::string &);
-    void set_jsonSchedules(const std::string &, int requestId);
-    void set_jsonConstraints(const std::string &, int requestId);
+    bool set_jsonSchedules(const std::string &, int requestId);
+    bool set_jsonConstraints(const std::string &, int requestId);
     void set_algorithm(const pp::Var &);
 
     //algorithm control
