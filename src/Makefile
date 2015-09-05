@@ -25,6 +25,8 @@ NOLOCALTYPEDEF = no-unused-local-typedef
 
 CFLAGS = -Wall -W${NOLOCALTYPEDEF} -std=gnu++14 ${INCDIRS}
 
+LDFLAGS = --pnacl-exceptions=sjlj
+
 SOURCES = $(wildcard *.cc) \
 	$(wildcard gascheduler/src/*.cpp) \
 	$(wildcard gascheduler/src/matrix/*.cpp) \
