@@ -70,9 +70,8 @@ class SkolarisInstance : public pp::Instance {
     void post_messages();
 
 	void post_started(int requestId);
-//	void post_isrunning();
 
-    void set_jsonData(const std::string &);
+    bool set_jsonData(const std::string &, int requestId);
     bool set_jsonSchedules(const std::string &, int requestId);
     bool set_jsonConstraints(const std::string &, int requestId);
     void set_algorithm(const pp::Var &);
@@ -82,7 +81,6 @@ class SkolarisInstance : public pp::Instance {
     void stop();
     void pause();
     void resume();
-//	void isRunning();
 
 	bool StringifySolution(std::string &result, const std::shared_ptr<Algorithm::ISolution> &);
 	std::string StringifyMessages() const; //puts errors and check fails into JSON string

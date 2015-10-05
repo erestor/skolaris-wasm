@@ -4,7 +4,7 @@
 
 using namespace std;
 
-const string SKOLARIS_VERSION("1.5.2" //keep in sync with 'currentVersion' in SkolarisUI/SkolarisUI.Web/App/config/plugin.js
+const string SKOLARIS_VERSION("1.5.3" //keep in sync with 'currentVersion' in SkolarisUI/SkolarisUI.Web/App/config/plugin.js
 #ifdef DEBUG
 	"debug"
 #endif
@@ -12,7 +12,7 @@ const string SKOLARIS_VERSION("1.5.2" //keep in sync with 'currentVersion' in Sk
 
 const string SKOLARIS_VERSION_MAJOR("1");
 const string SKOLARIS_VERSION_MINOR("5");
-const string SKOLARIS_VERSION_PATCH("2");
+const string SKOLARIS_VERSION_PATCH("3");
 
 void SkolarisInstance::post_complete(int requestId)
 {

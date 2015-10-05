@@ -46,8 +46,10 @@ void SkolarisInstance::handleSetMessage(const pp::VarDictionary &dict)
 	auto t = target.AsString();
 	auto p = payload.AsString();
 	auto requestId = dict.Get(pp::Var("reqId")).AsInt();
-	if (t == "jsonData")
-		set_jsonData(p);
+	if (t == "jsonData") {
+		if (!set_jsonData(p, requestId))
+			return;
+	}
 	else if (t == "jsonSchedules") {
 		if (!set_jsonSchedules(p, requestId))
 			return;

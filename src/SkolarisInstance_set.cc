@@ -10,7 +10,7 @@
 using namespace std;
 using namespace boost::property_tree;
 
-void SkolarisInstance::set_jsonData(const string &jsonData)
+bool SkolarisInstance::set_jsonData(const string &jsonData, int requestId)
 {
 	m_Errors.clear();
 	m_CheckFails.clear();
@@ -18,6 +18,11 @@ void SkolarisInstance::set_jsonData(const string &jsonData)
 	PluginControllerBuilder b { jsonData, maxTime, m_Errors };
 	m_Controller = b.BuildController(m_Store, m_ConstraintHolder, m_CheckFails);
 	post_messages();
+	if (!m_Controller) {
+		post_error(requestId, "Unable to load timetable data");
+		return false;
+	}
+	return true;
 }
 
 bool SkolarisInstance::set_jsonSchedules(const string &jsonSchedules, int requestId)
