@@ -1,8 +1,8 @@
 #include "SkolarisInstance.h"
-#include "controller_builder.h"
 #include "gascheduler/src/interface/icontroller.h"
+#include "gascheduler/src/plugin/controller_builder.h"
 #include "gascheduler/src/storage/store.h"
-#include "gascheduler/src/timetable/constraint_holder.h"
+#include "gascheduler/src/timetable/plugin/constraint_holder_pt.h"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <string>
@@ -14,7 +14,7 @@ bool SkolarisInstance::set_jsonData(const string &jsonData, int requestId)
 {
 	m_Errors.clear();
 	m_CheckFails.clear();
-	int maxTime = 5; //has no effect at the moment
+	int maxTime = 0; //=forever
 	PluginControllerBuilder b { jsonData, maxTime, m_Errors };
 	m_Controller = b.BuildController(m_Store, m_ConstraintHolder, m_CheckFails);
 	post_messages();

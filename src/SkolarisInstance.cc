@@ -1,8 +1,7 @@
 #include "SkolarisInstance.h"
 #include "event_handler.h"
-#include "algorithm_builder.h"
-#include "gascheduler/src/timetable/constraint_holder.h"
 #include "gascheduler/src/interface/icontroller.h"
+#include "gascheduler/src/plugin/algorithm_builder.h"
 #include "gascheduler/src/storage/store.h"
 #include <algorithm/isolution.h>
 #include <ctoolhu/random/engine.hpp>
@@ -16,16 +15,8 @@ using namespace boost::property_tree;
 
 /// The Instance class.  One of these exists for each instance of your NaCl
 /// module on the web page.  The browser will ask the Module object to create
-/// a new Instance for each occurrence of the <embed> tag that has these
-/// attributes:
-///     src="hello_tutorial.nmf"
-///     type="application/x-pnacl"
-/// To communicate with the browser, you must override HandleMessage() to
-/// receive messages from the browser, and use PostMessage() to send messages
-/// back to the browser.  Note that this interface is asynchronous.
-  
-/// The constructor creates the plugin-side instance.
-  /// @param[in] instance the handle to the browser-side plugin instance.
+/// a new Instance for each occurrence of the <embed> tag that has the needed
+/// attributes.
 SkolarisInstance::SkolarisInstance(PP_Instance instance)
 :
 	pp::Instance(instance)
@@ -106,7 +97,7 @@ bool SkolarisInstance::Start()
 			engine.seed(rd());
 		}
 		auto algorithm = PluginAlgorithmBuilder::BuildAlgorithm(m_jsonAlgorithm);
-		return Controller()->Start(move(algorithm));
+		return Controller()->StartAsync(move(algorithm));
 	}
 	catch(...) {
 		return false;

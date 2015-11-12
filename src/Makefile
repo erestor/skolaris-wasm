@@ -30,6 +30,8 @@ LDFLAGS = --pnacl-exceptions=sjlj
 SOURCES = $(wildcard *.cc) \
 	$(wildcard gascheduler/src/*.cpp) \
 	$(wildcard gascheduler/src/matrix/*.cpp) \
+	$(wildcard gascheduler/src/plugin/algorithm_builder.c*) \
+	$(wildcard gascheduler/src/plugin/controller_builder.c*) \
 	$(wildcard gascheduler/src/storage/*.cpp) \
 	$(wildcard gascheduler/src/timetable/*.cpp) \
 	$(wildcard gascheduler/src/timetable/algorithm/*.cpp) \
