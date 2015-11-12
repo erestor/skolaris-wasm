@@ -65,8 +65,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\algorithm_builder.cc" />
-    <ClCompile Include="src\controller_builder.cc" />
     <ClCompile Include="src\event_handler.cc" />
     <ClCompile Include="src\SkolarisInstance.cc" />
     <ClCompile Include="src\SkolarisInstance_set.cc" />
@@ -76,8 +74,6 @@
     <ClCompile Include="src\SkolarisModule.cc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\algorithm_builder.h" />
-    <ClInclude Include="src\controller_builder.h" />
     <ClInclude Include="src\event_handler.h" />
     <ClInclude Include="src\SkolarisInstance.h" />
     <ClInclude Include="src\SkolarisModule.h" />
