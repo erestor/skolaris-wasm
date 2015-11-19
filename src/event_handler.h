@@ -23,7 +23,7 @@ class PluginEventHandler :
 		Algorithm::Events::BestSolutionFound,
 		Algorithm::Events::FeasibleSolutionFound,
 		Algorithm::RNA::Events::Tick,
-		Algorithm::TabuSearch::Events::AfterTabuSearchStep,
+		Algorithm::TabuSearch::Events::AfterStep,
 		Control::Events::ThreadFinished,
 		Control::Events::Paused,
 		Control::Events::Resumed,
@@ -38,7 +38,7 @@ class PluginEventHandler :
 	void on(Algorithm::Events::BestSolutionFound *);
 	void on(Algorithm::Events::FeasibleSolutionFound *);
 	void on(Algorithm::RNA::Events::Tick *);
-	void on(Algorithm::TabuSearch::Events::AfterTabuSearchStep *);
+	void on(Algorithm::TabuSearch::Events::AfterStep *);
 	void on(Control::Events::ThreadFinished *);
 	void on(Control::Events::Paused *);
 	void on(Control::Events::Resumed *);

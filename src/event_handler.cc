@@ -45,7 +45,7 @@ void PluginEventHandler::on(Algorithm::RNA::Events::Tick *)
 	_api->post_text("*");
 }
 
-void PluginEventHandler::on(Algorithm::TabuSearch::Events::AfterTabuSearchStep *ev)
+void PluginEventHandler::on(Algorithm::TabuSearch::Events::AfterStep *ev)
 {
 	stringstream s;
 	s << ev->stepDescription.data() << " (" << ev->currentSolutionPtr->GetFitness() << ")" << endl;
