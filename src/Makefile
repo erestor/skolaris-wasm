@@ -7,7 +7,7 @@
 
 VALID_TOOLCHAINS := pnacl newlib glibc clang-newlib linux
 
-NACL_SDK_ROOT ?= $(abspath $(CURDIR)/../../nacl_sdk/pepper_44)
+NACL_SDK_ROOT ?= $(abspath $(CURDIR)/../../nacl_sdk/pepper_46)
 
 TARGET = skolaris
 

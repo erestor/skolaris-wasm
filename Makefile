@@ -17,7 +17,7 @@ endif
 PROJECTS := \
   src 
 
-HTTPD_PY := python ../nacl_sdk/pepper_44/tools/httpd.py --no-dir-check
+HTTPD_PY := python ../nacl_sdk/pepper_46/tools/httpd.py --no-dir-check
 
 ifeq ($(TOOLCHAIN),all)
 TOOLCHAIN_ARG:=TOOLCHAIN=all
