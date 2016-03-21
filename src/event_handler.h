@@ -27,6 +27,7 @@ class PluginEventHandler :
 		Control::Events::ThreadFinished,
 		Control::Events::Paused,
 		Control::Events::Resumed,
+		Timetabling::TimetableEvents::Message,
 		Timetabling::Constraints::Events::AlphaChanged> {
 
   public:
@@ -42,6 +43,7 @@ class PluginEventHandler :
 	void on(Control::Events::ThreadFinished *);
 	void on(Control::Events::Paused *);
 	void on(Control::Events::Resumed *);
+	void on(Timetabling::TimetableEvents::Message *);
 	void on(Timetabling::Constraints::Events::AlphaChanged *ev);
 
   private:

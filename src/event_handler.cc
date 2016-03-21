@@ -75,9 +75,15 @@ void PluginEventHandler::on(Control::Events::Resumed *)
 	_api->post_resumed();
 }
 
+void PluginEventHandler::on(Timetabling::TimetableEvents::Message *ev)
+{
+	_api->post_text(ev->m + "\n");
+}
+
 void PluginEventHandler::on(Timetabling::Constraints::Events::AlphaChanged *ev)
 {
 	char formatted[256];
 	snprintf(formatted, 255, "Constraint: %s, alpha: %0.2f -> %0.2f\n", ev->constraintPtr->GetName().data(), ev->oldAlpha, ev->newAlpha);
 	_api->post_text(formatted);
 }
+
