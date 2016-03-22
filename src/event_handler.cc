@@ -52,6 +52,11 @@ void PluginEventHandler::on(Algorithm::TabuSearch::Events::AfterStep *ev)
 	_api->post_text(s.str());
 }
 
+void PluginEventHandler::on(Control::Events::Exception *ev)
+{
+	_api->post_text(ev->what + "\n");
+}
+
 void PluginEventHandler::on(Control::Events::ThreadFinished *ev)
 {
 	using namespace std::chrono;
