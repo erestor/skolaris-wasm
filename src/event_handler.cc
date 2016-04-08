@@ -14,6 +14,11 @@ PluginEventHandler::PluginEventHandler(SkolarisInstance *api)
 {
 }
 
+void PluginEventHandler::on(Ctoolhu::Event::Message *ev)
+{
+	_api->post_text(ev->msg + "\n");
+}
+
 void PluginEventHandler::on(Algorithm::Events::Started *ev)
 {
 	stringstream s;
@@ -78,11 +83,6 @@ void PluginEventHandler::on(Control::Events::Paused *)
 void PluginEventHandler::on(Control::Events::Resumed *)
 {
 	_api->post_resumed();
-}
-
-void PluginEventHandler::on(Timetabling::TimetableEvents::Message *ev)
-{
-	_api->post_text(ev->m + "\n");
 }
 
 void PluginEventHandler::on(Timetabling::Constraints::Events::AlphaChanged *ev)

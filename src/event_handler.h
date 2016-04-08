@@ -12,12 +12,14 @@
 #include <algorithm/rna_search_events.h>
 #include <algorithm/tabu_search_events.h>
 #include <ctoolhu/event/subscriber.hpp>
+#include <ctoolhu/event/events.h>
 #include <memory>
 
 class SkolarisInstance;
 
 class PluginEventHandler : 
 	Ctoolhu::Event::Subscriber<
+		Ctoolhu::Event::Message,
 		Algorithm::Events::Started,
 		Algorithm::Events::Finished,
 		Algorithm::Events::BestSolutionFound,
@@ -28,13 +30,13 @@ class PluginEventHandler :
 		Control::Events::ThreadFinished,
 		Control::Events::Paused,
 		Control::Events::Resumed,
-		Timetabling::TimetableEvents::Message,
 		Timetabling::Constraints::Events::AlphaChanged> {
 
   public:
 
 	PluginEventHandler(SkolarisInstance *);
 
+	void on(Ctoolhu::Event::Message *);
 	void on(Algorithm::Events::Started *);
 	void on(Algorithm::Events::Finished *);
 	void on(Algorithm::Events::BestSolutionFound *);
@@ -45,7 +47,6 @@ class PluginEventHandler :
 	void on(Control::Events::ThreadFinished *);
 	void on(Control::Events::Paused *);
 	void on(Control::Events::Resumed *);
-	void on(Timetabling::TimetableEvents::Message *);
 	void on(Timetabling::Constraints::Events::AlphaChanged *ev);
 
   private:
