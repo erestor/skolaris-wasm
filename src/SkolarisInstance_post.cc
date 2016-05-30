@@ -4,7 +4,7 @@
 
 using namespace std;
 
-const string SKOLARIS_VERSION("1.21.0"
+const string SKOLARIS_VERSION("1.21.2"
 #ifdef DEBUG
 	"debug"
 #endif
@@ -12,7 +12,7 @@ const string SKOLARIS_VERSION("1.21.0"
 
 const string SKOLARIS_VERSION_MAJOR("1");
 const string SKOLARIS_VERSION_MINOR("21");
-const string SKOLARIS_VERSION_PATCH("0");
+const string SKOLARIS_VERSION_PATCH("2");
 
 void SkolarisInstance::post_complete(int requestId)
 {
@@ -101,14 +101,14 @@ void SkolarisInstance::post_feasiblesolution(int requestId)
 		post_error(requestId, s);
 }
 
-void SkolarisInstance::post_bestsolutionfound()
+void SkolarisInstance::post_bestsolutionfound(Algorithm::Fitness fitness)
 {
-	post_message("bestsolutionfound", pp::Var(static_cast<int>(Store()->GetBestSolution()->GetFitness())));
+	post_message("bestsolutionfound", pp::Var(static_cast<int>(fitness)));
 }
 
-void SkolarisInstance::post_feasiblesolutionfound()
+void SkolarisInstance::post_feasiblesolutionfound(Algorithm::Fitness fitness)
 {
-	post_message("feasiblesolutionfound", pp::Var(static_cast<int>(Store()->GetFeasibleSolution()->GetFitness())));
+	post_message("feasiblesolutionfound", pp::Var(static_cast<int>(fitness)));
 }
 
 

@@ -9,7 +9,6 @@
 #include <string>
 #include <vector>
 
-namespace Algorithm { class ISolution; }
 namespace Storage { class Store; }
 namespace Timetabling { class ConstraintHolderPT; }
 
@@ -46,8 +45,8 @@ class SkolarisInstance : public pp::Instance {
     void post_paused();
     void post_resumed();
 	void post_stopped(int h, int m, int s, int ms, const std::string &formatted);
-    void post_bestsolutionfound();
-    void post_feasiblesolutionfound();
+    void post_bestsolutionfound(Algorithm::Fitness fitness);
+    void post_feasiblesolutionfound(Algorithm::Fitness fitness);
 
   private:
 

@@ -59,14 +59,16 @@ bool SkolarisInstance::set_jsonSchedules(const string &jsonSchedules, int reques
 		post_error(requestId, "Unable to load schedules");
 		return false;
 	}
-	if (currentSolutionPtr->GetFitness() < Store()->GetBestSolution()->GetFitness())
+	auto fitness = currentSolutionPtr->GetFitness();
+	if (fitness < Store()->GetBestSolution()->GetFitness()) {
 		Store()->SetBestSolution();
-
+		post_bestsolutionfound(fitness);
+	}
 	if (currentSolutionPtr->IsFeasible()) {
 		auto storedFeasibleSolution = Store()->GetFeasibleSolution();
-		if (!storedFeasibleSolution || currentSolutionPtr->GetFitness() < storedFeasibleSolution->GetFitness()) {
+		if (!storedFeasibleSolution || fitness < storedFeasibleSolution->GetFitness()) {
 			Store()->SetFeasibleSolution();
-			post_feasiblesolutionfound();
+			post_feasiblesolutionfound(fitness);
 		}
 	}
 	return true;
