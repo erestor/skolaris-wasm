@@ -1,0 +1,3 @@
+[submodule "src/gascheduler"]
+	path = src/gascheduler
+	url = https://erestor@bitbucket.org/skolaris/gascheduler.git
