@@ -23,7 +23,7 @@ INCDIRS = -I${INCBOOST} -I${INCCTOOLHU} -I${INCLOCALSEARCH}
 NOERROR1 = no-error=unused-local-typedef
 NOLOCALTYPEDEF = no-unused-local-typedef
 
-CFLAGS = -Wall -W${NOLOCALTYPEDEF} -std=gnu++14 ${INCDIRS}
+CFLAGS = -Wall -W${NOLOCALTYPEDEF} -std=gnu++14 ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED
 
 LDFLAGS = --pnacl-exceptions=sjlj
 
