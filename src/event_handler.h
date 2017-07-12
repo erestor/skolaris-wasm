@@ -20,6 +20,8 @@ class SkolarisInstance;
 class PluginEventHandler : 
 	Ctoolhu::Event::Subscriber<
 		Ctoolhu::Event::Message,
+		Timetabling::TimetableEvents::BeforeInit,
+		Timetabling::TimetableEvents::AfterInit,
 		Algorithm::Events::Started,
 		Algorithm::Events::Finished,
 		Algorithm::Events::BestSolutionFound,
@@ -37,6 +39,8 @@ class PluginEventHandler :
 	PluginEventHandler(SkolarisInstance *);
 
 	void on(Ctoolhu::Event::Message *);
+	void on(Timetabling::TimetableEvents::BeforeInit *);
+	void on(Timetabling::TimetableEvents::AfterInit *);
 	void on(Algorithm::Events::Started *);
 	void on(Algorithm::Events::Finished *);
 	void on(Algorithm::Events::BestSolutionFound *);

@@ -8,6 +8,7 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 
 using namespace std;
@@ -30,16 +31,20 @@ SkolarisInstance::~SkolarisInstance()
 
 bool SkolarisInstance::StringifySolution(string &result, const shared_ptr<Algorithm::ISolution> &solution)
 {
+//	post_text("Inside StringifySolution\n");
 	if (!solution) {
 		result = "Unable to stringify solution: input is null";
 		return false;
 	}
 	try {
 		ptree data;
+//		post_text("Saving solution\n");
 		solution->Save(data);
+//		post_text("Solution saved\n");
 		stringstream s;
 		json_parser::write_json(s, data);
 		result = s.str();
+//		post_text("Json was written\n");
 		return true;
 	}
 	catch (const exception &e) {

@@ -19,6 +19,16 @@ void PluginEventHandler::on(Ctoolhu::Event::Message *ev)
 	_api->post_text(ev->msg + "\n");
 }
 
+void PluginEventHandler::on(Timetabling::TimetableEvents::BeforeInit *)
+{
+	_api->post_text("Initializing timetable...\n");
+}
+
+void PluginEventHandler::on(Timetabling::TimetableEvents::AfterInit *)
+{
+	_api->post_text("Timetable initialization complete\n");
+}
+
 void PluginEventHandler::on(Algorithm::Events::Started *ev)
 {
 	stringstream s;

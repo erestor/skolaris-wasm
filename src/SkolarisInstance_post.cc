@@ -4,15 +4,15 @@
 
 using namespace std;
 
-const string SKOLARIS_VERSION("2.0.1"
+const string SKOLARIS_VERSION("2.2.0"
 #ifdef DEBUG
 	"debug"
 #endif
 );
 
 const string SKOLARIS_VERSION_MAJOR("2");
-const string SKOLARIS_VERSION_MINOR("0");
-const string SKOLARIS_VERSION_PATCH("1");
+const string SKOLARIS_VERSION_MINOR("2");
+const string SKOLARIS_VERSION_PATCH("0");
 
 void SkolarisInstance::post_complete(int requestId)
 {
@@ -77,10 +77,13 @@ void SkolarisInstance::post_version(int requestId)
 void SkolarisInstance::post_currentsolution(int requestId)
 {
 	string s;
+//	post_text("Getting current solution\n");
 	if (StringifySolution(s, Store()->GetCurrentSolution()))
 		post_message(requestId, "currentsolution", pp::Var(s));
 	else
 		post_error(requestId, s);
+
+//	post_text("Finished getting current solution\n");
 }
 
 void SkolarisInstance::post_bestsolution(int requestId)
