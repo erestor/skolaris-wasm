@@ -45,7 +45,7 @@ bool SkolarisInstance::set_jsonSchedules(const string &jsonSchedules, int reques
 		return false;
 	}
 	auto currentSolutionPtr = Store()->GetCurrentSolution();
-	auto backup = currentSolutionPtr->Clone();
+	unique_ptr<Algorithm::ISolution> backup{currentSolutionPtr->Clone()};
 	try {
 		currentSolutionPtr->Load(schedules);
 	}
