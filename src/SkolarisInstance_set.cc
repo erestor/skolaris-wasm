@@ -1,6 +1,6 @@
 #include "SkolarisInstance.h"
+#include "gascheduler/src/controller_builder.h"
 #include "gascheduler/src/interface/icontroller.h"
-#include "gascheduler/src/plugin/controller_builder.h"
 #include "gascheduler/src/storage/store.h"
 #include "gascheduler/src/timetable/plugin/constraint_holder_pt.h"
 #include <boost/property_tree/ptree.hpp>
@@ -15,7 +15,7 @@ bool SkolarisInstance::set_jsonData(const string &jsonData, int requestId)
 	m_Errors.clear();
 	m_CheckFails.clear();
 	int maxTime = 0; //=forever
-	PluginControllerBuilder b { jsonData, maxTime, m_Errors };
+	ControllerBuilder b { jsonData, maxTime, m_Errors };
 	m_Controller = b.BuildController(m_Store, m_ConstraintHolder, m_CheckFails);
 	post_messages();
 	if (!m_Controller) {
@@ -98,9 +98,12 @@ bool SkolarisInstance::set_jsonConstraints(const string &jsonConstraints, int re
 	}
 	Store()->GetCurrentSolution()->MarkDirty();
 	Store()->GetBestSolution()->MarkDirty();
-	if (Store()->GetFeasibleSolution())
-		Store()->GetFeasibleSolution()->MarkDirty();
-
+	auto storedFeasibleSolution = Store()->GetFeasibleSolution();
+	if (storedFeasibleSolution) {
+		storedFeasibleSolution->MarkDirty();
+		if (!storedFeasibleSolution->IsFeasible())
+			Store()->ResetFeasibleSolution();
+	}
 	return true;
 }
 
