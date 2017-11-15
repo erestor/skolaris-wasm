@@ -77,19 +77,16 @@ void SkolarisInstance::post_version(int requestId)
 void SkolarisInstance::post_currentsolution(int requestId)
 {
 	string s;
-//	post_text("Getting current solution\n");
-	if (StringifySolution(s, Store()->GetCurrentSolution()))
+	if (stringifySolution(s, store()->GetCurrentSolution()))
 		post_message(requestId, "currentsolution", pp::Var(s));
 	else
 		post_error(requestId, s);
-
-//	post_text("Finished getting current solution\n");
 }
 
 void SkolarisInstance::post_bestsolution(int requestId)
 {
 	string s;
-	if (StringifySolution(s, Store()->GetBestSolution()))
+	if (stringifySolution(s, store()->GetBestSolution()))
 		post_message(requestId, "bestsolution", pp::Var(s));
 	else
 		post_error(requestId, s);
@@ -98,26 +95,35 @@ void SkolarisInstance::post_bestsolution(int requestId)
 void SkolarisInstance::post_feasiblesolution(int requestId)
 {
 	string s;
-	if (StringifySolution(s, Store()->GetFeasibleSolution()))
+	if (stringifySolution(s, store()->GetFeasibleSolution()))
 		post_message(requestId, "feasiblesolution", pp::Var(s));
 	else
 		post_error(requestId, s);
 }
 
-void SkolarisInstance::post_bestsolutionfound(Algorithm::Fitness fitness)
+
+void SkolarisInstance::post_bestsolutionfound(ISolution *solutionPtr)
 {
-	post_message("bestsolutionfound", pp::Var(static_cast<int>(fitness)));
+	string s;
+	if (stringifySolution(s, solutionPtr))
+		post_message("bestsolutionfound", pp::Var(s));
+	else
+		post_error(0, s);
 }
 
-void SkolarisInstance::post_feasiblesolutionfound(Algorithm::Fitness fitness)
+void SkolarisInstance::post_feasiblesolutionfound(ISolution *solutionPtr)
 {
-	post_message("feasiblesolutionfound", pp::Var(static_cast<int>(fitness)));
+	string s;
+	if (stringifySolution(s, solutionPtr))
+		post_message("feasiblesolutionfound", pp::Var(s));
+	else
+		post_error(0, s);
 }
 
 
 void SkolarisInstance::post_messages()
 {
-	post_message("messages", pp::Var(StringifyMessages()));
+	post_message("messages", pp::Var(stringifyMessages()));
 }
 
 

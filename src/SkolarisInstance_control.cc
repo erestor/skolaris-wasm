@@ -11,7 +11,7 @@ using namespace boost::property_tree;
 //algorithm control
 void SkolarisInstance::start(int requestId)
 {
-	if (Start())
+	if (start())
 		post_started(requestId);
 	else
 		post_error(requestId, "Unable to start search");
@@ -19,15 +19,15 @@ void SkolarisInstance::start(int requestId)
 
 void SkolarisInstance::pause()
 {
-	Controller()->PauseAsync();
+	controller()->PauseAsync();
 }
 
 void SkolarisInstance::resume()
 {
-	Controller()->Resume();
+	controller()->Resume();
 }
 
 void SkolarisInstance::stop()
 {
-	Controller()->StopAsync();
+	controller()->StopAsync();
 }

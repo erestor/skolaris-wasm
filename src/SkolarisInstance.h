@@ -45,8 +45,8 @@ class SkolarisInstance : public pp::Instance {
     void post_paused();
     void post_resumed();
 	void post_stopped(int h, int m, int s, int ms, const std::string &formatted);
-    void post_bestsolutionfound(Algorithm::Fitness fitness);
-    void post_feasiblesolutionfound(Algorithm::Fitness fitness);
+    void post_bestsolutionfound(ISolution *);
+    void post_feasiblesolutionfound(ISolution *);
 
   private:
 
@@ -81,11 +81,12 @@ class SkolarisInstance : public pp::Instance {
     void pause();
     void resume();
 
-	bool StringifySolution(std::string &result, const std::shared_ptr<Algorithm::ISolution> &);
-	std::string StringifyMessages() const; //puts errors and check fails into JSON string
-	IController *Controller();
-	Ctoolhu::Thread::LockingProxy<Storage::Store> Store() const; //do NOT call this twice in one expression, it will cause an exception. It is an object auto-locking call!
-	bool Start();
+	bool stringifySolution(std::string &result, ISolution *);
+	bool stringifySolution(std::string &result, const std::shared_ptr<Algorithm::ISolution> &);
+	std::string stringifyMessages() const; //puts errors and check fails into JSON string
+	IController *controller();
+	Ctoolhu::Thread::LockingProxy<Storage::Store> store() const; //do NOT call this twice in one expression, it will cause an exception. It is an object auto-locking call!
+	bool start();
 
 	controller_ptr_type m_Controller;
 	std::shared_ptr<Storage::Store> m_Store;

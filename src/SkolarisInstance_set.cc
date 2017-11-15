@@ -27,7 +27,7 @@ bool SkolarisInstance::set_jsonData(const string &jsonData, int requestId)
 
 bool SkolarisInstance::set_jsonSchedules(const string &jsonSchedules, int requestId)
 {
-	if (Controller()->IsRunning()) {
+	if (controller()->IsRunning()) {
 		post_error(requestId, "Cannot load schedules while search is running");
 		return false;
 	}
@@ -44,7 +44,7 @@ bool SkolarisInstance::set_jsonSchedules(const string &jsonSchedules, int reques
 		post_error(requestId, "Unable to parse schedules");
 		return false;
 	}
-	auto currentSolutionPtr = Store()->GetCurrentSolution();
+	auto currentSolutionPtr = store()->GetCurrentSolution();
 	unique_ptr<Algorithm::ISolution> backup{currentSolutionPtr->Clone()};
 	try {
 		currentSolutionPtr->Load(schedules);
@@ -60,14 +60,14 @@ bool SkolarisInstance::set_jsonSchedules(const string &jsonSchedules, int reques
 		return false;
 	}
 	auto fitness = currentSolutionPtr->GetFitness();
-	if (fitness < Store()->GetBestSolution()->GetFitness()) {
-		Store()->SetBestSolution();
+	if (fitness < store()->GetBestSolution()->GetFitness()) {
+		store()->SetBestSolution();
 		post_bestsolutionfound(fitness);
 	}
 	if (currentSolutionPtr->IsFeasible()) {
-		auto storedFeasibleSolution = Store()->GetFeasibleSolution();
+		auto storedFeasibleSolution = store()->GetFeasibleSolution();
 		if (!storedFeasibleSolution || fitness < storedFeasibleSolution->GetFitness()) {
-			Store()->SetFeasibleSolution();
+			store()->SetFeasibleSolution();
 			post_feasiblesolutionfound(fitness);
 		}
 	}
@@ -76,7 +76,7 @@ bool SkolarisInstance::set_jsonSchedules(const string &jsonSchedules, int reques
 
 bool SkolarisInstance::set_jsonConstraints(const string &jsonConstraints, int requestId)
 {
-	if (Controller()->IsRunning()) {
+	if (controller()->IsRunning()) {
 		post_error(requestId, "Cannot load constraints while search is running");
 		return false;
 	}
@@ -96,13 +96,13 @@ bool SkolarisInstance::set_jsonConstraints(const string &jsonConstraints, int re
 		post_error(requestId, "Unable to load constraints");
 		return false;
 	}
-	Store()->GetCurrentSolution()->MarkDirty();
-	Store()->GetBestSolution()->MarkDirty();
-	auto storedFeasibleSolution = Store()->GetFeasibleSolution();
+	store()->GetCurrentSolution()->MarkDirty();
+	store()->GetBestSolution()->MarkDirty();
+	auto storedFeasibleSolution = store()->GetFeasibleSolution();
 	if (storedFeasibleSolution) {
 		storedFeasibleSolution->MarkDirty();
 		if (!storedFeasibleSolution->IsFeasible())
-			Store()->ResetFeasibleSolution();
+			store()->ResetFeasibleSolution();
 	}
 	return true;
 }

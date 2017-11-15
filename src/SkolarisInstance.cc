@@ -29,22 +29,18 @@ SkolarisInstance::~SkolarisInstance()
 {
 }
 
-bool SkolarisInstance::StringifySolution(string &result, const shared_ptr<Algorithm::ISolution> &solution)
+bool SkolarisInstance::stringifySolution(string &result, ISolution *solutionPtr)
 {
-//	post_text("Inside StringifySolution\n");
-	if (!solution) {
+	if (!solutionPtr) {
 		result = "Unable to stringify solution: input is null";
 		return false;
 	}
 	try {
 		ptree data;
-//		post_text("Saving solution\n");
-		solution->Save(data);
-//		post_text("Solution saved\n");
+		solutionPtr->Save(data);
 		stringstream s;
 		json_parser::write_json(s, data);
 		result = s.str();
-//		post_text("Json was written\n");
 		return true;
 	}
 	catch (const exception &e) {
@@ -56,7 +52,12 @@ bool SkolarisInstance::StringifySolution(string &result, const shared_ptr<Algori
 	return false;
 }
 
-string SkolarisInstance::StringifyMessages() const
+bool SkolarisInstance::stringifySolution(string &result, const shared_ptr<Algorithm::ISolution> &solution)
+{
+	return stringifySolution(result, solution.get());
+}
+
+string SkolarisInstance::stringifyMessages() const
 {
 	ptree errors;
 	for (auto const &e : m_Errors) {
@@ -77,7 +78,7 @@ string SkolarisInstance::StringifyMessages() const
 }
 
 //====================================================================================================================
-IController *SkolarisInstance::Controller()
+IController *SkolarisInstance::controller()
 {
 	if (!m_Controller) {
 		post_error(0, "Skolaris plugin controller has not been initialized. Open the errors/warnings console for details.");
@@ -86,12 +87,12 @@ IController *SkolarisInstance::Controller()
 	return m_Controller.get();
 }
 
-Ctoolhu::Thread::LockingProxy<Storage::Store> SkolarisInstance::Store() const
+Ctoolhu::Thread::LockingProxy<Storage::Store> SkolarisInstance::store() const
 {
 	return Storage::LockStore(m_Store.get());
 }
 
-bool SkolarisInstance::Start()
+bool SkolarisInstance::start()
 {
 	try {
 		auto &engine = Ctoolhu::Random::Private::SingleRandomEngine::Instance();
@@ -102,7 +103,7 @@ bool SkolarisInstance::Start()
 			engine.seed(rd());
 		}
 		auto algorithm = PluginAlgorithmBuilder::BuildAlgorithm(m_jsonAlgorithm);
-		return Controller()->StartAsync(move(algorithm));
+		return controller()->StartAsync(move(algorithm));
 	}
 	catch(...) {
 		return false;

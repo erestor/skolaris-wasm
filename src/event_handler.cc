@@ -44,7 +44,7 @@ void PluginEventHandler::on(Algorithm::Events::Finished *)
 
 void PluginEventHandler::on(Algorithm::Events::BestSolutionFound *ev)
 {
-	_api->post_bestsolutionfound(ev->solutionPtr->GetFitness());
+	_api->post_bestsolutionfound(ev->solutionPtr);
 	stringstream s;
 	s << " " << ev->solutionPtr->GetFitness() << (ev->solutionPtr->IsFeasible() ? "F " : " ");
 	_api->post_text(s.str());
@@ -52,7 +52,7 @@ void PluginEventHandler::on(Algorithm::Events::BestSolutionFound *ev)
 
 void PluginEventHandler::on(Algorithm::Events::FeasibleSolutionFound *ev)
 {
-	_api->post_feasiblesolutionfound(ev->solutionPtr->GetFitness());
+	_api->post_feasiblesolutionfound(ev->solutionPtr);
 }
 
 void PluginEventHandler::on(Algorithm::RNA::Events::Tick *)
