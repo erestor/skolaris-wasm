@@ -62,13 +62,13 @@ bool SkolarisInstance::set_jsonSchedules(const string &jsonSchedules, int reques
 	auto fitness = currentSolutionPtr->GetFitness();
 	if (fitness < store()->GetBestSolution()->GetFitness()) {
 		store()->SetBestSolution();
-		post_bestsolutionfound(fitness);
+		post_bestsolutionfound(currentSolutionPtr.get());
 	}
 	if (currentSolutionPtr->IsFeasible()) {
 		auto storedFeasibleSolution = store()->GetFeasibleSolution();
 		if (!storedFeasibleSolution || fitness < storedFeasibleSolution->GetFitness()) {
 			store()->SetFeasibleSolution();
-			post_feasiblesolutionfound(fitness);
+			post_feasiblesolutionfound(currentSolutionPtr.get());
 		}
 	}
 	return true;

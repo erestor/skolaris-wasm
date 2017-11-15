@@ -45,8 +45,8 @@ class SkolarisInstance : public pp::Instance {
     void post_paused();
     void post_resumed();
 	void post_stopped(int h, int m, int s, int ms, const std::string &formatted);
-    void post_bestsolutionfound(ISolution *);
-    void post_feasiblesolutionfound(ISolution *);
+    void post_bestsolutionfound(Algorithm::ISolution *);
+    void post_feasiblesolutionfound(Algorithm::ISolution *);
 
   private:
 
@@ -81,7 +81,7 @@ class SkolarisInstance : public pp::Instance {
     void pause();
     void resume();
 
-	bool stringifySolution(std::string &result, ISolution *);
+	bool stringifySolution(std::string &result, Algorithm::ISolution *);
 	bool stringifySolution(std::string &result, const std::shared_ptr<Algorithm::ISolution> &);
 	std::string stringifyMessages() const; //puts errors and check fails into JSON string
 	IController *controller();

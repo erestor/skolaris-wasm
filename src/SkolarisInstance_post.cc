@@ -4,15 +4,15 @@
 
 using namespace std;
 
-const string SKOLARIS_VERSION("2.9.1"
+const string SKOLARIS_VERSION("3.0.0"
 #ifdef DEBUG
 	"debug"
 #endif
 );
 
-const string SKOLARIS_VERSION_MAJOR("2");
-const string SKOLARIS_VERSION_MINOR("9");
-const string SKOLARIS_VERSION_PATCH("1");
+const string SKOLARIS_VERSION_MAJOR("3");
+const string SKOLARIS_VERSION_MINOR("0");
+const string SKOLARIS_VERSION_PATCH("0");
 
 void SkolarisInstance::post_complete(int requestId)
 {
@@ -102,7 +102,7 @@ void SkolarisInstance::post_feasiblesolution(int requestId)
 }
 
 
-void SkolarisInstance::post_bestsolutionfound(ISolution *solutionPtr)
+void SkolarisInstance::post_bestsolutionfound(Algorithm::ISolution *solutionPtr)
 {
 	string s;
 	if (stringifySolution(s, solutionPtr))
@@ -111,7 +111,7 @@ void SkolarisInstance::post_bestsolutionfound(ISolution *solutionPtr)
 		post_error(0, s);
 }
 
-void SkolarisInstance::post_feasiblesolutionfound(ISolution *solutionPtr)
+void SkolarisInstance::post_feasiblesolutionfound(Algorithm::ISolution *solutionPtr)
 {
 	string s;
 	if (stringifySolution(s, solutionPtr))

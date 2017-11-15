@@ -29,7 +29,7 @@ SkolarisInstance::~SkolarisInstance()
 {
 }
 
-bool SkolarisInstance::stringifySolution(string &result, ISolution *solutionPtr)
+bool SkolarisInstance::stringifySolution(string &result, Algorithm::ISolution *solutionPtr)
 {
 	if (!solutionPtr) {
 		result = "Unable to stringify solution: input is null";
