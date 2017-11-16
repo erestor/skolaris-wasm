@@ -105,7 +105,7 @@ void SkolarisInstance::post_feasiblesolution(int requestId)
 void SkolarisInstance::post_bestsolutionfound(Algorithm::ISolution *solutionPtr)
 {
 	string s;
-	if (stringifySolution(s, solutionPtr))
+	if (stringifyFitnessSummary(s, solutionPtr))
 		post_message("bestsolutionfound", pp::Var(s));
 	else
 		post_error(0, s);
@@ -114,7 +114,7 @@ void SkolarisInstance::post_bestsolutionfound(Algorithm::ISolution *solutionPtr)
 void SkolarisInstance::post_feasiblesolutionfound(Algorithm::ISolution *solutionPtr)
 {
 	string s;
-	if (stringifySolution(s, solutionPtr))
+	if (stringifyFitnessSummary(s, solutionPtr))
 		post_message("feasiblesolutionfound", pp::Var(s));
 	else
 		post_error(0, s);

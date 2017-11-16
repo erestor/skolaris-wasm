@@ -29,7 +29,28 @@ SkolarisInstance::~SkolarisInstance()
 {
 }
 
-bool SkolarisInstance::stringifySolution(string &result, Algorithm::ISolution *solutionPtr)
+bool SkolarisInstance::stringifyFitnessSummary(string &result, Algorithm::ISolution *solutionPtr) const
+{
+	if (!solutionPtr) {
+		result = "Unable to stringify fitness summary: input is null";
+		return false;
+	}
+	try {
+		ptree data;
+		data.put("fitness", solutionPtr->GetFitness());
+		data.put("feasible", solutionPtr->IsFeasible());
+		stringstream s;
+		json_parser::write_json(s, data);
+		result = s.str();
+		return true;
+	}
+	catch (const exception &e) {
+		result = string("Unable to stringify fitness summary: ") + e.what();
+	}
+	return false;
+}
+
+bool SkolarisInstance::stringifySolution(string &result, const shared_ptr<Algorithm::ISolution> &solutionPtr) const
 {
 	if (!solutionPtr) {
 		result = "Unable to stringify solution: input is null";
@@ -46,15 +67,7 @@ bool SkolarisInstance::stringifySolution(string &result, Algorithm::ISolution *s
 	catch (const exception &e) {
 		result = string("Unable to stringify solution: ") + e.what();
 	}
-	catch(...) {
-		result = "Unable to stringify solution: unknown exception";
-	}
 	return false;
-}
-
-bool SkolarisInstance::stringifySolution(string &result, const shared_ptr<Algorithm::ISolution> &solution)
-{
-	return stringifySolution(result, solution.get());
 }
 
 string SkolarisInstance::stringifyMessages() const

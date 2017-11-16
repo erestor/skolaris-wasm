@@ -81,8 +81,8 @@ class SkolarisInstance : public pp::Instance {
     void pause();
     void resume();
 
-	bool stringifySolution(std::string &result, Algorithm::ISolution *);
-	bool stringifySolution(std::string &result, const std::shared_ptr<Algorithm::ISolution> &);
+	bool stringifyFitnessSummary(std::string &result, Algorithm::ISolution *) const;
+	bool stringifySolution(std::string &result, const std::shared_ptr<Algorithm::ISolution> &) const;
 	std::string stringifyMessages() const; //puts errors and check fails into JSON string
 	IController *controller();
 	Ctoolhu::Thread::LockingProxy<Storage::Store> store() const; //do NOT call this twice in one expression, it will cause an exception. It is an object auto-locking call!
