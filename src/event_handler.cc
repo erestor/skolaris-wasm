@@ -80,9 +80,7 @@ void PluginEventHandler::on(Control::Events::ThreadFinished *ev)
 	int m = duration_cast<minutes>(milli).count() % 60;
 	int s = duration_cast<seconds>(milli).count() % 60;
 	int ms = milli.count() % 1000;
-	char formatted[13];
-	sprintf(formatted, "%02d:%02d:%02d.%03d", h, m, s, ms);
-	_api->post_stopped(h, m, s, ms, formatted);
+	_api->post_stopped(h, m, s, ms);
 }
 
 void PluginEventHandler::on(Control::Events::Paused *)

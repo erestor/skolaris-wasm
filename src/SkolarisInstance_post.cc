@@ -4,7 +4,7 @@
 
 using namespace std;
 
-const string SKOLARIS_VERSION("3.0.0"
+const string SKOLARIS_VERSION("3.0.1"
 #ifdef DEBUG
 	"debug"
 #endif
@@ -12,7 +12,7 @@ const string SKOLARIS_VERSION("3.0.0"
 
 const string SKOLARIS_VERSION_MAJOR("3");
 const string SKOLARIS_VERSION_MINOR("0");
-const string SKOLARIS_VERSION_PATCH("0");
+const string SKOLARIS_VERSION_PATCH("1");
 
 void SkolarisInstance::post_complete(int requestId)
 {
@@ -142,13 +142,12 @@ void SkolarisInstance::post_resumed()
 	post_message("resumed");
 }
 
-void SkolarisInstance::post_stopped(int h, int m, int s, int ms, const std::string &formatted)
+void SkolarisInstance::post_stopped(int h, int m, int s, int ms)
 {
 	pp::VarDictionary timeDict;
 	timeDict.Set("h", h);
 	timeDict.Set("m", m);
 	timeDict.Set("s", s);
 	timeDict.Set("ms", ms);
-	timeDict.Set("formatted", formatted);
 	post_message("stopped", timeDict);
 }

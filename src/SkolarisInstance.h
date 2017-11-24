@@ -44,7 +44,7 @@ class SkolarisInstance : public pp::Instance {
 	void post_text(const std::string &);
     void post_paused();
     void post_resumed();
-	void post_stopped(int h, int m, int s, int ms, const std::string &formatted);
+	void post_stopped(int h, int m, int s, int ms);
     void post_bestsolutionfound(Algorithm::ISolution *);
     void post_feasiblesolutionfound(Algorithm::ISolution *);
 
