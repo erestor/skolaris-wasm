@@ -10,7 +10,7 @@
 #include <vector>
 
 namespace Storage { class Store; }
-namespace Timetabling { class ConstraintHolderPT; }
+namespace Timetabling { class ConstraintHolder; }
 
 class IController;
 class PluginEventHandler;
@@ -90,7 +90,7 @@ class SkolarisInstance : public pp::Instance {
 
 	controller_ptr_type m_Controller;
 	std::shared_ptr<Storage::Store> m_Store;
-	std::shared_ptr<Timetabling::ConstraintHolderPT> m_ConstraintHolder;
+	std::shared_ptr<Timetabling::ConstraintHolder> m_ConstraintHolder;
 	std::unique_ptr<PluginEventHandler> m_EventHandler;
 	std::vector<std::string> m_Errors;
 	std::vector<boost::property_tree::ptree> m_CheckFails;

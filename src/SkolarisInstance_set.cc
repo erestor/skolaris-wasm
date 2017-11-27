@@ -2,7 +2,7 @@
 #include "gascheduler/src/controller_builder.h"
 #include "gascheduler/src/interface/icontroller.h"
 #include "gascheduler/src/storage/store.h"
-#include "gascheduler/src/timetable/plugin/constraint_holder_pt.h"
+#include "gascheduler/src/timetable/constraint_holder.h"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <string>
@@ -40,11 +40,8 @@ bool SkolarisInstance::set_jsonSchedules(const string &jsonSchedules, int reques
 		post_error(requestId, string("Unable to parse schedules: ") + e.what());
 		return false;
 	}
-	catch(...) {
-		post_error(requestId, "Unable to parse schedules");
-		return false;
-	}
-	auto currentSolutionPtr = store()->GetCurrentSolution();
+	auto storage = store();
+	auto currentSolutionPtr = storage->GetCurrentSolution();
 	unique_ptr<Algorithm::ISolution> backup{currentSolutionPtr->Clone()};
 	try {
 		currentSolutionPtr->Load(schedules);
@@ -54,20 +51,15 @@ bool SkolarisInstance::set_jsonSchedules(const string &jsonSchedules, int reques
 		post_error(requestId, string("Unable to load schedules: ") + e.what());
 		return false;
 	}
-	catch(...) {
-		backup->CopyTo(currentSolutionPtr.get());
-		post_error(requestId, "Unable to load schedules");
-		return false;
-	}
 	auto fitness = currentSolutionPtr->GetFitness();
-	if (fitness < store()->GetBestSolution()->GetFitness()) {
-		store()->SetBestSolution();
+	if (fitness < storage->GetBestSolution()->GetFitness()) {
+		storage->SetBestSolution();
 		post_bestsolutionfound(currentSolutionPtr.get());
 	}
 	if (currentSolutionPtr->IsFeasible()) {
-		auto storedFeasibleSolution = store()->GetFeasibleSolution();
+		auto storedFeasibleSolution = storage->GetFeasibleSolution();
 		if (!storedFeasibleSolution || fitness < storedFeasibleSolution->GetFitness()) {
-			store()->SetFeasibleSolution();
+			storage->SetFeasibleSolution();
 			post_feasiblesolutionfound(currentSolutionPtr.get());
 		}
 	}
@@ -85,24 +77,25 @@ bool SkolarisInstance::set_jsonConstraints(const string &jsonConstraints, int re
 		stringstream s(jsonConstraints);
 		json_parser::read_json(s, constraints);
 	}
-	catch(...) {
-		post_error(requestId, "Unable to parse constraints");
+	catch(const exception &e) {
+		post_error(requestId, string("Unable to parse constraints: ") + e.what());
 		return false;
 	}
 	try {
 		m_ConstraintHolder->LoadConstraints(constraints);
 	}
-	catch(...) {
-		post_error(requestId, "Unable to load constraints");
+	catch(const exception &e) {
+		post_error(requestId, string("Unable to load constraints: ") + e.what());
 		return false;
 	}
-	store()->GetCurrentSolution()->MarkDirty();
-	store()->GetBestSolution()->MarkDirty();
-	auto storedFeasibleSolution = store()->GetFeasibleSolution();
+	auto storage = store();
+	storage->GetCurrentSolution()->MarkDirty();
+	storage->GetBestSolution()->MarkDirty();
+	auto storedFeasibleSolution = storage->GetFeasibleSolution();
 	if (storedFeasibleSolution) {
 		storedFeasibleSolution->MarkDirty();
 		if (!storedFeasibleSolution->IsFeasible())
-			store()->ResetFeasibleSolution();
+			storage->ResetFeasibleSolution();
 	}
 	return true;
 }

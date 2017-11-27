@@ -42,7 +42,7 @@ void PluginEventHandler::on(Algorithm::Events::Finished *)
 	_api->post_text("\n");
 }
 
-void PluginEventHandler::on(Algorithm::Events::BestSolutionFound *ev)
+void PluginEventHandler::on(Control::Events::BestSolutionFound *ev)
 {
 	_api->post_bestsolutionfound(ev->solutionPtr);
 	stringstream s;
