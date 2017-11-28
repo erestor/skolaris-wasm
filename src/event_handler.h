@@ -24,7 +24,7 @@ class PluginEventHandler :
 		Timetabling::TimetableEvents::AfterInit,
 		Algorithm::Events::Started,
 		Algorithm::Events::Finished,
-		Control::Events::BestSolutionFound,
+		Algorithm::Events::BestSolutionFound,
 		Algorithm::Events::FeasibleSolutionFound,
 		Algorithm::RNA::Events::Tick,
 		Algorithm::TabuSearch::Events::StepExecuted,
@@ -43,7 +43,7 @@ class PluginEventHandler :
 	void on(Timetabling::TimetableEvents::AfterInit *);
 	void on(Algorithm::Events::Started *);
 	void on(Algorithm::Events::Finished *);
-	void on(Control::Events::BestSolutionFound *);
+	void on(Algorithm::Events::BestSolutionFound *);
 	void on(Algorithm::Events::FeasibleSolutionFound *);
 	void on(Algorithm::RNA::Events::Tick *);
 	void on(Algorithm::TabuSearch::Events::StepExecuted *);
