@@ -37,8 +37,8 @@ bool SkolarisInstance::stringifyFitnessSummary(string &result, Algorithm::ISolut
 	}
 	try {
 		ptree data;
-		data.put("fitness", solutionPtr->GetFitness());
-		data.put("feasible", solutionPtr->IsFeasible());
+		data.put("fitness", solutionPtr->getFitness());
+		data.put("feasible", solutionPtr->isFeasible());
 		stringstream s;
 		json_parser::write_json(s, data);
 		result = s.str();
@@ -58,7 +58,7 @@ bool SkolarisInstance::stringifySolution(string &result, const shared_ptr<Algori
 	}
 	try {
 		ptree data;
-		solutionPtr->Save(data);
+		solutionPtr->save(data);
 		stringstream s;
 		json_parser::write_json(s, data);
 		result = s.str();
@@ -116,7 +116,7 @@ bool SkolarisInstance::start()
 			engine.seed(rd());
 		}
 		auto algorithm = PluginAlgorithmBuilder::BuildAlgorithm(m_jsonAlgorithm);
-		return controller()->StartAsync(move(algorithm));
+		return controller()->startAsync(move(algorithm));
 	}
 	catch(...) {
 		return false;

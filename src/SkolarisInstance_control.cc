@@ -19,15 +19,15 @@ void SkolarisInstance::start(int requestId)
 
 void SkolarisInstance::pause()
 {
-	controller()->PauseAsync();
+	controller()->pauseAsync();
 }
 
 void SkolarisInstance::resume()
 {
-	controller()->Resume();
+	controller()->resume();
 }
 
 void SkolarisInstance::stop()
 {
-	controller()->StopAsync();
+	controller()->stopAsync();
 }

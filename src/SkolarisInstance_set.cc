@@ -27,7 +27,7 @@ bool SkolarisInstance::set_jsonData(const string &jsonData, int requestId)
 
 bool SkolarisInstance::set_jsonSchedules(const string &jsonSchedules, int requestId)
 {
-	if (controller()->IsRunning()) {
+	if (controller()->isRunning()) {
 		post_error(requestId, "Cannot load schedules while search is running");
 		return false;
 	}
@@ -42,23 +42,23 @@ bool SkolarisInstance::set_jsonSchedules(const string &jsonSchedules, int reques
 	}
 	auto storage = store();
 	auto currentSolutionPtr = storage->GetCurrentSolution();
-	unique_ptr<Algorithm::ISolution> backup{currentSolutionPtr->Clone()};
+	unique_ptr<Algorithm::ISolution> backup{currentSolutionPtr->clone()};
 	try {
-		currentSolutionPtr->Load(schedules);
+		currentSolutionPtr->load(schedules);
 	}
 	catch (const exception &e) {
-		backup->CopyTo(currentSolutionPtr.get());
+		backup->copyTo(currentSolutionPtr.get());
 		post_error(requestId, string("Unable to load schedules: ") + e.what());
 		return false;
 	}
-	auto fitness = currentSolutionPtr->GetFitness();
-	if (fitness < storage->GetBestSolution()->GetFitness()) {
+	auto fitness = currentSolutionPtr->getFitness();
+	if (fitness < storage->GetBestSolution()->getFitness()) {
 		storage->SetBestSolution();
 		post_bestsolutionfound(currentSolutionPtr.get());
 	}
-	if (currentSolutionPtr->IsFeasible()) {
+	if (currentSolutionPtr->isFeasible()) {
 		auto storedFeasibleSolution = storage->GetFeasibleSolution();
-		if (!storedFeasibleSolution || fitness < storedFeasibleSolution->GetFitness()) {
+		if (!storedFeasibleSolution || fitness < storedFeasibleSolution->getFitness()) {
 			storage->SetFeasibleSolution();
 			post_feasiblesolutionfound(currentSolutionPtr.get());
 		}
@@ -68,7 +68,7 @@ bool SkolarisInstance::set_jsonSchedules(const string &jsonSchedules, int reques
 
 bool SkolarisInstance::set_jsonConstraints(const string &jsonConstraints, int requestId)
 {
-	if (controller()->IsRunning()) {
+	if (controller()->isRunning()) {
 		post_error(requestId, "Cannot load constraints while search is running");
 		return false;
 	}
@@ -89,12 +89,12 @@ bool SkolarisInstance::set_jsonConstraints(const string &jsonConstraints, int re
 		return false;
 	}
 	auto storage = store();
-	storage->GetCurrentSolution()->MarkDirty();
-	storage->GetBestSolution()->MarkDirty();
+	storage->GetCurrentSolution()->markDirty();
+	storage->GetBestSolution()->markDirty();
 	auto storedFeasibleSolution = storage->GetFeasibleSolution();
 	if (storedFeasibleSolution) {
-		storedFeasibleSolution->MarkDirty();
-		if (!storedFeasibleSolution->IsFeasible())
+		storedFeasibleSolution->markDirty();
+		if (!storedFeasibleSolution->isFeasible())
 			storage->ResetFeasibleSolution();
 	}
 	return true;
