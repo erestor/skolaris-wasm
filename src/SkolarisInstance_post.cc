@@ -4,13 +4,13 @@
 
 using namespace std;
 
-const string SKOLARIS_VERSION("3.5.0"
+const string SKOLARIS_VERSION("8.5.0"
 #ifdef DEBUG
 	"debug"
 #endif
 );
 
-const string SKOLARIS_VERSION_MAJOR("3");
+const string SKOLARIS_VERSION_MAJOR("8");
 const string SKOLARIS_VERSION_MINOR("5");
 const string SKOLARIS_VERSION_PATCH("0");
 
