@@ -41,7 +41,7 @@ bool SkolarisInstance::set_jsonSchedules(const string &jsonSchedules, int reques
 		return false;
 	}
 	auto storage = store();
-	auto currentSolutionPtr = storage->GetCurrentSolution();
+	auto currentSolutionPtr = storage->getCurrentSolution();
 	unique_ptr<Algorithm::ISolution> backup{currentSolutionPtr->clone()};
 	try {
 		currentSolutionPtr->load(schedules);
@@ -52,14 +52,14 @@ bool SkolarisInstance::set_jsonSchedules(const string &jsonSchedules, int reques
 		return false;
 	}
 	auto fitness = currentSolutionPtr->getFitness();
-	if (fitness < storage->GetBestSolution()->getFitness()) {
-		storage->SetBestSolution();
+	if (fitness < storage->getBestSolution()->getFitness()) {
+		storage->setBestSolution();
 		post_bestsolutionfound(currentSolutionPtr.get());
 	}
 	if (currentSolutionPtr->isFeasible()) {
-		auto storedFeasibleSolution = storage->GetFeasibleSolution();
+		auto storedFeasibleSolution = storage->getFeasibleSolution();
 		if (!storedFeasibleSolution || fitness < storedFeasibleSolution->getFitness()) {
-			storage->SetFeasibleSolution();
+			storage->setFeasibleSolution();
 			post_feasiblesolutionfound(currentSolutionPtr.get());
 		}
 	}
@@ -89,13 +89,20 @@ bool SkolarisInstance::set_jsonConstraints(const string &jsonConstraints, int re
 		return false;
 	}
 	auto storage = store();
-	storage->GetCurrentSolution()->markDirty();
-	storage->GetBestSolution()->markDirty();
-	auto storedFeasibleSolution = storage->GetFeasibleSolution();
-	if (storedFeasibleSolution) {
-		storedFeasibleSolution->markDirty();
-		if (!storedFeasibleSolution->isFeasible())
-			storage->ResetFeasibleSolution();
+	storage->getCurrentSolution()->markDirty();
+	storage->getBestSolution()->markDirty();
+	storage->getBestOverallSolution()->markDirty();
+	auto storedSolution = storage->getFeasibleSolution();
+	if (storedSolution) {
+		storedSolution->markDirty();
+		if (!storedSolution->isFeasible())
+			storage->resetFeasibleSolution();
+	}
+	storedSolution = storage->getFeasibleOverallSolution();
+	if (storedSolution) {
+		storedSolution->markDirty();
+		if (!storedSolution->isFeasible())
+			storage->resetFeasibleOverallSolution();
 	}
 	return true;
 }

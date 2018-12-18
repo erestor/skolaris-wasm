@@ -24,6 +24,7 @@ class PluginEventHandler :
 		Timetabling::TimetableEvents::AfterInit,
 		Algorithm::Events::Started,
 		Algorithm::Events::Finished,
+		Algorithm::Events::CurrentSolutionChanged,
 		Algorithm::Events::BestSolutionFound,
 		Algorithm::Events::FeasibleSolutionFound,
 		Algorithm::RNA::Events::Tick,
@@ -43,6 +44,7 @@ class PluginEventHandler :
 	void on(Timetabling::TimetableEvents::AfterInit *);
 	void on(Algorithm::Events::Started *);
 	void on(Algorithm::Events::Finished *);
+	void on(Algorithm::Events::CurrentSolutionChanged *);
 	void on(Algorithm::Events::BestSolutionFound *);
 	void on(Algorithm::Events::FeasibleSolutionFound *);
 	void on(Algorithm::RNA::Events::Tick *);

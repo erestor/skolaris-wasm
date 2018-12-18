@@ -102,7 +102,7 @@ IController *SkolarisInstance::controller()
 
 Ctoolhu::Thread::LockingProxy<Storage::Store> SkolarisInstance::store() const
 {
-	return Storage::LockStore(m_Store.get());
+	return Storage::lockStore(m_Store.get());
 }
 
 bool SkolarisInstance::start()

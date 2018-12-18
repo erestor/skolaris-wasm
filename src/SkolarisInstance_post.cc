@@ -4,15 +4,15 @@
 
 using namespace std;
 
-const string SKOLARIS_VERSION("8.7.13"
+const string SKOLARIS_VERSION("9.0.0"
 #ifdef DEBUG
 	"debug"
 #endif
 );
 
-const string SKOLARIS_VERSION_MAJOR("8");
-const string SKOLARIS_VERSION_MINOR("7");
-const string SKOLARIS_VERSION_PATCH("13");
+const string SKOLARIS_VERSION_MAJOR("9");
+const string SKOLARIS_VERSION_MINOR("0");
+const string SKOLARIS_VERSION_PATCH("0");
 
 void SkolarisInstance::post_complete(int requestId)
 {
@@ -77,7 +77,7 @@ void SkolarisInstance::post_version(int requestId)
 void SkolarisInstance::post_currentsolution(int requestId)
 {
 	string s;
-	if (stringifySolution(s, store()->GetCurrentSolution()))
+	if (stringifySolution(s, store()->getCurrentSolution()))
 		post_message(requestId, "currentsolution", pp::Var(s));
 	else
 		post_error(requestId, s);
@@ -86,7 +86,7 @@ void SkolarisInstance::post_currentsolution(int requestId)
 void SkolarisInstance::post_bestsolution(int requestId)
 {
 	string s;
-	if (stringifySolution(s, store()->GetBestSolution()))
+	if (stringifySolution(s, store()->getBestSolution()))
 		post_message(requestId, "bestsolution", pp::Var(s));
 	else
 		post_error(requestId, s);
@@ -95,12 +95,38 @@ void SkolarisInstance::post_bestsolution(int requestId)
 void SkolarisInstance::post_feasiblesolution(int requestId)
 {
 	string s;
-	if (stringifySolution(s, store()->GetFeasibleSolution()))
+	if (stringifySolution(s, store()->getFeasibleSolution()))
 		post_message(requestId, "feasiblesolution", pp::Var(s));
 	else
 		post_error(requestId, s);
 }
 
+void SkolarisInstance::post_bestoverallsolution(int requestId)
+{
+    string s;
+    if (stringifySolution(s, store()->getBestOverallSolution()))
+        post_message(requestId, "bestoverallsolution", pp::Var(s));
+    else
+        post_error(requestId, s);
+}
+
+void SkolarisInstance::post_feasibleoverallsolution(int requestId)
+{
+    string s;
+    if (stringifySolution(s, store()->getFeasibleOverallSolution()))
+        post_message(requestId, "feasibleoverallsolution", pp::Var(s));
+    else
+        post_error(requestId, s);
+}
+
+void SkolarisInstance::post_currentsolutionchanged(Algorithm::ISolution *solutionPtr)
+{
+	string s;
+	if (stringifyFitnessSummary(s, solutionPtr))
+		post_message("currentsolutionchanged", pp::Var(s));
+	else
+		post_error(0, s);
+}
 
 void SkolarisInstance::post_bestsolutionfound(Algorithm::ISolution *solutionPtr)
 {

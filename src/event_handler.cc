@@ -42,6 +42,11 @@ void PluginEventHandler::on(Algorithm::Events::Finished *)
 	_api->post_text("\n");
 }
 
+void PluginEventHandler::on(Algorithm::Events::CurrentSolutionChanged *ev)
+{
+	_api->post_currentsolutionchanged(ev->solutionPtr);
+}
+
 void PluginEventHandler::on(Algorithm::Events::BestSolutionFound *ev)
 {
 	_api->post_bestsolutionfound(ev->solutionPtr);

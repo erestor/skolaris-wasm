@@ -37,6 +37,10 @@ void SkolarisInstance::handleGetMessage(const pp::VarDictionary &dict)
 		post_bestsolution(requestId);
 	else if (t == "feasiblesolution")
 		post_feasiblesolution(requestId);
+	else if (t == "bestoverallsolution")
+		post_bestoverallsolution(requestId);
+	else if (t == "feasibleoverallsolution")
+		post_feasibleoverallsolution(requestId);
 }
 
 void SkolarisInstance::handleSetMessage(const pp::VarDictionary &dict)

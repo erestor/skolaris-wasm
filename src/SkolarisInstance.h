@@ -45,6 +45,7 @@ class SkolarisInstance : public pp::Instance {
     void post_paused();
     void post_resumed();
 	void post_stopped(int h, int m, int s, int ms);
+    void post_currentsolutionchanged(Algorithm::ISolution *);
     void post_bestsolutionfound(Algorithm::ISolution *);
     void post_feasiblesolutionfound(Algorithm::ISolution *);
 
@@ -66,6 +67,8 @@ class SkolarisInstance : public pp::Instance {
     void post_currentsolution(int requestId);
     void post_bestsolution(int requestId);
     void post_feasiblesolution(int requestId);
+    void post_bestoverallsolution(int requestId);
+    void post_feasibleoverallsolution(int requestId);
     void post_messages();
 
 	void post_started(int requestId);
