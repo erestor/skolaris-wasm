@@ -81,9 +81,8 @@ bool SkolarisInstance::set_jsonConstraints(const string &jsonConstraints, int re
 	return true;
 }
 
-void SkolarisInstance::set_algorithm(const pp::Var &payload)
+void SkolarisInstance::set_algorithm(const ptree &payload)
 {
-	pp::VarDictionary dict(payload);
-	m_jsonAlgorithm = dict.Get("algorithm").AsString();
-    m_benchmarkMode = dict.Get("benchmark").AsBool();
+	m_jsonAlgorithm = payload.get<string>("algorithm");
+    m_benchmarkMode = payload.get<bool>("benchmark");
 }

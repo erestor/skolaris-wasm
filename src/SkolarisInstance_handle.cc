@@ -1,34 +1,39 @@
 #include "SkolarisInstance.h"
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
 #include <string>
+#include <stdio.h>
 
+using namespace boost::property_tree;
 using namespace std;
 
 /// Handler for messages coming in from the browser via postMessage().  The
 /// @a var_message can contain be any pp:Var type; for example int, string
 /// Array or Dictinary. Please see the pp:Var documentation for more details.
 /// @param[in] var_message The message posted by the browser.
-void SkolarisInstance::HandleMessage(const pp::Var &var_message)
+void SkolarisInstance::HandleMessage(const string &var_message)
 {
-	if (!var_message.is_dictionary())
-		return;
+	ptree message;
+	stringstream s(var_message);
+	json_parser::read_json(s, message);
 
-	pp::VarDictionary dictionary(var_message);
-	auto type = dictionary.Get(pp::Var("type")).AsString();
+	auto type = message.get<string>("type");
+	auto target = message.get<string>("target");
+	printf("SkolarisInstance::HandleMessage type = %s, target = %s\n", type.c_str(), target.c_str());
 	if (type == "get")
-		handleGetMessage(dictionary);
+		handleGetMessage(message);
 	else if (type == "set")
-		handleSetMessage(dictionary);
+		handleSetMessage(message);
 	else if (type == "control")
-		handleControlMessage(dictionary);
+		handleControlMessage(message);
 	else
 		post_error(0, "unknown message");
 }
 
-void SkolarisInstance::handleGetMessage(const pp::VarDictionary &dict)
+void SkolarisInstance::handleGetMessage(const ptree &msg)
 {
-	auto target = dict.Get(pp::Var("target"));
-	auto t = target.AsString();
-	auto requestId = dict.Get(pp::Var("reqId")).AsInt();
+	auto t = msg.get<string>("target");
+	auto requestId = msg.get("reqId", 0);
 	if (t == "version")
 		post_version(requestId);
 	else if (t == "currentsolution")
@@ -43,13 +48,11 @@ void SkolarisInstance::handleGetMessage(const pp::VarDictionary &dict)
 		post_feasibleoverallsolution(requestId);
 }
 
-void SkolarisInstance::handleSetMessage(const pp::VarDictionary &dict)
+void SkolarisInstance::handleSetMessage(const ptree &msg)
 {
-	auto target = dict.Get(pp::Var("target"));
-	auto payload = dict.Get(pp::Var("payload"));
-	auto t = target.AsString();
-	auto p = payload.AsString();
-	auto requestId = dict.Get(pp::Var("reqId")).AsInt();
+	auto t = msg.get<string>("target");
+	auto p = msg.get<string>("payload");
+	auto requestId = msg.get("reqId", 0);
 	if (t == "jsonData") {
 		if (!set_jsonData(p, requestId))
 			return;
@@ -62,17 +65,19 @@ void SkolarisInstance::handleSetMessage(const pp::VarDictionary &dict)
 		if (!set_jsonConstraints(p, requestId))
 			return;
 	}
-	else if (t == "algorithm")
+	else if (t == "algorithm") {
+		ptree payload;
+		stringstream s(p);
+		json_parser::read_json(s, payload);
 		set_algorithm(payload);
-
+	}
 	post_complete(requestId);
 }
 
-void SkolarisInstance::handleControlMessage(const pp::VarDictionary &dict)
+void SkolarisInstance::handleControlMessage(const ptree &msg)
 {
-	auto target = dict.Get(pp::Var("target"));
-	auto t = target.AsString();
-	auto requestId = dict.Get(pp::Var("reqId")).AsInt();
+	auto t = msg.get<string>("target");
+	auto requestId = msg.get("reqId", 0);
 	if (t == "start")
 		start(requestId);
 	else if (t == "pause")
@@ -82,4 +87,3 @@ void SkolarisInstance::handleControlMessage(const pp::VarDictionary &dict)
 	else if (t == "stop")
 		stop();
 }
-

@@ -18,9 +18,7 @@ using namespace boost::property_tree;
 /// module on the web page.  The browser will ask the Module object to create
 /// a new Instance for each occurrence of the <embed> tag that has the needed
 /// attributes.
-SkolarisInstance::SkolarisInstance(PP_Instance instance)
-:
-	pp::Instance(instance)
+SkolarisInstance::SkolarisInstance()
 {
 	m_EventHandler = make_unique<PluginEventHandler>(this);
 }

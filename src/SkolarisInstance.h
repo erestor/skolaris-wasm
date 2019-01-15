@@ -1,7 +1,4 @@
 #include "event_handler.h"
-#include "ppapi/cpp/instance.h"
-#include "ppapi/cpp/var.h"
-#include "ppapi/cpp/var_dictionary.h"
 #include <algorithm/isolution.h>
 #include <ctoolhu/thread/proxy.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
@@ -15,31 +12,18 @@ namespace Timetabling { class ConstraintHolder; }
 class IController;
 class PluginEventHandler;
 
-/// The Instance class.  One of these exists for each instance of your NaCl
-/// module on the web page.  The browser will ask the Module object to create
-/// a new Instance for each occurrence of the <embed> tag that has these
-/// attributes:
-///     src="hello_tutorial.nmf"
-///     type="application/x-pnacl"
-/// To communicate with the browser, you must override HandleMessage() to
-/// receive messages from the browser, and use PostMessage() to send messages
-/// back to the browser.  Note that this interface is asynchronous.
-class SkolarisInstance : public pp::Instance {
+class SkolarisInstance {
 
 	typedef std::unique_ptr<IController> controller_ptr_type;
 
   public:
 
-	/// The constructor creates the plugin-side instance.
-	/// @param[in] instance the handle to the browser-side plugin instance.
-	explicit SkolarisInstance(PP_Instance instance); 
+	SkolarisInstance();
 	virtual ~SkolarisInstance(); 
 
-	/// Handler for messages coming in from the browser via postMessage().  The
-	/// @a var_message can contain be any pp:Var type; for example int, string
-	/// Array or Dictinary. Please see the pp:Var documentation for more details.
+	// PPAPI Handler for messages coming in from the browser via postMessage().
 	/// @param[in] var_message The message posted by the browser.
-	virtual void HandleMessage(const pp::Var &);
+	void HandleMessage(const std::string &);
 
 	void post_text(const std::string &);
     void post_paused();
@@ -51,15 +35,20 @@ class SkolarisInstance : public pp::Instance {
 
   private:
 
-	void handleSetMessage(const pp::VarDictionary &);
-	void handleGetMessage(const pp::VarDictionary &);
-	void handleControlMessage(const pp::VarDictionary &);
+	// PPAPI Posts message to the browser
+	void PostMessage(const boost::property_tree::ptree &);
+
+	void handleSetMessage(const boost::property_tree::ptree &);
+	void handleGetMessage(const boost::property_tree::ptree &);
+	void handleControlMessage(const boost::property_tree::ptree &);
 
 	void post_message(const std::string &type);
-	void post_message(const std::string &type, const pp::Var &payload);
+	void post_message(const std::string &type, const std::string &payload);
+	void post_message(const std::string &type, const boost::property_tree::ptree &);
 
 	void post_message(int requestId, const std::string &type);
-	void post_message(int requestId, const std::string &type, const pp::Var &payload);
+	void post_message(int requestId, const std::string &type, const std::string &payload);
+	void post_message(int requestId, const std::string &type, const boost::property_tree::ptree &);
 
 	void post_complete(int requestId);
 	void post_error(int requestId, const std::string &what);
@@ -76,7 +65,7 @@ class SkolarisInstance : public pp::Instance {
     bool set_jsonData(const std::string &, int requestId);
     bool set_jsonSchedules(const std::string &, int requestId);
     bool set_jsonConstraints(const std::string &, int requestId);
-    void set_algorithm(const pp::Var &);
+    void set_algorithm(const boost::property_tree::ptree &);
 
     //algorithm control
     void start(int requestId);

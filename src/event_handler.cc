@@ -104,4 +104,3 @@ void PluginEventHandler::on(Timetabling::ConstraintEvents::AlphaChanged *ev)
 	snprintf(formatted, 255, "Constraint: %s, alpha: %0.2f -> %0.2f\n", ev->constraintPtr->getName().data(), ev->oldAlpha, ev->newAlpha);
 	_api->post_text(formatted);
 }
-
