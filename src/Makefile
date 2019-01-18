@@ -8,6 +8,7 @@
 CXX = emcc
 TARGET = skolaris
 
+THREADS = -s USE_PTHREADS=1 -s PTHREAD_POOL_SIZE=5
 INCBOOST = /usr/local/include
 INCCTOOLHU = /usr/local/include/ctoolhu
 INCLOCALSEARCH = /usr/local/include/localsearch/include
@@ -17,21 +18,19 @@ NOERROR1 = no-error=unused-local-typedef
 NOLOCALTYPEDEF = no-unused-local-typedef
 NOUNUSEDCAPTURE = no-unused-lambda-capture
 
-CFLAGS = -O2 -Wall -W${NOLOCALTYPEDEF} -W$(NOUNUSEDCAPTURE) -std=gnu++14 ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED
+CFLAGS = -O2 -Wall -W${NOLOCALTYPEDEF} -W$(NOUNUSEDCAPTURE) -std=c++17 ${THREADS} ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED
 
 LDFLAGS = -O2 -s WASM=1 --shell-file html_template/shell_minimal.html -s NO_EXIT_RUNTIME=1 -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall"]' -s NO_FILESYSTEM=1
 
 SOURCES_CC = $(wildcard *.cc)
 SOURCES_CPP = \
 	$(wildcard gascheduler/src/*.cpp) \
-	$(wildcard gascheduler/src/matrix/*.cpp) \
 	$(wildcard gascheduler/src/plugin/algorithm_builder.cpp) \
-	$(wildcard gascheduler/src/plugin/controller_builder.cpp) \
 	$(wildcard gascheduler/src/storage/*.cpp) \
-	$(wildcard gascheduler/src/timetable/*.cpp) \
 	$(wildcard gascheduler/src/timetable/algorithm/*.cpp) \
 	$(wildcard gascheduler/src/timetable/analysis/*.cpp) \
 	$(wildcard gascheduler/src/timetable/model/*.cpp) \
+	$(wildcard gascheduler/src/timetable/*.cpp) \
 	$(wildcard ~/dev/localsearch/**/*.cpp)
 
 SOURCES = $(SOURCES_CC) $(SOURCES_CPP)
