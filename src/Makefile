@@ -18,9 +18,9 @@ NOERROR1 = no-error=unused-local-typedef
 NOLOCALTYPEDEF = no-unused-local-typedef
 NOUNUSEDCAPTURE = no-unused-lambda-capture
 
-CFLAGS = -O2 -Wall -W${NOLOCALTYPEDEF} -W$(NOUNUSEDCAPTURE) -std=c++17 ${THREADS} ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED
+CFLAGS = -O3 -Wall -W${NOLOCALTYPEDEF} -W$(NOUNUSEDCAPTURE) -std=c++17 ${THREADS} ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED
 
-LDFLAGS = -O2 -s WASM=1 --shell-file html_template/shell_minimal.html -s NO_EXIT_RUNTIME=1 -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall"]' -s NO_FILESYSTEM=1
+LDFLAGS = -O3 -s WASM=1 --shell-file html_template/shell_minimal.html -s NO_EXIT_RUNTIME=1 -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall"]' -s NO_FILESYSTEM=1 -s ERROR_ON_UNDEFINED_SYMBOLS=0
 
 SOURCES_CC = $(wildcard *.cc)
 SOURCES_CPP = \
