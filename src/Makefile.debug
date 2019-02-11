@@ -28,7 +28,6 @@ SOURCES_CPP = \
 	$(wildcard gascheduler/src/plugin/algorithm_builder.cpp) \
 	$(wildcard gascheduler/src/storage/*.cpp) \
 	$(wildcard gascheduler/src/timetable/algorithm/*.cpp) \
-	$(wildcard gascheduler/src/timetable/analysis/*.cpp) \
 	$(wildcard gascheduler/src/timetable/model/*.cpp) \
 	$(wildcard gascheduler/src/timetable/*.cpp) \
 	$(wildcard ~/dev/localsearch/**/*.cpp)
