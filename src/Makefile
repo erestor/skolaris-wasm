@@ -18,9 +18,9 @@ NOERROR1 = no-error=unused-local-typedef
 NOLOCALTYPEDEF = no-unused-local-typedef
 NOUNUSEDCAPTURE = no-unused-lambda-capture
 
-CFLAGS = -O1 -Wall -W${NOLOCALTYPEDEF} -W$(NOUNUSEDCAPTURE) -std=c++17 ${THREADS} ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED -g4
+CFLAGS = -O1 -Wall -W${NOLOCALTYPEDEF} -W$(NOUNUSEDCAPTURE) -std=c++17 ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED -g4
 
-LDFLAGS = -O1 -s WASM=1 --shell-file html_template/shell_minimal.html -s NO_EXIT_RUNTIME=1 -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall","cwrap"]' -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s ASSERTIONS=1 -g4 --source-map-base http://localhost/SkolarisUI.Web/Plugin/src/
+LDFLAGS = -O1 -s WASM=1 --shell-file html_template/shell_minimal.html -s NO_EXIT_RUNTIME=1 -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall","cwrap"]' -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s ASSERTIONS=1 -s NO_FILESYSTEM=1 -g4 --source-map-base http://localhost/SkolarisUI.Web/Plugin/src/ ${THREADS}
 
 SOURCES_CC = $(wildcard *.cc)
 SOURCES_CPP = \
@@ -49,5 +49,5 @@ clean:
 	find . -name "*.o" -type f -delete
 
 copy:
-	cp Release/skolaris.* ~/Public
+	cp Release/skolaris.* Release/pthread-main.js ~/Public
 
