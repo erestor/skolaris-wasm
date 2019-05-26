@@ -4,14 +4,14 @@
 
 using namespace std;
 
-const string SKOLARIS_VERSION("9.6.0"
+const string SKOLARIS_VERSION("9.7.0"
 #ifdef DEBUG
 	"debug"
 #endif
 );
 
 const string SKOLARIS_VERSION_MAJOR("9");
-const string SKOLARIS_VERSION_MINOR("6");
+const string SKOLARIS_VERSION_MINOR("7");
 const string SKOLARIS_VERSION_PATCH("0");
 
 void SkolarisInstance::post_complete(int requestId)
