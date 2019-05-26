@@ -3,6 +3,8 @@
 #include "gascheduler/src/interface/icontroller.h"
 #include "gascheduler/src/storage/store.h"
 #include "gascheduler/src/timetable/constraint_holder.h"
+#include <algorithm/events.h>
+#include <ctoolhu/event/firer.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <string>
@@ -40,8 +42,7 @@ bool SkolarisInstance::set_jsonSchedules(const string &jsonSchedules, int reques
 		post_error(requestId, string("Unable to parse schedules: ") + e.what());
 		return false;
 	}
-	auto storage = store();
-	auto currentSolutionPtr = storage->getCurrentSolution();
+	auto currentSolutionPtr = store()->getCurrentSolution();
 	unique_ptr<Algorithm::ISolution> backup{currentSolutionPtr->clone()};
 	try {
 		currentSolutionPtr->load(schedules);
@@ -50,18 +51,6 @@ bool SkolarisInstance::set_jsonSchedules(const string &jsonSchedules, int reques
 		backup->copyTo(currentSolutionPtr.get());
 		post_error(requestId, string("Unable to load schedules: ") + e.what());
 		return false;
-	}
-	auto fitness = currentSolutionPtr->getFitness();
-	if (fitness < storage->getBestSolution()->getFitness()) {
-		storage->setBestSolution();
-		post_bestsolutionfound(currentSolutionPtr.get());
-	}
-	if (currentSolutionPtr->isFeasible()) {
-		auto storedFeasibleSolution = storage->getFeasibleSolution();
-		if (!storedFeasibleSolution || fitness < storedFeasibleSolution->getFitness()) {
-			storage->setFeasibleSolution();
-			post_feasiblesolutionfound(currentSolutionPtr.get());
-		}
 	}
 	return true;
 }
@@ -82,27 +71,11 @@ bool SkolarisInstance::set_jsonConstraints(const string &jsonConstraints, int re
 		return false;
 	}
 	try {
-		m_ConstraintHolder->LoadConstraints(constraints);
+		m_ConstraintHolder->loadConstraints(constraints);
 	}
 	catch(const exception &e) {
 		post_error(requestId, string("Unable to load constraints: ") + e.what());
 		return false;
-	}
-	auto storage = store();
-	storage->getCurrentSolution()->markDirty();
-	storage->getBestSolution()->markDirty();
-	storage->getBestOverallSolution()->markDirty();
-	auto storedSolution = storage->getFeasibleSolution();
-	if (storedSolution) {
-		storedSolution->markDirty();
-		if (!storedSolution->isFeasible())
-			storage->resetFeasibleSolution();
-	}
-	storedSolution = storage->getFeasibleOverallSolution();
-	if (storedSolution) {
-		storedSolution->markDirty();
-		if (!storedSolution->isFeasible())
-			storage->resetFeasibleOverallSolution();
 	}
 	return true;
 }
