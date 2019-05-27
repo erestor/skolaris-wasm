@@ -56,6 +56,7 @@ bool SkolarisInstance::set_jsonSchedules(const string &jsonSchedules, int reques
 
 bool SkolarisInstance::set_jsonConstraints(const string &jsonConstraints, int requestId)
 {
+	m_Errors.clear();
 	if (controller()->isRunning()) {
 		post_error(requestId, "Cannot load constraints while search is running");
 		return false;
