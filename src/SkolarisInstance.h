@@ -39,7 +39,7 @@ class SkolarisInstance : public pp::Instance {
 	/// @a var_message can contain be any pp:Var type; for example int, string
 	/// Array or Dictinary. Please see the pp:Var documentation for more details.
 	/// @param[in] var_message The message posted by the browser.
-	virtual void HandleMessage(const pp::Var&);
+	virtual void HandleMessage(const pp::Var &);
 
 	void post_text(const std::string &);
     void post_paused();
@@ -69,7 +69,7 @@ class SkolarisInstance : public pp::Instance {
     void post_feasiblesolution(int requestId);
     void post_bestoverallsolution(int requestId);
     void post_feasibleoverallsolution(int requestId);
-    void post_messages();
+    void post_warnings();
 
 	void post_started(int requestId);
 
@@ -86,7 +86,7 @@ class SkolarisInstance : public pp::Instance {
 
 	bool stringifyFitnessSummary(std::string &result, Algorithm::ISolution *) const;
 	bool stringifySolution(std::string &result, const std::shared_ptr<Algorithm::ISolution> &) const;
-	std::string stringifyMessages() const; //puts errors and check fails into JSON string
+	std::string stringifyMessages(const std::vector<boost::property_tree::ptree> &warnings) const; //puts errors and check fails into JSON string
 	IController *controller();
 	Ctoolhu::Thread::LockingProxy<Storage::Store> store() const; //do NOT call this twice in one expression, it will cause an exception. It is an object auto-locking call!
 	bool start();
@@ -96,9 +96,7 @@ class SkolarisInstance : public pp::Instance {
 	std::shared_ptr<Timetabling::ConstraintHolder> m_ConstraintHolder;
 	std::unique_ptr<PluginEventHandler> m_EventHandler;
 	std::vector<std::string> m_Errors;
-	std::vector<boost::property_tree::ptree> m_CheckFails;
 
 	std::string m_jsonAlgorithm;
 	bool m_benchmarkMode;
 };
-

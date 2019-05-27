@@ -1,5 +1,7 @@
 #include "SkolarisInstance.h"
 #include "gascheduler/src/storage/store.h"
+#include "gascheduler/src/timetable/timetable_events.h"
+#include <ctoolhu/event/firer.hpp>
 #include <string>
 
 using namespace std;
@@ -147,9 +149,14 @@ void SkolarisInstance::post_feasiblesolutionfound(Algorithm::ISolution *solution
 }
 
 
-void SkolarisInstance::post_messages()
+void SkolarisInstance::post_warnings()
 {
-	post_message("messages", pp::Var(stringifyMessages()));
+	auto event = Timetabling::TimetableEvents::Check();
+	Ctoolhu::Event::Fire(event);
+	if (!event.valid)
+		m_Errors.push_back("Timetable data is invalid");
+
+	post_message("messages", pp::Var(stringifyMessages(event.messages)));
 }
 
 

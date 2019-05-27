@@ -70,7 +70,7 @@ bool SkolarisInstance::stringifySolution(string &result, const shared_ptr<Algori
 	return false;
 }
 
-string SkolarisInstance::stringifyMessages() const
+string SkolarisInstance::stringifyMessages(const std::vector<boost::property_tree::ptree> &warnings) const
 {
 	ptree errors;
 	for (auto const &e : m_Errors) {
@@ -79,9 +79,9 @@ string SkolarisInstance::stringifyMessages() const
 		errors.push_back(std::make_pair("", child));
 	}
 	ptree checkFails;
-	for (auto const &cf : m_CheckFails) {
+	for (auto const &cf : warnings)
 		checkFails.push_back(std::make_pair("", cf));
-	}
+
 	ptree messages;
 	messages.add_child("errors", errors);
 	messages.add_child("checkFails", checkFails);
