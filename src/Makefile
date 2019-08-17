@@ -20,7 +20,8 @@ NOUNUSEDCAPTURE = no-unused-lambda-capture
 
 CFLAGS = -Wall -W${NOLOCALTYPEDEF} -W$(NOUNUSEDCAPTURE) -std=c++17 ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED -g4
 
-LDFLAGS = -s WASM=1 --shell-file html_template/shell_minimal.html -s NO_EXIT_RUNTIME=1 -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall","cwrap"]' -s ASSERTIONS=1 -s VERBOSE=1 -s NO_FILESYSTEM=1 -g4 --source-map-base http://localhost/SkolarisUI.Web/Plugin/src/ ${THREADS}
+LDFLAGS = -s WASM=1 --shell-file html_template/shell_minimal.html -s NO_EXIT_RUNTIME=1 -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall","cwrap"]' -s ASSERTIONS=1 -g4 --source-map-base http://localhost/SkolarisUI.Web/Plugin/src/ ${THREADS}
+EXTRALDFLAGS = -s VERBOSE=1 -s FILESYSTEM=0
 
 SOURCES_CC = $(wildcard *.cc)
 SOURCES_CPP = \
@@ -37,7 +38,7 @@ SOURCES = $(SOURCES_CC) $(SOURCES_CPP)
 OBJECTS = $(SOURCES_CC:.cc=.o) $(SOURCES_CPP:.cpp=.o)
 
 skolaris: $(OBJECTS)
-	EMCC_DEBUG=1 $(CXX) -o Release/skolaris.html $^ $(LDFLAGS)
+	$(CXX) -o Release/skolaris.html $^ $(LDFLAGS)
 
 %.o: %.cc
 	$(CXX) -c $(CFLAGS) -o $@ $<
