@@ -22,14 +22,14 @@ void SkolarisInstance::post_complete(int requestId)
 {
 	ptree dictionary;
 	dictionary.put("reqId", requestId);
-	PostMessage(dictionary);
+	postMessage(dictionary);
 }
 
 void SkolarisInstance::post_message(const std::string &type)
 {
 	ptree dictionary;
 	dictionary.put("type", type);
-	PostMessage(dictionary);
+	postMessage(dictionary);
 }
 
 void SkolarisInstance::post_message(const std::string &type, const string &payload)
@@ -37,7 +37,7 @@ void SkolarisInstance::post_message(const std::string &type, const string &paylo
 	ptree dictionary;
 	dictionary.put("type", type);
 	dictionary.put("payload", payload);
-	PostMessage(dictionary);
+	postMessage(dictionary);
 }
 
 void SkolarisInstance::post_message(const std::string &type, const ptree &payload)
@@ -45,7 +45,7 @@ void SkolarisInstance::post_message(const std::string &type, const ptree &payloa
 	ptree dictionary;
 	dictionary.put("type", type);
 	dictionary.put_child("payload", payload);
-	PostMessage(dictionary);
+	postMessage(dictionary);
 }
 
 void SkolarisInstance::post_message(int requestId, const std::string &type)
@@ -53,7 +53,7 @@ void SkolarisInstance::post_message(int requestId, const std::string &type)
 	ptree dictionary;
 	dictionary.put("reqId", requestId);
 	dictionary.put("type", type);
-	PostMessage(dictionary);
+	postMessage(dictionary);
 }
 
 void SkolarisInstance::post_message(int requestId, const std::string &type, const string &payload)
@@ -62,7 +62,7 @@ void SkolarisInstance::post_message(int requestId, const std::string &type, cons
 	dictionary.put("reqId", requestId);
 	dictionary.put("type", type);
 	dictionary.put("payload", payload);
-	PostMessage(dictionary);
+	postMessage(dictionary);
 }
 
 void SkolarisInstance::post_message(int requestId, const std::string &type, const ptree &payload)
@@ -71,7 +71,7 @@ void SkolarisInstance::post_message(int requestId, const std::string &type, cons
 	dictionary.put("reqId", requestId);
 	dictionary.put("type", type);
 	dictionary.put_child("payload", payload);
-	PostMessage(dictionary);
+	postMessage(dictionary);
 }
 
 void SkolarisInstance::post_error(int requestId, const std::string &what)

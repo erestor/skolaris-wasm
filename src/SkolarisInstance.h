@@ -2,6 +2,7 @@
 #include <algorithm/isolution.h>
 #include <ctoolhu/thread/proxy.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
+#include <loki/Singleton.h>
 #include <memory>
 #include <string>
 #include <vector>
@@ -21,9 +22,8 @@ class SkolarisInstance {
 	SkolarisInstance();
 	virtual ~SkolarisInstance(); 
 
-	// PPAPI Handler for messages coming in from the browser via postMessage().
-	/// @param[in] var_message The message posted by the browser.
-	void HandleMessage(const std::string &);
+	//handler for messages coming in from the browser
+	void handleMessage(const std::string &);
 
 	void post_text(const std::string &);
     void post_paused();
@@ -35,8 +35,8 @@ class SkolarisInstance {
 
   private:
 
-	// PPAPI Posts message to the browser
-	void PostMessage(const boost::property_tree::ptree &);
+	//posts message to the browser
+	void postMessage(const boost::property_tree::ptree &);
 
 	void handleSetMessage(const boost::property_tree::ptree &);
 	void handleGetMessage(const boost::property_tree::ptree &);
@@ -89,3 +89,5 @@ class SkolarisInstance {
 	std::string m_jsonAlgorithm;
 	bool m_benchmarkMode;
 };
+
+typedef Loki::SingletonHolder<SkolarisInstance> SingleSkolarisInstance;

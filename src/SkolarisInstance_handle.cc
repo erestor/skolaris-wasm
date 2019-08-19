@@ -11,7 +11,7 @@ using namespace std;
 /// @a var_message can contain be any pp:Var type; for example int, string
 /// Array or Dictinary. Please see the pp:Var documentation for more details.
 /// @param[in] var_message The message posted by the browser.
-void SkolarisInstance::HandleMessage(const string &var_message)
+void SkolarisInstance::handleMessage(const string &var_message)
 {
 	ptree message;
 	stringstream s(var_message);
