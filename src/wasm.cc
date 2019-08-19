@@ -24,7 +24,7 @@ void SkolarisInstance::PostMessage(const ptree &data)
 	json_parser::write_json(s, data);
 	auto result = s.str();
 	EM_ASM({
-		window['SkolarisModule']['postMessage'](UTF8ToString($0));
+		postMessage(UTF8ToString($0));
 	}, result.c_str());
 }
 
@@ -34,7 +34,7 @@ extern "C" {
 
 void EMSCRIPTEN_KEEPALIVE handleMessage(const char *msg)
 {
-	printf("handleMessage called with %s\n", msg);
+//	printf("handleMessage called with %s\n", msg);
 	instancePtr->HandleMessage(msg);
 }
 
