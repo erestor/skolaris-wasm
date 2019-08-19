@@ -36,18 +36,12 @@
     <ClCompile Include="src\SkolarisInstance_set.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\SkolarisModule.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\event_handler.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="src\SkolarisInstance.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\SkolarisModule.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

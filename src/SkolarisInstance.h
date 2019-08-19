@@ -25,42 +25,43 @@ class SkolarisInstance {
 	//handler for messages coming in from the browser
 	void handleMessage(const std::string &);
 
-	void post_text(const std::string &);
-    void post_paused();
-    void post_resumed();
-	void post_stopped(int h, int m, int s, int ms);
-    void post_currentsolutionchanged(Algorithm::ISolution *);
-    void post_bestsolutionfound(Algorithm::ISolution *);
-    void post_feasiblesolutionfound(Algorithm::ISolution *);
+	void post_text(const std::string &) const;
+    void post_paused() const;
+    void post_resumed() const;
+	void post_stopped(int h, int m, int s, int ms) const;
+    void post_currentsolutionchanged(Algorithm::ISolution *) const;
+    void post_bestsolutionfound(Algorithm::ISolution *) const;
+    void post_feasiblesolutionfound(Algorithm::ISolution *) const;
 
   private:
 
 	//posts message to the browser
-	void postMessage(const boost::property_tree::ptree &);
+	void postMessage(const char *) const;
+	void postMessage(const boost::property_tree::ptree &) const;
 
 	void handleSetMessage(const boost::property_tree::ptree &);
 	void handleGetMessage(const boost::property_tree::ptree &);
 	void handleControlMessage(const boost::property_tree::ptree &);
 
-	void post_message(const std::string &type);
-	void post_message(const std::string &type, const std::string &payload);
-	void post_message(const std::string &type, const boost::property_tree::ptree &);
+	void post_message(const std::string &type) const;
+	void post_message(const std::string &type, const std::string &payload) const;
+	void post_message(const std::string &type, const boost::property_tree::ptree &) const;
 
-	void post_message(int requestId, const std::string &type);
-	void post_message(int requestId, const std::string &type, const std::string &payload);
-	void post_message(int requestId, const std::string &type, const boost::property_tree::ptree &);
+	void post_message(int requestId, const std::string &type) const;
+	void post_message(int requestId, const std::string &type, const std::string &payload) const;
+	void post_message(int requestId, const std::string &type, const boost::property_tree::ptree &) const;
 
-	void post_complete(int requestId);
-	void post_error(int requestId, const std::string &what);
-	void post_version(int requestId);
-    void post_currentsolution(int requestId);
-    void post_bestsolution(int requestId);
-    void post_feasiblesolution(int requestId);
-    void post_bestoverallsolution(int requestId);
-    void post_feasibleoverallsolution(int requestId);
+	void post_complete(int requestId) const;
+	void post_error(int requestId, const std::string &what) const;
+	void post_version(int requestId) const;
+    void post_currentsolution(int requestId) const;
+    void post_bestsolution(int requestId) const;
+    void post_feasiblesolution(int requestId) const;
+    void post_bestoverallsolution(int requestId) const;
+    void post_feasibleoverallsolution(int requestId) const;
     void post_warnings();
 
-	void post_started(int requestId);
+	void post_started(int requestId) const;
 
     bool set_jsonData(const std::string &, int requestId);
     bool set_jsonSchedules(const std::string &, int requestId);

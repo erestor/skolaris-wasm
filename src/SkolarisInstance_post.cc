@@ -2,6 +2,7 @@
 #include "gascheduler/src/storage/store.h"
 #include "gascheduler/src/timetable/timetable_events.h"
 #include <ctoolhu/event/firer.hpp>
+#include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <string>
 
@@ -18,21 +19,29 @@ const string SKOLARIS_VERSION_MAJOR("9");
 const string SKOLARIS_VERSION_MINOR("8");
 const string SKOLARIS_VERSION_PATCH("1");
 
-void SkolarisInstance::post_complete(int requestId)
+void SkolarisInstance::postMessage(const ptree &data) const
+{
+	std::stringstream s;
+	json_parser::write_json(s, data);
+	auto result = s.str();
+	postMessage(result.c_str());
+}
+
+void SkolarisInstance::post_complete(int requestId) const
 {
 	ptree dictionary;
 	dictionary.put("reqId", requestId);
 	postMessage(dictionary);
 }
 
-void SkolarisInstance::post_message(const std::string &type)
+void SkolarisInstance::post_message(const std::string &type) const
 {
 	ptree dictionary;
 	dictionary.put("type", type);
 	postMessage(dictionary);
 }
 
-void SkolarisInstance::post_message(const std::string &type, const string &payload)
+void SkolarisInstance::post_message(const std::string &type, const string &payload) const
 {
 	ptree dictionary;
 	dictionary.put("type", type);
@@ -40,7 +49,7 @@ void SkolarisInstance::post_message(const std::string &type, const string &paylo
 	postMessage(dictionary);
 }
 
-void SkolarisInstance::post_message(const std::string &type, const ptree &payload)
+void SkolarisInstance::post_message(const std::string &type, const ptree &payload) const
 {
 	ptree dictionary;
 	dictionary.put("type", type);
@@ -48,7 +57,7 @@ void SkolarisInstance::post_message(const std::string &type, const ptree &payloa
 	postMessage(dictionary);
 }
 
-void SkolarisInstance::post_message(int requestId, const std::string &type)
+void SkolarisInstance::post_message(int requestId, const std::string &type) const
 {
 	ptree dictionary;
 	dictionary.put("reqId", requestId);
@@ -56,7 +65,7 @@ void SkolarisInstance::post_message(int requestId, const std::string &type)
 	postMessage(dictionary);
 }
 
-void SkolarisInstance::post_message(int requestId, const std::string &type, const string &payload)
+void SkolarisInstance::post_message(int requestId, const std::string &type, const string &payload) const
 {
 	ptree dictionary;
 	dictionary.put("reqId", requestId);
@@ -65,7 +74,7 @@ void SkolarisInstance::post_message(int requestId, const std::string &type, cons
 	postMessage(dictionary);
 }
 
-void SkolarisInstance::post_message(int requestId, const std::string &type, const ptree &payload)
+void SkolarisInstance::post_message(int requestId, const std::string &type, const ptree &payload) const
 {
 	ptree dictionary;
 	dictionary.put("reqId", requestId);
@@ -74,17 +83,17 @@ void SkolarisInstance::post_message(int requestId, const std::string &type, cons
 	postMessage(dictionary);
 }
 
-void SkolarisInstance::post_error(int requestId, const std::string &what)
+void SkolarisInstance::post_error(int requestId, const std::string &what) const
 {
 	post_message(requestId, "error", what);
 }
 
-void SkolarisInstance::post_text(const std::string &what)
+void SkolarisInstance::post_text(const std::string &what) const
 {
 	post_message("text", what);
 }
 
-void SkolarisInstance::post_version(int requestId)
+void SkolarisInstance::post_version(int requestId) const
 {
 	ptree dict;
 	dict.put("version", SKOLARIS_VERSION);
@@ -95,7 +104,7 @@ void SkolarisInstance::post_version(int requestId)
 }
 
 
-void SkolarisInstance::post_currentsolution(int requestId)
+void SkolarisInstance::post_currentsolution(int requestId) const
 {
 	string s;
 	if (stringifySolution(s, store()->getCurrentSolution()))
@@ -104,7 +113,7 @@ void SkolarisInstance::post_currentsolution(int requestId)
 		post_error(requestId, s);
 }
 
-void SkolarisInstance::post_bestsolution(int requestId)
+void SkolarisInstance::post_bestsolution(int requestId) const
 {
 	string s;
 	if (stringifySolution(s, store()->getBestSolution()))
@@ -113,7 +122,7 @@ void SkolarisInstance::post_bestsolution(int requestId)
 		post_error(requestId, s);
 }
 
-void SkolarisInstance::post_feasiblesolution(int requestId)
+void SkolarisInstance::post_feasiblesolution(int requestId) const
 {
 	string s;
 	if (stringifySolution(s, store()->getFeasibleSolution()))
@@ -122,7 +131,7 @@ void SkolarisInstance::post_feasiblesolution(int requestId)
 		post_error(requestId, s);
 }
 
-void SkolarisInstance::post_bestoverallsolution(int requestId)
+void SkolarisInstance::post_bestoverallsolution(int requestId) const
 {
     string s;
     if (stringifySolution(s, store()->getBestOverallSolution()))
@@ -131,7 +140,7 @@ void SkolarisInstance::post_bestoverallsolution(int requestId)
         post_error(requestId, s);
 }
 
-void SkolarisInstance::post_feasibleoverallsolution(int requestId)
+void SkolarisInstance::post_feasibleoverallsolution(int requestId) const
 {
     string s;
     if (stringifySolution(s, store()->getFeasibleOverallSolution()))
@@ -140,7 +149,7 @@ void SkolarisInstance::post_feasibleoverallsolution(int requestId)
         post_error(requestId, s);
 }
 
-void SkolarisInstance::post_currentsolutionchanged(Algorithm::ISolution *solutionPtr)
+void SkolarisInstance::post_currentsolutionchanged(Algorithm::ISolution *solutionPtr) const
 {
 	string s;
 	if (stringifyFitnessSummary(s, solutionPtr))
@@ -149,7 +158,7 @@ void SkolarisInstance::post_currentsolutionchanged(Algorithm::ISolution *solutio
 		post_error(0, s);
 }
 
-void SkolarisInstance::post_bestsolutionfound(Algorithm::ISolution *solutionPtr)
+void SkolarisInstance::post_bestsolutionfound(Algorithm::ISolution *solutionPtr) const
 {
 	string s;
 	if (stringifyFitnessSummary(s, solutionPtr))
@@ -158,7 +167,7 @@ void SkolarisInstance::post_bestsolutionfound(Algorithm::ISolution *solutionPtr)
 		post_error(0, s);
 }
 
-void SkolarisInstance::post_feasiblesolutionfound(Algorithm::ISolution *solutionPtr)
+void SkolarisInstance::post_feasiblesolutionfound(Algorithm::ISolution *solutionPtr) const
 {
 	string s;
 	if (stringifyFitnessSummary(s, solutionPtr))
@@ -179,22 +188,22 @@ void SkolarisInstance::post_warnings()
 }
 
 
-void SkolarisInstance::post_started(int requestId)
+void SkolarisInstance::post_started(int requestId) const
 {
 	post_message(requestId, "started");
 }
 
-void SkolarisInstance::post_paused()
+void SkolarisInstance::post_paused() const
 {
 	post_message("paused");
 }
 
-void SkolarisInstance::post_resumed()
+void SkolarisInstance::post_resumed() const
 {
 	post_message("resumed");
 }
 
-void SkolarisInstance::post_stopped(int h, int m, int s, int ms)
+void SkolarisInstance::post_stopped(int h, int m, int s, int ms) const
 {
 	ptree timeDict;
 	timeDict.put("h", h);

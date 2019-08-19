@@ -71,13 +71,11 @@
     <ClCompile Include="src\SkolarisInstance_control.cc" />
     <ClCompile Include="src\SkolarisInstance_handle.cc" />
     <ClCompile Include="src\SkolarisInstance_post.cc" />
-    <ClCompile Include="src\SkolarisModule.cc" />
     <ClCompile Include="src\wasm.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\event_handler.h" />
     <ClInclude Include="src\SkolarisInstance.h" />
-    <ClInclude Include="src\SkolarisModule.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
