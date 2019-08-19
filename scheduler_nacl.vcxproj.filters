@@ -13,42 +13,42 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\src">
-      <UniqueIdentifier>{02b154a2-e7d3-424a-8dd8-a90d091065d8}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\wasm.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\event_handler.cc">
-      <Filter>Source Files\src</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\SkolarisInstance.cc">
-      <Filter>Source Files\src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SkolarisModule.cc">
-      <Filter>Source Files\src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SkolarisInstance_post.cc">
-      <Filter>Source Files\src</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\SkolarisInstance_control.cc">
-      <Filter>Source Files\src</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\SkolarisInstance_handle.cc">
-      <Filter>Source Files\src</Filter>
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SkolarisInstance_post.cc">
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\SkolarisInstance_set.cc">
-      <Filter>Source Files\src</Filter>
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SkolarisModule.cc">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\event_handler.h">
-      <Filter>Source Files\src</Filter>
+      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="src\SkolarisInstance.h">
-      <Filter>Source Files\src</Filter>
+      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="src\SkolarisModule.h">
-      <Filter>Source Files\src</Filter>
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
