@@ -34,7 +34,7 @@ extern "C" {
 
 void EMSCRIPTEN_KEEPALIVE handleMessage(const char *msg)
 {
-//	printf("handleMessage called with %s\n", msg);
+	printf("handleMessage called with %s\n", msg);
 	instancePtr->HandleMessage(msg);
 }
 
