@@ -18,10 +18,10 @@ NOERROR1 = no-error=unused-local-typedef
 NOLOCALTYPEDEF = no-unused-local-typedef
 NOUNUSEDCAPTURE = no-unused-lambda-capture
 
-CFLAGS = -Wall -W${NOLOCALTYPEDEF} -W$(NOUNUSEDCAPTURE) -std=c++17 ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED -g4
+CFLAGS = -O2 -Wall -W${NOLOCALTYPEDEF} -W$(NOUNUSEDCAPTURE) -std=c++17 ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED
 
-LDFLAGS = -s WASM=1 --shell-file html_template/shell_minimal.html -s DISABLE_EXCEPTION_CATCHING=0 -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall","cwrap"]' -s ASSERTIONS=1 -s TOTAL_MEMORY=256Mb -g4 --source-map-base http://localhost/SkolarisUI.Web/Plugin/src/ ${THREADS}
-EXTRALDFLAGS = -s VERBOSE=1 -s FILESYSTEM=0 -s ALLOW_MEMORY_GROWTH=1 -s WASM_MEM_MAX=536870912
+LDFLAGS = -O2 -s MODULARIZE=1 -s EXPORT_NAME=SkolarisModule --shell-file html_template/shell_minimal.html -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall","cwrap"]' --source-map-base http://localhost/SkolarisUI.Web/Plugin/src/ ${THREADS} -s TOTAL_MEMORY=256Mb
+EXTRALDFLAGS = -s ALLOW_MEMORY_GROWTH=1 -s WASM_MEM_MAX=536870912 -s TOTAL_MEMORY=256Mb
 
 SOURCES_CC = $(wildcard *.cc)
 SOURCES_CPP = \
@@ -50,5 +50,5 @@ clean:
 	find . ~/dev/localsearch -name "*.o" -type f -delete
 
 copy:
-	cp Release/skolaris.* Release/pthread-main.js ~/Public/skolaris_wasm
+	cp Release/skolaris.* ~/Public/skolaris_wasm
 
