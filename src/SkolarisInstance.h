@@ -1,8 +1,8 @@
 #include "event_handler.h"
 #include <algorithm/isolution.h>
+#include <ctoolhu/singleton/holder.hpp>
 #include <ctoolhu/thread/proxy.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
-#include <loki/Singleton.h>
 #include <memory>
 #include <string>
 #include <vector>
@@ -91,4 +91,4 @@ class SkolarisInstance {
 	bool m_benchmarkMode;
 };
 
-typedef Loki::SingletonHolder<SkolarisInstance> SingleSkolarisInstance;
+typedef Ctoolhu::Singleton::Holder<SkolarisInstance> SingleSkolarisInstance;
