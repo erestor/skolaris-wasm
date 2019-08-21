@@ -20,7 +20,7 @@ NOUNUSEDCAPTURE = no-unused-lambda-capture
 
 CFLAGS = -O2 -Wall -W${NOLOCALTYPEDEF} -W$(NOUNUSEDCAPTURE) -std=c++17 ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED
 
-LDFLAGS = -O2 -s MODULARIZE=1 -s EXPORT_NAME=SkolarisModule --shell-file html_template/shell_minimal.html -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall","cwrap"]' --source-map-base http://localhost/SkolarisUI.Web/Plugin/src/ ${THREADS} -s TOTAL_MEMORY=256Mb
+LDFLAGS = -O2 -s MODULARIZE=1 -s EXPORT_NAME=SkolarisModule --shell-file html_template/shell_minimal.html -s EXTRA_EXPORTED_RUNTIME_METHODS='["cwrap"]' ${THREADS} -s TOTAL_MEMORY=256Mb
 EXTRALDFLAGS = -s ALLOW_MEMORY_GROWTH=1 -s WASM_MEM_MAX=536870912 -s TOTAL_MEMORY=256Mb
 
 SOURCES_CC = $(wildcard *.cc)

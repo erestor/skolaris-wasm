@@ -20,7 +20,7 @@ NOUNUSEDCAPTURE = no-unused-lambda-capture
 
 CFLAGS = -Wall -W${NOLOCALTYPEDEF} -W$(NOUNUSEDCAPTURE) -std=c++17 ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED -g4
 
-LDFLAGS = --shell-file html_template/shell_minimal.html -s DISABLE_EXCEPTION_CATCHING=0 -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall","cwrap"]' -s ASSERTIONS=1 -s TOTAL_MEMORY=256Mb -g4 --source-map-base http://localhost/SkolarisUI.Web/Plugin/src/ ${THREADS}
+LDFLAGS = --shell-file html_template/shell_minimal.html -s DISABLE_EXCEPTION_CATCHING=0 -s EXTRA_EXPORTED_RUNTIME_METHODS='["cwrap"]' -s ASSERTIONS=1 -s TOTAL_MEMORY=256Mb -g4 --source-map-base http://localhost/SkolarisUI.Web/Plugin/src/ ${THREADS}
 EXTRALDFLAGS = -s ALLOW_MEMORY_GROWTH=1 -s WASM_MEM_MAX=536870912
 
 SOURCES_CC = $(wildcard *.cc)
@@ -38,7 +38,7 @@ SOURCES = $(SOURCES_CC) $(SOURCES_CPP)
 OBJECTS = $(SOURCES_CC:.cc=.o) $(SOURCES_CPP:.cpp=.o)
 
 skolaris: $(OBJECTS)
-	$(CXX) -o Release/skolaris.html $^ $(LDFLAGS)
+	$(CXX) -o Debug/skolaris.html $^ $(LDFLAGS)
 
 %.o: %.cc
 	$(CXX) -c $(CFLAGS) -o $@ $<
@@ -50,5 +50,5 @@ clean:
 	find . ~/dev/localsearch -name "*.o" -type f -delete
 
 copy:
-	cp Release/skolaris.* ~/Public/skolaris_wasm
+	cp Debug/skolaris.* ~/Public/skolaris_wasm
 
