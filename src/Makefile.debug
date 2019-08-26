@@ -8,7 +8,7 @@
 CXX = emcc
 TARGET = skolaris
 
-THREADS = -s USE_PTHREADS=1 -s PTHREAD_POOL_SIZE=5
+THREADS = -s USE_PTHREADS=1 -s PTHREAD_POOL_SIZE=6
 INCBOOST = /usr/local/include
 INCCTOOLHU = /usr/local/include/ctoolhu
 INCLOCALSEARCH = /usr/local/include/localsearch/include
@@ -20,7 +20,7 @@ NOUNUSEDCAPTURE = no-unused-lambda-capture
 
 CFLAGS = -Wall -W${NOLOCALTYPEDEF} -W$(NOUNUSEDCAPTURE) -std=c++17 ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED -g4
 
-LDFLAGS = --shell-file html_template/shell_minimal.html -s DISABLE_EXCEPTION_CATCHING=0 -s EXTRA_EXPORTED_RUNTIME_METHODS='["cwrap"]' -s ASSERTIONS=1 -s TOTAL_MEMORY=256Mb -g4 --source-map-base http://localhost/SkolarisUI.Web/Plugin/src/ ${THREADS}
+LDFLAGS = --shell-file html_template/shell_minimal.html -s DISABLE_EXCEPTION_CATCHING=0 -s EXTRA_EXPORTED_RUNTIME_METHODS='["cwrap"]' -s ASSERTIONS=1 -s DEMANGLE_SUPPORT=1 -s TOTAL_MEMORY=256Mb -g4 --source-map-base http://localhost/SkolarisUI.Web/Plugin/src/ ${THREADS}
 EXTRALDFLAGS = -s ALLOW_MEMORY_GROWTH=1 -s WASM_MEM_MAX=536870912
 
 SOURCES_CC = $(wildcard *.cc)
@@ -47,7 +47,7 @@ skolaris: $(OBJECTS)
 	$(CXX) -c $(CFLAGS) -o $@ $<
 
 clean:
-	find . ~/dev/localsearch -name "*.o" -type f -delete
+	rm -rf ~/.emscripten_cache; find . ~/dev/localsearch -name "*.o" -type f -delete
 
 copy:
 	cp Debug/skolaris.* ~/Public/skolaris_wasm

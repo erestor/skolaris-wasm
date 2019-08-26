@@ -1,8 +1,5 @@
 #include "SkolarisInstance.h"
 #include <emscripten/emscripten.h>
-#include <memory>
-#include <sstream>
-#include <stdio.h>
 
 void SkolarisInstance::postMessage(const char *msg) const
 {

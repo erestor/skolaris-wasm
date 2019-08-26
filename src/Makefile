@@ -8,7 +8,7 @@
 CXX = emcc
 TARGET = skolaris
 
-THREADS = -s USE_PTHREADS=1 -s PTHREAD_POOL_SIZE=5
+THREADS = -s USE_PTHREADS=1 -s PTHREAD_POOL_SIZE=6
 INCBOOST = /usr/local/include
 INCCTOOLHU = /usr/local/include/ctoolhu
 INCLOCALSEARCH = /usr/local/include/localsearch/include

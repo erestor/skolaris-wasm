@@ -2,7 +2,7 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <string>
-#include <stdio.h>
+//#include <stdio.h>
 
 using namespace boost::property_tree;
 using namespace std;
@@ -19,7 +19,7 @@ void SkolarisInstance::handleMessage(const string &var_message)
 
 	auto type = message.get<string>("type");
 	auto target = message.get<string>("target");
-	printf("SkolarisInstance::HandleMessage type = %s, target = %s\n", type.c_str(), target.c_str());
+	//printf("SkolarisInstance::HandleMessage type = %s, target = %s\n", type.c_str(), target.c_str());
 	if (type == "get")
 		handleGetMessage(message);
 	else if (type == "set")
