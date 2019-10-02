@@ -1,5 +1,8 @@
 #include "event_handler.h"
-#include <algorithm/isolution.h>
+#include "gascheduler/src/controller.hpp"
+#include "gascheduler/src/timetable/schedule.h"
+#include <localsearch/store.hpp>
+#include <localsearch/interface/isolution.h>
 #include <ctoolhu/singleton/holder.hpp>
 #include <ctoolhu/thread/proxy.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
@@ -7,15 +10,14 @@
 #include <string>
 #include <vector>
 
-namespace Storage { class Store; }
-namespace Timetabling { class ConstraintHolder; }
+namespace Timetabling {
+	class ConstraintHolder;
+}
 
 class IController;
 class PluginEventHandler;
 
 class SkolarisInstance {
-
-	typedef std::unique_ptr<IController> controller_ptr_type;
 
   public:
 
@@ -75,20 +77,21 @@ class SkolarisInstance {
     void resume();
 
 	bool stringifyFitnessSummary(std::string &result, Algorithm::ISolution *) const;
-	bool stringifySolution(std::string &result, const std::shared_ptr<Algorithm::ISolution> &) const;
+	bool stringifySolution(std::string &result, const Algorithm::ISolution *) const;
 	std::string stringifyMessages(const std::vector<boost::property_tree::ptree> &warnings) const; //puts errors and check fails into JSON string
-	IController *controller();
-	Ctoolhu::Thread::LockingProxy<Storage::Store> store() const; //do NOT call this twice in one expression, it will cause an exception. It is an object auto-locking call!
-	bool start();
 
-	controller_ptr_type m_Controller;
-	std::shared_ptr<Storage::Store> m_Store;
-	std::shared_ptr<Timetabling::ConstraintHolder> m_ConstraintHolder;
-	std::unique_ptr<PluginEventHandler> m_EventHandler;
-	std::vector<std::string> m_Errors;
+	Controller<Timetabling::Schedule> *controller();
 
-	std::string m_jsonAlgorithm;
-	bool m_benchmarkMode;
+	Algorithm::Storage::Store<Timetabling::Schedule>::locked_t lockStore() const; //do NOT call this twice in one expression, it will cause an exception. It is an object auto-locking call!
+
+	std::unique_ptr<Controller<Timetabling::Schedule>> _controller;
+	std::shared_ptr<Algorithm::Storage::Store<Timetabling::Schedule>> _store;
+	std::shared_ptr<Timetabling::ConstraintHolder> _constraintHolder;
+	std::unique_ptr<PluginEventHandler> _eventHandler;
+	std::vector<std::string> _errors;
+
+	std::string _jsonAlgorithm;
+	bool _benchmarkMode;
 };
 
 typedef Ctoolhu::Singleton::Holder<SkolarisInstance> SingleSkolarisInstance;

@@ -1,9 +1,7 @@
 #include "SkolarisInstance.h"
-#include "gascheduler/src/controller_builder.h"
-#include "gascheduler/src/interface/icontroller.h"
-#include "gascheduler/src/storage/store.h"
+#include "gascheduler/src/controller_builder.hpp"
 #include "gascheduler/src/timetable/constraint_holder.h"
-#include <algorithm/events.h>
+#include <localsearch/events/events.h>
 #include <ctoolhu/event/firer.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
@@ -14,12 +12,12 @@ using namespace boost::property_tree;
 
 bool SkolarisInstance::set_jsonData(const string &jsonData, int requestId)
 {
-	m_Errors.clear();
+	_errors.clear();
 	int maxTime = 0; //=forever
-	ControllerBuilder b { jsonData, maxTime, m_Errors };
-	m_Controller = b.BuildController(m_Store, m_ConstraintHolder);
+	ControllerBuilder<Timetabling::Schedule> b { jsonData, maxTime, _errors };
+	_controller = b.BuildController(_store, _constraintHolder);
 	post_warnings();
-	if (!m_Controller) {
+	if (!_controller) {
 		post_error(requestId, "Unable to load timetable data");
 		return false;
 	}
@@ -41,13 +39,13 @@ bool SkolarisInstance::set_jsonSchedules(const string &jsonSchedules, int reques
 		post_error(requestId, string("Unable to parse schedules: ") + e.what());
 		return false;
 	}
-	auto currentSolutionPtr = store()->getCurrentSolution();
-	unique_ptr<Algorithm::ISolution> backup{currentSolutionPtr->clone()};
+	auto currentSolutionPtr = lockStore()->getCurrentSolution();
+	Timetabling::Schedule backup(*currentSolutionPtr);
 	try {
 		currentSolutionPtr->load(schedules);
 	}
 	catch (const exception &e) {
-		backup->copyTo(currentSolutionPtr.get());
+		*currentSolutionPtr = backup;
 		post_error(requestId, string("Unable to load schedules: ") + e.what());
 		return false;
 	}
@@ -56,7 +54,7 @@ bool SkolarisInstance::set_jsonSchedules(const string &jsonSchedules, int reques
 
 bool SkolarisInstance::set_jsonConstraints(const string &jsonConstraints, int requestId)
 {
-	m_Errors.clear();
+	_errors.clear();
 	if (controller()->isRunning()) {
 		post_error(requestId, "Cannot load constraints while search is running");
 		return false;
@@ -71,7 +69,7 @@ bool SkolarisInstance::set_jsonConstraints(const string &jsonConstraints, int re
 		return false;
 	}
 	try {
-		m_ConstraintHolder->loadConstraints(constraints);
+		_constraintHolder->loadConstraints(constraints);
 	}
 	catch(const exception &e) {
 		post_error(requestId, string("Unable to load constraints: ") + e.what());
@@ -83,6 +81,6 @@ bool SkolarisInstance::set_jsonConstraints(const string &jsonConstraints, int re
 
 void SkolarisInstance::set_algorithm(const ptree &payload)
 {
-	m_jsonAlgorithm = payload.get<string>("algorithm");
-    m_benchmarkMode = payload.get<bool>("benchmark");
+	_jsonAlgorithm = payload.get<string>("algorithm");
+    _benchmarkMode = payload.get<bool>("benchmark");
 }

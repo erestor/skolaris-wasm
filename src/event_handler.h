@@ -8,9 +8,9 @@
 #include "gascheduler/src/timetable/schedule_events.h"
 #include "gascheduler/src/timetable/constraint_events.h"
 #include "gascheduler/src/control_events.h"
-#include <algorithm/events.h>
-#include <algorithm/rna_search_events.h>
-#include <algorithm/tabu_search_events.h>
+#include <localsearch/events/events.h>
+#include <localsearch/events/rna_search_events.h>
+#include <localsearch/events/tabu_search_events.h>
 #include <ctoolhu/event/subscriber.hpp>
 #include <ctoolhu/event/events.h>
 #include <memory>

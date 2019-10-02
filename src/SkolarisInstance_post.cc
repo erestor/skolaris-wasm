@@ -1,5 +1,4 @@
 #include "SkolarisInstance.h"
-#include "gascheduler/src/storage/store.h"
 #include "gascheduler/src/timetable/timetable_events.h"
 #include <ctoolhu/event/firer.hpp>
 #include <boost/property_tree/json_parser.hpp>
@@ -9,7 +8,7 @@
 using namespace boost::property_tree;
 using namespace std;
 
-const string SKOLARIS_VERSION("9.8.2"
+const string SKOLARIS_VERSION("9.8.3"
 #ifdef DEBUG
 	"debug"
 #endif
@@ -17,7 +16,7 @@ const string SKOLARIS_VERSION("9.8.2"
 
 const string SKOLARIS_VERSION_MAJOR("9");
 const string SKOLARIS_VERSION_MINOR("8");
-const string SKOLARIS_VERSION_PATCH("2");
+const string SKOLARIS_VERSION_PATCH("3");
 
 void SkolarisInstance::postMessage(const ptree &data) const
 {
@@ -107,7 +106,7 @@ void SkolarisInstance::post_version(int requestId) const
 void SkolarisInstance::post_currentsolution(int requestId) const
 {
 	string s;
-	if (stringifySolution(s, store()->getCurrentSolution()))
+	if (stringifySolution(s, lockStore()->getCurrentSolution()))
 		post_message(requestId, "currentsolution", s);
 	else
 		post_error(requestId, s);
@@ -116,7 +115,7 @@ void SkolarisInstance::post_currentsolution(int requestId) const
 void SkolarisInstance::post_bestsolution(int requestId) const
 {
 	string s;
-	if (stringifySolution(s, store()->getBestSolution()))
+	if (stringifySolution(s, lockStore()->getBestSolution()))
 		post_message(requestId, "bestsolution", s);
 	else
 		post_error(requestId, s);
@@ -125,7 +124,7 @@ void SkolarisInstance::post_bestsolution(int requestId) const
 void SkolarisInstance::post_feasiblesolution(int requestId) const
 {
 	string s;
-	if (stringifySolution(s, store()->getFeasibleSolution()))
+	if (stringifySolution(s, lockStore()->getFeasibleSolution()))
 		post_message(requestId, "feasiblesolution", s);
 	else
 		post_error(requestId, s);
@@ -134,7 +133,7 @@ void SkolarisInstance::post_feasiblesolution(int requestId) const
 void SkolarisInstance::post_bestoverallsolution(int requestId) const
 {
     string s;
-    if (stringifySolution(s, store()->getBestOverallSolution()))
+    if (stringifySolution(s, lockStore()->getBestOverallSolution()))
         post_message(requestId, "bestoverallsolution", s);
     else
         post_error(requestId, s);
@@ -143,7 +142,7 @@ void SkolarisInstance::post_bestoverallsolution(int requestId) const
 void SkolarisInstance::post_feasibleoverallsolution(int requestId) const
 {
     string s;
-    if (stringifySolution(s, store()->getFeasibleOverallSolution()))
+    if (stringifySolution(s, lockStore()->getFeasibleOverallSolution()))
         post_message(requestId, "feasibleoverallsolution", s);
     else
         post_error(requestId, s);
@@ -182,7 +181,7 @@ void SkolarisInstance::post_warnings()
 	auto event = Timetabling::TimetableEvents::Check();
 	Ctoolhu::Event::Fire(event);
 	if (!event.valid)
-		m_Errors.push_back("Timetable data is invalid");
+		_errors.push_back("Timetable data is invalid");
 
 	post_message("messages", stringifyMessages(event.messages));
 }

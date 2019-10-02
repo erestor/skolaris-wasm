@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\gascheduler">
+      <UniqueIdentifier>{23dedf35-e565-4d62-8083-18e3fae18ace}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\wasm.cc">
@@ -36,6 +39,9 @@
     <ClCompile Include="src\SkolarisInstance_set.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\gascheduler\src\plugin\algorithm_builder.cpp">
+      <Filter>Source Files\gascheduler</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\event_handler.h">
@@ -43,6 +49,9 @@
     </ClInclude>
     <ClInclude Include="src\SkolarisInstance.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gascheduler\src\plugin\algorithm_builder.h">
+      <Filter>Source Files\gascheduler</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

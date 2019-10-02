@@ -2,9 +2,8 @@
 // Author:		Martin Klemsa
 //----------------------------------------------------------------------------
 #include "event_handler.h"
-#include "gascheduler/src/timetable/constraint.h"
 #include "SkolarisInstance.h"
-#include <algorithm/isolution.h>
+#include <localsearch/interface/isolution.h>
 #include <sstream>
 
 using namespace std;
@@ -16,7 +15,7 @@ PluginEventHandler::PluginEventHandler(SkolarisInstance *api)
 
 void PluginEventHandler::on(Ctoolhu::Event::Message *ev)
 {
-	_api->post_text(ev->msg + "\n");
+	_api->post_text(ev->msg + '\n');
 }
 
 void PluginEventHandler::on(Timetabling::TimetableEvents::BeforeInit *)
@@ -68,13 +67,13 @@ void PluginEventHandler::on(Algorithm::RNA::Events::Tick *)
 void PluginEventHandler::on(Algorithm::TabuSearch::Events::StepExecuted *ev)
 {
 	stringstream s;
-	s << ev->stepDescription.data() << " (" << ev->currentSolutionPtr->getFitness() << ")" << endl;
+	s << ev->stepDescription.data() << " (" << ev->currentSolutionPtr->getFitness() << ')' << endl;
 	_api->post_text(s.str());
 }
 
 void PluginEventHandler::on(Control::Events::Exception *ev)
 {
-	_api->post_text(ev->what + "\n");
+	_api->post_text(ev->what + '\n');
 }
 
 void PluginEventHandler::on(Control::Events::ThreadFinished *ev)
@@ -101,6 +100,6 @@ void PluginEventHandler::on(Control::Events::Resumed *)
 void PluginEventHandler::on(Timetabling::ConstraintEvents::AlphaChanged *ev)
 {
 	char formatted[256];
-	snprintf(formatted, 255, "Constraint: %s, alpha: %0.2f -> %0.2f\n", ev->constraintPtr->getName().data(), ev->oldAlpha, ev->newAlpha);
+	snprintf(formatted, 255, "Constraint: %s, alpha: %0.2f -> %0.2f\n", ev->name.data(), ev->oldAlpha, ev->newAlpha);
 	_api->post_text(formatted);
 }

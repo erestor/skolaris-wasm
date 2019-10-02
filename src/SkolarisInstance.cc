@@ -1,9 +1,6 @@
 #include "SkolarisInstance.h"
 #include "event_handler.h"
-#include "gascheduler/src/interface/icontroller.h"
 #include "gascheduler/src/plugin/algorithm_builder.h"
-#include "gascheduler/src/storage/store.h"
-#include <algorithm/isolution.h>
 #include <ctoolhu/random/engine.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
@@ -20,7 +17,7 @@ using namespace boost::property_tree;
 /// attributes.
 SkolarisInstance::SkolarisInstance()
 {
-	m_EventHandler = make_unique<PluginEventHandler>(this);
+	_eventHandler = make_unique<PluginEventHandler>(this);
 }
 
 SkolarisInstance::~SkolarisInstance()
@@ -48,7 +45,7 @@ bool SkolarisInstance::stringifyFitnessSummary(string &result, Algorithm::ISolut
 	return false;
 }
 
-bool SkolarisInstance::stringifySolution(string &result, const shared_ptr<Algorithm::ISolution> &solutionPtr) const
+bool SkolarisInstance::stringifySolution(string &result, const Algorithm::ISolution *solutionPtr) const
 {
 	if (!solutionPtr) {
 		result = "Unable to stringify solution: input is null";
@@ -71,7 +68,7 @@ bool SkolarisInstance::stringifySolution(string &result, const shared_ptr<Algori
 string SkolarisInstance::stringifyMessages(const std::vector<boost::property_tree::ptree> &warnings) const
 {
 	ptree errors;
-	for (auto const &e : m_Errors) {
+	for (auto const &e : _errors) {
 		ptree child;
 		child.put("", e);
 		errors.push_back(std::make_pair("", child));
@@ -89,34 +86,16 @@ string SkolarisInstance::stringifyMessages(const std::vector<boost::property_tre
 }
 
 //====================================================================================================================
-IController *SkolarisInstance::controller()
+Controller<Timetabling::Schedule> *SkolarisInstance::controller()
 {
-	if (!m_Controller) {
+	if (!_controller) {
 		post_error(0, "Skolaris plugin controller has not been initialized. Open the errors/warnings console for details.");
 		return nullptr;
 	}
-	return m_Controller.get();
+	return _controller.get();
 }
 
-Ctoolhu::Thread::LockingProxy<Storage::Store> SkolarisInstance::store() const
+Algorithm::Storage::Store<Timetabling::Schedule>::locked_t SkolarisInstance::lockStore() const
 {
-	return Storage::lockStore(m_Store.get());
-}
-
-bool SkolarisInstance::start()
-{
-	try {
-		auto &engine = Ctoolhu::Random::Private::SingleRandomEngine::Instance();
-		if (m_benchmarkMode)
-			engine.seed(0);
-		else {
-			random_device rd;
-			engine.seed(rd());
-		}
-		auto algorithm = PluginAlgorithmBuilder::BuildAlgorithm(m_jsonAlgorithm);
-		return controller()->startAsync(move(algorithm));
-	}
-	catch(...) {
-		return false;
-	}
+	return Algorithm::Storage::lockStore(*_store);
 }
