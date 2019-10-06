@@ -8,41 +8,47 @@
 CXX = emcc
 TARGET = skolaris
 
-THREADS = -s USE_PTHREADS=1 -s PTHREAD_POOL_SIZE=6
 INCBOOST = /usr/local/include
 INCCTOOLHU = /usr/local/include/ctoolhu
 INCLOCALSEARCH = /usr/local/include/localsearch
 INCDIRS = -I${INCBOOST} -I${INCCTOOLHU} -I${INCLOCALSEARCH}
 
-CFLAGS = -Wall -std=c++17 -fno-rtti ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED -DBOOST_NO_RTTI -BOOST_NO_TYPEID -g4
+CFLAGS = -Wall -std=c++17 -fno-rtti ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED -DBOOST_NO_RTTI -DBOOST_NO_TYPEID
+CFLAGSDEBUG = -g4
+CFLAGSRELEASE = -O2
 
-LDFLAGS = --shell-file html_template/shell_minimal.html -s DISABLE_EXCEPTION_CATCHING=0 -s EXTRA_EXPORTED_RUNTIME_METHODS='["calledRun","cwrap"]' -s ASSERTIONS=1 -s DEMANGLE_SUPPORT=1 -s ALLOW_MEMORY_GROWTH=1 -s WASM_MEM_MAX=512Mb -g4 --source-map-base http://localhost/SkolarisUI.Web/Plugin/src/ ${THREADS}
+LDFLAGS = -s ALLOW_MEMORY_GROWTH=1 -s WASM_MEM_MAX=512Mb -s USE_PTHREADS=1 -s PTHREAD_POOL_SIZE=6 --shell-file html_template/shell_minimal.html
+LDFLAGSDEBUG = -s EXTRA_EXPORTED_RUNTIME_METHODS='["calledRun","cwrap"]' -s ASSERTIONS=1 -s DEMANGLE_SUPPORT=1 -s DISABLE_EXCEPTION_CATCHING=0 --source-map-base http://localhost/SkolarisUI.Web/Plugin/src/ -g4
+LDFLAGSRELEASE = -s EXTRA_EXPORTED_RUNTIME_METHODS='["cwrap"]' -s MODULARIZE=1 -s EXPORT_NAME=SkolarisModule -O2
+LDFLAGSUNUSED = -s VERBOSE=1 -s TOTAL_MEMORY=16Mb
 
 SOURCES_CC = $(wildcard *.cc)
 SOURCES_CPP = \
 	$(wildcard gascheduler/src/*.cpp) \
 	$(wildcard gascheduler/src/plugin/algorithm_builder.cpp) \
-	$(wildcard gascheduler/src/storage/*.cpp) \
+	$(wildcard gascheduler/src/timetable/*.cpp) \
 	$(wildcard gascheduler/src/timetable/algorithm/*.cpp) \
 	$(wildcard gascheduler/src/timetable/analysis/*.cpp) \
-	$(wildcard gascheduler/src/timetable/model/*.cpp) \
-	$(wildcard gascheduler/src/timetable/*.cpp)
+	$(wildcard gascheduler/src/timetable/model/*.cpp)
 
 SOURCES = $(SOURCES_CC) $(SOURCES_CPP)
 OBJECTS = $(SOURCES_CC:.cc=.o) $(SOURCES_CPP:.cpp=.o)
 
 skolaris: $(OBJECTS)
-	$(CXX) -o Debug/skolaris.html $^ $(LDFLAGS)
+	$(CXX) -o Release/skolaris.html $^ $(LDFLAGS) $(LDFLAGSRELEASE)
 
 %.o: %.cc
-	$(CXX) -c $(CFLAGS) -o $@ $<
+	$(CXX) -c $(CFLAGS) $(CFLAGSRELEASE) -o $@ $<
 
 %.o: %.cpp
-	$(CXX) -c $(CFLAGS) -o $@ $<
+	$(CXX) -c $(CFLAGS) $(CFLAGSRELEASE) -o $@ $<
+
+debug:  $(OBJECTS)
+	$(CXX) -o Debug/skolaris.html $^ $(LDFLAGS) $(LDFLAGSDEBUG)
 
 clean:
 	rm -rf ~/.emscripten_cache; find . -name "*.o" -type f -delete
 
 copy:
-	cp Debug/skolaris.* ~/Public/skolaris_wasm
+	cp Release/skolaris.* ~/Public/skolaris_wasm/release; cp Debug/skolaris.* ~/Public/skolaris_wasm/debug
 
