@@ -11,17 +11,13 @@ TARGET = skolaris
 THREADS = -s USE_PTHREADS=1 -s PTHREAD_POOL_SIZE=6
 INCBOOST = /usr/local/include
 INCCTOOLHU = /usr/local/include/ctoolhu
-INCLOCALSEARCH = /usr/local/include/localsearch/include
+INCLOCALSEARCH = /usr/local/include/localsearch
 INCDIRS = -I${INCBOOST} -I${INCCTOOLHU} -I${INCLOCALSEARCH}
 
-NOERROR1 = no-error=unused-local-typedef
-NOLOCALTYPEDEF = no-unused-local-typedef
-NOUNUSEDCAPTURE = no-unused-lambda-capture
-
-CFLAGS = -Wall -W${NOLOCALTYPEDEF} -W$(NOUNUSEDCAPTURE) -std=c++17 ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED -g4
+CFLAGS = -Wall -std=c++17 -fno-rtti ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED -DBOOST_NO_RTTI -g4
 
 LDFLAGS = --shell-file html_template/shell_minimal.html -s DISABLE_EXCEPTION_CATCHING=0 -s EXTRA_EXPORTED_RUNTIME_METHODS='["cwrap"]' -s ASSERTIONS=1 -s DEMANGLE_SUPPORT=1 -s TOTAL_MEMORY=256Mb -g4 --source-map-base http://localhost/SkolarisUI.Web/Plugin/src/ ${THREADS}
-EXTRALDFLAGS = -s ALLOW_MEMORY_GROWTH=1 -s WASM_MEM_MAX=536870912
+EXTRALDFLAGS = -s ALLOW_MEMORY_GROWTH=1 -s WASM_MEM_MAX=512Mb
 
 SOURCES_CC = $(wildcard *.cc)
 SOURCES_CPP = \
@@ -31,8 +27,7 @@ SOURCES_CPP = \
 	$(wildcard gascheduler/src/timetable/algorithm/*.cpp) \
 	$(wildcard gascheduler/src/timetable/analysis/*.cpp) \
 	$(wildcard gascheduler/src/timetable/model/*.cpp) \
-	$(wildcard gascheduler/src/timetable/*.cpp) \
-	$(wildcard ~/dev/localsearch/**/*.cpp)
+	$(wildcard gascheduler/src/timetable/*.cpp)
 
 SOURCES = $(SOURCES_CC) $(SOURCES_CPP)
 OBJECTS = $(SOURCES_CC:.cc=.o) $(SOURCES_CPP:.cpp=.o)
@@ -47,7 +42,7 @@ skolaris: $(OBJECTS)
 	$(CXX) -c $(CFLAGS) -o $@ $<
 
 clean:
-	rm -rf ~/.emscripten_cache; find . ~/dev/localsearch -name "*.o" -type f -delete
+	rm -rf ~/.emscripten_cache; find . -name "*.o" -type f -delete
 
 copy:
 	cp Debug/skolaris.* ~/Public/skolaris_wasm
