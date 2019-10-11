@@ -37,14 +37,14 @@ OBJECTS = $(SOURCES_CC:.cc=.o) $(SOURCES_CPP:.cpp=.o)
 skolaris: $(OBJECTS)
 	$(CXX) -o Release/skolaris.html $^ $(LDFLAGS) $(LDFLAGSRELEASE)
 
+debug:  $(OBJECTS)
+	$(CXX) -o Debug/skolaris.html $^ $(LDFLAGS) $(LDFLAGSDEBUG)
+
 %.o: %.cc
 	$(CXX) -c $(CFLAGS) $(CFLAGSRELEASE) -o $@ $<
 
 %.o: %.cpp
 	$(CXX) -c $(CFLAGS) $(CFLAGSRELEASE) -o $@ $<
-
-debug:  $(OBJECTS)
-	$(CXX) -o Debug/skolaris.html $^ $(LDFLAGS) $(LDFLAGSDEBUG)
 
 clean:
 	rm -rf ~/.emscripten_cache; find . -name "*.o" -type f -delete
