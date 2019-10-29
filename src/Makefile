@@ -48,6 +48,9 @@ debug:  $(OBJECTS)
 	$(CXX) -c $(CFLAGS) $(CFLAGSRELEASE) -o $@ $<
 
 clean:
+	find . -name "*.o" -type f -delete
+
+wipe:
 	rm -rf ~/.emscripten_cache; find . -name "*.o" -type f -delete
 
 copy:
