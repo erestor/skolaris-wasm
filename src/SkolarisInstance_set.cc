@@ -15,7 +15,7 @@ bool SkolarisInstance::set_jsonData(const string &jsonData, int requestId)
 	_errors.clear();
 	int maxTime = 0; //=forever
 	ControllerBuilder<Timetabling::Schedule> b { jsonData, maxTime, _errors };
-	_controller = b.BuildController(_store, _constraintHolder);
+	_controller = b.BuildController(_store, _constraintHolder, _timetable);
 	post_warnings();
 	if (!_controller) {
 		post_error(requestId, "Unable to load timetable data");
@@ -69,7 +69,7 @@ bool SkolarisInstance::set_jsonConstraints(const string &jsonConstraints, int re
 		return false;
 	}
 	try {
-		_constraintHolder->loadConstraints(constraints);
+		_constraintHolder->loadConstraints(constraints, *_timetable);
 	}
 	catch(const exception &e) {
 		post_error(requestId, string("Unable to load constraints: ") + e.what());
