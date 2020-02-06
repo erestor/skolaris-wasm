@@ -82,5 +82,5 @@ bool SkolarisInstance::set_jsonConstraints(const string &jsonConstraints, int re
 void SkolarisInstance::set_algorithm(const ptree &payload)
 {
 	_jsonAlgorithm = payload.get<string>("algorithm");
-    _benchmarkMode = payload.get<bool>("benchmark");
+	_benchmarkMode = payload.get<bool>("benchmark");
 }

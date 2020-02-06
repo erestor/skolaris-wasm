@@ -1,9 +1,7 @@
-//----------------------------------------------------------------------------
-// Author:		Martin Klemsa
-//----------------------------------------------------------------------------
 #include "event_handler.h"
 #include "SkolarisInstance.h"
 #include <localsearch/interface/isolution.h>
+#include <chrono>
 #include <sstream>
 
 using namespace std;
@@ -99,7 +97,7 @@ void PluginEventHandler::on(Control::Events::Resumed *)
 
 void PluginEventHandler::on(Timetabling::ConstraintEvents::AlphaChanged *ev)
 {
-	char formatted[256];
-	snprintf(formatted, 255, "Constraint: %s, alpha: %0.2f -> %0.2f\n", ev->name.data(), ev->oldAlpha, ev->newAlpha);
-	_api->post_text(formatted);
+	stringstream s;
+	s << "Constraint: " << ev->name << ", alpha: " << ev->oldAlpha << " -> " << ev->newAlpha << '\n';
+	_api->post_text(s.str());
 }

@@ -178,7 +178,7 @@ void SkolarisInstance::post_feasiblesolutionfound(Algorithm::ISolution *solution
 
 void SkolarisInstance::post_warnings()
 {
-	auto event = Timetabling::TimetableEvents::Check();
+	Timetabling::TimetableEvents::Check event;
 	Ctoolhu::Event::Fire(event);
 	if (!event.valid)
 		_errors.push_back("Timetable data is invalid");

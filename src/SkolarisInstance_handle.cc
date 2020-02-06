@@ -7,10 +7,6 @@
 using namespace boost::property_tree;
 using namespace std;
 
-/// Handler for messages coming in from the browser via postMessage().  The
-/// @a var_message can contain be any pp:Var type; for example int, string
-/// Array or Dictinary. Please see the pp:Var documentation for more details.
-/// @param[in] var_message The message posted by the browser.
 void SkolarisInstance::handleMessage(const string &var_message)
 {
 	ptree message;
