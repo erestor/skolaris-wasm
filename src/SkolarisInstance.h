@@ -60,7 +60,6 @@ class SkolarisInstance {
 	void post_feasiblesolution(int requestId) const;
 	void post_bestoverallsolution(int requestId) const;
 	void post_feasibleoverallsolution(int requestId) const;
-	void post_warnings();
 
 	void post_started(int requestId) const;
 

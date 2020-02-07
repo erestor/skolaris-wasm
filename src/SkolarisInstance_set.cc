@@ -12,11 +12,9 @@ using namespace boost::property_tree;
 
 bool SkolarisInstance::set_jsonData(const string &jsonData, int requestId)
 {
-	_errors.clear();
-	int maxTime = 0; //=forever
+	const int maxTime{0}; //=forever
 	ControllerBuilder<Timetabling::Schedule> b { jsonData, maxTime, _errors };
 	_controller = b.BuildController(_store, _constraintHolder, _timetable);
-	post_warnings();
 	if (!_controller) {
 		post_error(requestId, "Unable to load timetable data");
 		return false;
@@ -54,7 +52,6 @@ bool SkolarisInstance::set_jsonSchedules(const string &jsonSchedules, int reques
 
 bool SkolarisInstance::set_jsonConstraints(const string &jsonConstraints, int requestId)
 {
-	_errors.clear();
 	if (controller()->isRunning()) {
 		post_error(requestId, "Cannot load constraints while search is running");
 		return false;
@@ -75,7 +72,13 @@ bool SkolarisInstance::set_jsonConstraints(const string &jsonConstraints, int re
 		post_error(requestId, string("Unable to load constraints: ") + e.what());
 		return false;
 	}
-	post_warnings();
+	Timetabling::TimetableEvents::Check ev;
+	Ctoolhu::Event::Fire(ev);
+	if (!ev.valid)
+		_errors.push_back("Timetable data is invalid");
+
+	post_message("messages", stringifyMessages(ev.messages));
+	_errors.clear();
 	return true;
 }
 
