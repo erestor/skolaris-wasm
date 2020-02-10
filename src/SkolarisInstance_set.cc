@@ -12,11 +12,20 @@ using namespace boost::property_tree;
 
 bool SkolarisInstance::set_jsonData(const string &jsonData, int requestId)
 {
-	const int maxTime{0}; //=forever
-	ControllerBuilder<Timetabling::Schedule> b { jsonData, maxTime, _errors };
-	_controller = b.BuildController(_store, _constraintHolder, _timetable);
+	ptree timetableData;
+	ptree controllerConfig;
+	try {
+		stringstream s(jsonData);
+		json_parser::read_json(s, timetableData);
+	}
+	catch (const exception &e) {
+		post_error(requestId, string("Unable to parse timetable data: ") + e.what());
+		return false;
+	}
+	ControllerBuilder<Timetabling::Schedule> factory{timetableData, controllerConfig, _errors};
+	_controller = factory.BuildController(_store, _constraintHolder, _timetable);
 	if (!_controller) {
-		post_error(requestId, "Unable to load timetable data");
+		post_error(requestId, "Unable to create computation controller");
 		return false;
 	}
 	return true;
