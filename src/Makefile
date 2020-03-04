@@ -1,19 +1,15 @@
-# Copyright (c) 2013 The Chromium Authors. All rights reserved.
-# Use of this source code is governed by a BSD-style license that can be
-# found in the LICENSE file.
-
-# GNU Makefile based on shared rules provided by the Native Client SDK.
-# See README.Makefiles for more details.
-
 CXX = emcc
 TARGET = skolaris
+BUILD_DIR = build
+
+MKDIR_P = @mkdir -p
 
 INCBOOST = /usr/local/include
 INCCTOOLHU = /usr/local/include/ctoolhu
 INCLOCALSEARCH = /usr/local/include/localsearch
 INCDIRS = -I${INCBOOST} -I${INCCTOOLHU} -I${INCLOCALSEARCH}
 
-CFLAGS = -Wall -std=c++17 -fno-rtti ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED -DBOOST_NO_RTTI -DBOOST_NO_TYPEID
+CFLAGS = -Wall -std=c++17 -fno-rtti ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED -DBOOST_NO_RTTI -DBOOST_NO_TYPEID -MMD -MP
 CFLAGSDEBUG = -g4
 CFLAGSRELEASE = -DNDEBUG -O2
 
@@ -33,26 +29,35 @@ SOURCES_CPP = \
 	$(wildcard gascheduler/src/timetable/model/*.cpp)
 
 SOURCES = $(SOURCES_CC) $(SOURCES_CPP)
-OBJECTS = $(SOURCES_CC:.cc=.o) $(SOURCES_CPP:.cpp=.o)
+OBJS = $(SOURCES:%=$(BUILD_DIR)/%.o)
+#OBJS = $(SOURCES_CC:.cc=.o) $(SOURCES_CPP:.cpp=.o)
+DEPS = $(OBJS:.o=.d)
 
-skolaris: $(OBJECTS)
-	$(CXX) -o Release/skolaris.html $^ $(LDFLAGS) $(LDFLAGSRELEASE)
+$(BUILD_DIR)/%.cc.o: %.cc
+	$(MKDIR_P) $(dir $@)
+	$(CXX) $(CFLAGS) $(CFLAGSRELEASE) -c $< -o $@
 
-debug:  $(OBJECTS)
-	$(CXX) -o Debug/skolaris.html $^ $(LDFLAGS) $(LDFLAGSDEBUG)
+$(BUILD_DIR)/%.cpp.o: %.cpp
+	$(MKDIR_P) $(dir $@)
+	$(CXX) $(CFLAGS) $(CFLAGSRELEASE) -c $< -o $@
 
-%.o: %.cc
-	$(CXX) -c $(CFLAGS) $(CFLAGSRELEASE) -o $@ $<
+skolaris: $(OBJS)
+	$(CXX) $(OBJS) -o Release/skolaris.html $(LDFLAGS) $(LDFLAGSRELEASE)
 
-%.o: %.cpp
-	$(CXX) -c $(CFLAGS) $(CFLAGSRELEASE) -o $@ $<
+debug: $(OBJS)
+	$(CXX) $(OBJS) -o Debug/skolaris.html $(LDFLAGS) $(LDFLAGSDEBUG)
 
+-include $(DEPS)
+
+.PHONY: clean
 clean:
-	find . -name "*.o" -type f -delete
+	rm -rf $(BUILD_DIR)
 
+.PHONY: wipe
 wipe:
 	rm -rf ~/.emscripten_cache; find . -name "*.o" -type f -delete
 
-copy:
+.PHONY: install
+install:
 	cp Release/skolaris.* ~/Public/skolaris_wasm/release; cp Debug/skolaris.* ~/Public/skolaris_wasm/debug
 

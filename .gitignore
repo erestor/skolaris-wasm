@@ -8,6 +8,7 @@
 *.o
 *.obj
 *.so
+build/
 Build/
 Benchmark/
 ClientBin/
