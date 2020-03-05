@@ -12,7 +12,9 @@ build/
 Build/
 Benchmark/
 ClientBin/
+debug/
 Debug/
+release/
 Release/
 ReleaseDebug/
 Profiling/
