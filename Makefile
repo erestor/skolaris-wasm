@@ -2,6 +2,15 @@ CXX = emcc
 TARGET = skolaris
 BUILD_DIR = build
 
+ifeq "${MAKECMDGOALS}" "debug"
+BUILD_DIR = build_debug
+CFLAGSBUILD = -g4
+else
+CFLAGSBUILD = -DNDEBUG -O2
+endif
+
+#$(info $$BUILD_DIR is [${BUILD_DIR}])
+
 MKDIR_P = @mkdir -p
 
 INCBOOST = /usr/local/include
@@ -10,8 +19,6 @@ INCLOCALSEARCH = /usr/local/include/localsearch
 INCDIRS = -I${INCBOOST} -I${INCCTOOLHU} -I${INCLOCALSEARCH}
 
 CFLAGS = -Wall -std=c++17 -fno-rtti ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED -DBOOST_NO_RTTI -DBOOST_NO_TYPEID -MMD -MP
-CFLAGSDEBUG = -g4
-CFLAGSRELEASE = -DNDEBUG -O2
 
 LDFLAGS = --shell-file src/html_template/shell_minimal.html
 LDFLAGSDEBUG = -s EXTRA_EXPORTED_RUNTIME_METHODS='["calledRun","cwrap"]' -s ASSERTIONS=1 -s DEMANGLE_SUPPORT=1 -s DISABLE_EXCEPTION_CATCHING=0 --source-map-base http://localhost/SkolarisUI.Web/Plugin/src/ -g4
@@ -36,11 +43,11 @@ DEPS = $(OBJS:.o=.d)
 
 $(BUILD_DIR)/%.cc.o: %.cc
 	$(MKDIR_P) $(dir $@)
-	$(CXX) $(CFLAGS) $(CFLAGSRELEASE) -c $< -o $@
+	$(CXX) $(CFLAGS) $(CFLAGSBUILD) -c $< -o $@
 
 $(BUILD_DIR)/%.cpp.o: %.cpp
 	$(MKDIR_P) $(dir $@)
-	$(CXX) $(CFLAGS) $(CFLAGSRELEASE) -c $< -o $@
+	$(CXX) $(CFLAGS) $(CFLAGSBUILD) -c $< -o $@
 
 skolaris: $(OBJS)
 	$(MKDIR_P) release
