@@ -8,7 +8,7 @@
 using namespace boost::property_tree;
 using namespace std;
 
-const string SKOLARIS_VERSION("9.15.0gamma"
+const string SKOLARIS_VERSION("9.15.0"
 #ifdef DEBUG
 	"debug"
 #endif
