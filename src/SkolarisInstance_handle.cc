@@ -75,11 +75,13 @@ void SkolarisInstance::handleControlMessage(const ptree &msg)
 	auto t = msg.get<string>("target");
 	auto requestId = msg.get("reqId", 0);
 	if (t == "start")
-		start(requestId);
+		startAsync(requestId);
+	else if (t == "startSync")
+		start();
 	else if (t == "pause")
-		pause();
+		pauseAsync();
 	else if (t == "resume")
-		resume();
+		resumeAsync();
 	else if (t == "stop")
-		stop();
+		stopAsync();
 }

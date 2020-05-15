@@ -79,7 +79,7 @@ string SkolarisInstance::stringifyMessages(const std::vector<boost::property_tre
 	return s.str();
 }
 
-Controller<Timetabling::Schedule> *SkolarisInstance::controller()
+Control::Controller<Timetabling::Schedule> *SkolarisInstance::controller()
 {
 	if (!_controller) {
 		post_error(0, "Skolaris plugin controller has not been initialized. Open the errors/warnings console for details.");

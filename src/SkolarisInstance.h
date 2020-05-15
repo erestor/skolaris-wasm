@@ -69,22 +69,23 @@ class SkolarisInstance {
 	void set_algorithm(const boost::property_tree::ptree &);
 
 	//algorithm control
-	void start(int requestId);
-	void stop();
-	void pause();
-	void resume();
+	void start();
+	void startAsync(int requestId);
+	void stopAsync();
+	void pauseAsync();
+	void resumeAsync();
 
 	bool stringifyFitnessSummary(std::string &result, Algorithm::ISolution *) const;
 	bool stringifySolution(std::string &result, const Algorithm::ISolution *) const;
 	std::string stringifyMessages(const std::vector<boost::property_tree::ptree> &warnings) const;
 		//puts errors and check fails into JSON string
 
-	Controller<Timetabling::Schedule> *controller();
+	Control::Controller<Timetabling::Schedule> *controller();
 
 	Algorithm::Storage::Store<Timetabling::Schedule>::locked_t lockStore() const;
 		//do NOT call this twice in one expression, it will cause an exception. It is an object auto-locking call!
 
-	std::unique_ptr<Controller<Timetabling::Schedule>> _controller;
+	std::unique_ptr<Control::Controller<Timetabling::Schedule>> _controller;
 	std::shared_ptr<Algorithm::Storage::Store<Timetabling::Schedule>> _store;
 	std::shared_ptr<Timetabling::ConstraintHolder> _constraintHolder;
 	std::shared_ptr<Timetabling::Timetable> _timetable;

@@ -22,7 +22,7 @@ bool SkolarisInstance::set_jsonData(const string &jsonData, int requestId)
 		post_error(requestId, string("Unable to parse timetable data: ") + e.what());
 		return false;
 	}
-	ControllerBuilder<Timetabling::Schedule> factory{timetableData, controllerConfig, _errors};
+	Control::ControllerBuilder<Timetabling::Schedule> factory{timetableData, controllerConfig, _errors};
 	_controller = factory.BuildController(_store, _constraintHolder, _timetable);
 	if (!_controller) {
 		post_error(requestId, "Unable to create computation controller");
