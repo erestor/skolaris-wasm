@@ -4,7 +4,7 @@ BUILD_DIR = build
 
 ifeq "${MAKECMDGOALS}" "debug"
 BUILD_DIR = build_debug
-CFLAGSBUILD = -g4
+CFLAGSBUILD = -g4 -D_DEBUG
 LDFLAGSBUILD = -s EXTRA_EXPORTED_RUNTIME_METHODS='["calledRun","cwrap"]' -s ASSERTIONS=1 -s DEMANGLE_SUPPORT=1 -s DISABLE_EXCEPTION_CATCHING=0 --source-map-base http://localhost/SkolarisUI.Web/Plugin/src/ -g4
 else
 CFLAGSBUILD = -DNDEBUG -O2
