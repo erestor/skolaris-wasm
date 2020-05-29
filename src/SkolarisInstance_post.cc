@@ -8,7 +8,7 @@
 using namespace boost::property_tree;
 using namespace std;
 
-const string SKOLARIS_VERSION("9.17.0"
+const string SKOLARIS_VERSION("9.17.1"
 #ifdef DEBUG
 	"debug"
 #endif
@@ -16,7 +16,7 @@ const string SKOLARIS_VERSION("9.17.0"
 
 const string SKOLARIS_VERSION_MAJOR("9");
 const string SKOLARIS_VERSION_MINOR("17");
-const string SKOLARIS_VERSION_PATCH("0");
+const string SKOLARIS_VERSION_PATCH("1");
 
 void SkolarisInstance::postMessage(const ptree &data) const
 {
@@ -132,20 +132,20 @@ void SkolarisInstance::post_feasiblesolution(int requestId) const
 
 void SkolarisInstance::post_bestoverallsolution(int requestId) const
 {
-    string s;
-    if (stringifySolution(s, lockStore()->getBestOverallSolution()))
-        post_message(requestId, "bestoverallsolution", s);
-    else
-        post_error(requestId, s);
+	string s;
+	if (stringifySolution(s, lockStore()->getBestOverallSolution()))
+		post_message(requestId, "bestoverallsolution", s);
+	else
+		post_error(requestId, s);
 }
 
 void SkolarisInstance::post_feasibleoverallsolution(int requestId) const
 {
-    string s;
-    if (stringifySolution(s, lockStore()->getFeasibleOverallSolution()))
-        post_message(requestId, "feasibleoverallsolution", s);
-    else
-        post_error(requestId, s);
+	string s;
+	if (stringifySolution(s, lockStore()->getFeasibleOverallSolution()))
+		post_message(requestId, "feasibleoverallsolution", s);
+	else
+		post_error(requestId, s);
 }
 
 void SkolarisInstance::post_currentsolutionchanged(Algorithm::ISolution *solutionPtr) const

@@ -65,11 +65,11 @@ string SkolarisInstance::stringifyMessages(const std::vector<boost::property_tre
 	for (auto const &e : _errors) {
 		ptree child;
 		child.put("", e);
-		errors.push_back(std::make_pair("", child));
+		errors.push_back({"", child});
 	}
 	ptree checkFails;
 	for (auto const &cf : warnings)
-		checkFails.push_back(std::make_pair("", cf));
+		checkFails.push_back({"", cf});
 
 	ptree messages;
 	messages.add_child("errors", errors);

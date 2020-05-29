@@ -1,6 +1,3 @@
-//----------------------------------------------------------------------------
-// Author:		Martin Klemsa
-//----------------------------------------------------------------------------
 #ifndef _event_handler_included_
 #define _event_handler_included_
 
@@ -37,7 +34,7 @@ class PluginEventHandler :
 
   public:
 
-	PluginEventHandler(SkolarisInstance *);
+	explicit PluginEventHandler(SkolarisInstance *);
 
 	void on(Ctoolhu::Event::Message *);
 	void on(Timetabling::TimetableEvents::BeforeInit *);
