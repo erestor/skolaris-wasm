@@ -11,6 +11,11 @@ CFLAGSBUILD = -DNDEBUG -O2
 LDFLAGSBUILD = -s EXTRA_EXPORTED_RUNTIME_METHODS='["cwrap"]' -O2
 endif
 
+ifeq "${MAKECMDGOALS}" "skolarisOneThread"
+BUILD_DIR = build_one_thread
+CFLAGSBUILD = -DNDEBUG -O2 -DUSE_ONE_THREAD
+endif
+
 #$(info $$BUILD_DIR is [${BUILD_DIR}])
 
 MKDIR_P = @mkdir -p

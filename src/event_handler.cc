@@ -74,7 +74,7 @@ void PluginEventHandler::on(Control::Events::Exception *ev)
 	_api->post_text(ev->what + '\n');
 }
 
-void PluginEventHandler::on(Control::Events::ThreadFinished *ev)
+void PluginEventHandler::on(Control::Events::Finished *ev)
 {
 	using namespace std::chrono;
 	auto milli = ev->elapsedTime;

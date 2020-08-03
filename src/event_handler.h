@@ -27,7 +27,7 @@ class PluginEventHandler :
 		Algorithm::RNA::Events::Tick,
 		Algorithm::TabuSearch::Events::StepExecuted,
 		Control::Events::Exception,
-		Control::Events::ThreadFinished,
+		Control::Events::Finished,
 		Control::Events::Paused,
 		Control::Events::Resumed,
 		Timetabling::ConstraintEvents::AlphaChanged> {
@@ -47,7 +47,7 @@ class PluginEventHandler :
 	void on(Algorithm::RNA::Events::Tick *);
 	void on(Algorithm::TabuSearch::Events::StepExecuted *);
 	void on(Control::Events::Exception *);
-	void on(Control::Events::ThreadFinished *);
+	void on(Control::Events::Finished *);
 	void on(Control::Events::Paused *);
 	void on(Control::Events::Resumed *);
 	void on(Timetabling::ConstraintEvents::AlphaChanged *ev);
