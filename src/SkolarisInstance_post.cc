@@ -8,15 +8,15 @@
 using namespace boost::property_tree;
 using namespace std;
 
-const string SKOLARIS_VERSION("9.19.2"
+const string SKOLARIS_VERSION("9.20.0"
 #ifdef DEBUG
 	"debug"
 #endif
 );
 
 const string SKOLARIS_VERSION_MAJOR("9");
-const string SKOLARIS_VERSION_MINOR("19");
-const string SKOLARIS_VERSION_PATCH("2");
+const string SKOLARIS_VERSION_MINOR("20");
+const string SKOLARIS_VERSION_PATCH("0");
 
 void SkolarisInstance::postMessage(const ptree &data) const
 {
