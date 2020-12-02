@@ -9,8 +9,8 @@ using namespace boost::property_tree;
 using namespace std;
 
 const string SKOLARIS_VERSION_MAJOR{"9"};
-const string SKOLARIS_VERSION_MINOR{"20"};
-const string SKOLARIS_VERSION_PATCH{"1"};
+const string SKOLARIS_VERSION_MINOR{"21"};
+const string SKOLARIS_VERSION_PATCH{"0"};
 
 const string SKOLARIS_VERSION = SKOLARIS_VERSION_MAJOR + "." + SKOLARIS_VERSION_MINOR + "." + SKOLARIS_VERSION_PATCH
 #ifdef DEBUG
