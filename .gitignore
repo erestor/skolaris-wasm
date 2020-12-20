@@ -12,3 +12,5 @@ release/
 .svn/
 .git/
 
+.vs/
+*.vcxproj.user
