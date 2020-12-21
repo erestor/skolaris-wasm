@@ -2,18 +2,24 @@ CXX = emcc
 TARGET = skolaris
 BUILD_DIR = build
 
-ifeq "${MAKECMDGOALS}" "debug"
+ifeq "${MAKECMDGOALS}" "skolarisDebug"
 BUILD_DIR = build_debug
-CFLAGSBUILD = -g4 -D_DEBUG -s USE_PTHREADS=1
-LDFLAGSBUILD = -s EXTRA_EXPORTED_RUNTIME_METHODS='["calledRun","cwrap"]' -s ASSERTIONS=1 -s DEMANGLE_SUPPORT=1 -s DISABLE_EXCEPTION_CATCHING=0 --source-map-base http://localhost/SkolarisUI.Web/Plugin/src/ -g4
+CFLAGSBUILD = -g4 -D_DEBUG -s USE_PTHREADS=1 -s DISABLE_EXCEPTION_CATCHING=0 -s ASSERTIONS=2 -s SAFE_HEAP=1
+LDFLAGSBUILD = -s EXTRA_EXPORTED_RUNTIME_METHODS='["cwrap", "lengthBytesUTF8", "stringToUTF8"]' -s ASSERTIONS=2 -s SAFE_HEAP=1 -s DEMANGLE_SUPPORT=1 -s DISABLE_EXCEPTION_CATCHING=0 --source-map-base http://localhost/SkolarisUI.Web/Plugin/src/ -g4
 else
 CFLAGSBUILD = -DNDEBUG -O2 -s USE_PTHREADS=1
-LDFLAGSBUILD = -s EXTRA_EXPORTED_RUNTIME_METHODS='["cwrap"]' -O2
+LDFLAGSBUILD = -s EXTRA_EXPORTED_RUNTIME_METHODS='["cwrap", "lengthBytesUTF8", "stringToUTF8"]' -O2
 endif
 
 ifeq "${MAKECMDGOALS}" "skolarisOneThread"
 BUILD_DIR = build_one_thread
 CFLAGSBUILD = -DNDEBUG -O2 -DUSE_ONE_THREAD
+endif
+
+ifeq "${MAKECMDGOALS}" "skolarisOneThreadDebug"
+BUILD_DIR = build_one_thread_debug
+CFLAGSBUILD = -g4 -D_DEBUG -DUSE_ONE_THREAD -s DISABLE_EXCEPTION_CATCHING=0
+LDFLAGSBUILD = -s EXTRA_EXPORTED_RUNTIME_METHODS='["cwrap"]' -s ASSERTIONS=1 -s DEMANGLE_SUPPORT=1 -s DISABLE_EXCEPTION_CATCHING=0 --source-map-base http://localhost/SkolarisUI.Web/Plugin/src/ -g4
 endif
 
 #$(info $$BUILD_DIR is [${BUILD_DIR}])
@@ -58,7 +64,7 @@ skolaris: $(OBJS)
 	$(MKDIR_P) release
 	$(CXX) $(OBJS) -o release/skolaris.html $(LDFLAGS) $(LDFLAGSMULTITHREAD) $(LDFLAGSBUILD)
 
-debug: $(OBJS)
+skolarisDebug: $(OBJS)
 	$(MKDIR_P) debug
 	$(CXX) $(OBJS) -o debug/skolaris.html $(LDFLAGS) $(LDFLAGSMULTITHREAD) $(LDFLAGSBUILD)
 
@@ -66,15 +72,15 @@ skolarisOneThread: $(OBJS)
 	$(MKDIR_P) release
 	$(CXX) $(OBJS) -o release/skolarisOneThread.html $(LDFLAGS) $(LDFLAGSONETHREAD) $(LDFLAGSBUILD)
 
+skolarisOneThreadDebug: $(OBJS)
+	$(MKDIR_P) debug
+	$(CXX) $(OBJS) -o debug/skolarisOneThread.html $(LDFLAGS) $(LDFLAGSONETHREAD) $(LDFLAGSBUILD)
+
 -include $(DEPS)
 
 .PHONY: clean
 clean:
-	@rm -rf $(BUILD_DIR)
-
-.PHONY: wipe
-wipe:
-	rm -rf ~/.emscripten_cache; rm -rf $(BUILD_DIR)
+	@rm -rf build build_debug build_one_thread build_one_thread_debug release debug
 
 .PHONY: install
 install:
@@ -82,4 +88,4 @@ install:
 	
 .PHONY: install_debug
 install_debug:
-	cp debug/skolaris.* ~/Public/skolaris_wasm/debug
+	cp debug/skolaris.* debug/skolarisOneThread* ~/Public/skolaris_wasm/debug

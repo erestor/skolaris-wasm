@@ -1,6 +1,4 @@
 #include "SkolarisInstance.h"
-#include "gascheduler/src/timetable/timetable_events.h"
-#include <ctoolhu/event/firer.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <string>
