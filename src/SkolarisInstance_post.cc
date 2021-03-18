@@ -8,7 +8,7 @@ using namespace std;
 
 const string SKOLARIS_VERSION_MAJOR{"10"};
 const string SKOLARIS_VERSION_MINOR{"2"};
-const string SKOLARIS_VERSION_PATCH{"1"};
+const string SKOLARIS_VERSION_PATCH{"2"};
 
 const string SKOLARIS_VERSION = SKOLARIS_VERSION_MAJOR + "." + SKOLARIS_VERSION_MINOR + "." + SKOLARIS_VERSION_PATCH
 #ifdef DEBUG
