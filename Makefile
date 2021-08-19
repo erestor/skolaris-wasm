@@ -7,13 +7,13 @@ BUILD_DIR = build_debug
 CFLAGSBUILD = -g4 -D_DEBUG -s USE_PTHREADS=1 -s DISABLE_EXCEPTION_CATCHING=0 -s ASSERTIONS=2 -s SAFE_HEAP=1
 LDFLAGSBUILD = -s EXPORTED_RUNTIME_METHODS='["cwrap", "lengthBytesUTF8", "stringToUTF8"]' -s ASSERTIONS=2 -s SAFE_HEAP=1 -s DEMANGLE_SUPPORT=1 -s DISABLE_EXCEPTION_CATCHING=0 --source-map-base http://localhost/SkolarisUI.Web/Plugin/src/ -g4
 else
-CFLAGSBUILD = -DNDEBUG -O2 -s USE_PTHREADS=1
-LDFLAGSBUILD = -s EXPORTED_RUNTIME_METHODS='["cwrap", "lengthBytesUTF8", "stringToUTF8"]' -O2
+CFLAGSBUILD = -DNDEBUG -O3 -s USE_PTHREADS=1
+LDFLAGSBUILD = -s EXPORTED_RUNTIME_METHODS='["cwrap", "lengthBytesUTF8", "stringToUTF8"]' -O3
 endif
 
 ifeq "${MAKECMDGOALS}" "skolarisOneThread"
 BUILD_DIR = build_one_thread
-CFLAGSBUILD = -DNDEBUG -O2 -DUSE_ONE_THREAD
+CFLAGSBUILD = -DNDEBUG -O3 -DUSE_ONE_THREAD
 endif
 
 ifeq "${MAKECMDGOALS}" "skolarisOneThreadDebug"
@@ -31,7 +31,7 @@ INCCTOOLHU = /usr/local/include/ctoolhu
 INCLOCALSEARCH = /usr/local/include/localsearch
 INCDIRS = -I${INCBOOST} -I${INCCTOOLHU} -I${INCLOCALSEARCH}
 
-CFLAGS = -Wall -std=c++17 -fno-rtti ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED -DBOOST_NO_RTTI -DBOOST_NO_TYPEID -MMD -MP
+CFLAGS = -Wall -std=c++20 -fno-rtti ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED -DBOOST_NO_RTTI -DBOOST_NO_TYPEID -MMD -MP
 
 LDFLAGS = --shell-file src/html_template/shell_minimal.html -s MODULARIZE=1
 LDFLAGSONETHREAD = -s ALLOW_MEMORY_GROWTH=1 -s WASM_MEM_MAX=512Mb -s EXPORT_NAME=SkolarisOneThreadModule
