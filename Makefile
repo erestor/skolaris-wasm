@@ -5,10 +5,10 @@ BUILD_DIR = build
 ifeq "${MAKECMDGOALS}" "skolarisDebug"
 BUILD_DIR = build_debug
 CFLAGSBUILD = -g4 -D_DEBUG -s USE_PTHREADS=1 -s DISABLE_EXCEPTION_CATCHING=0 -s ASSERTIONS=2 -s SAFE_HEAP=1
-LDFLAGSBUILD = -s EXPORTED_RUNTIME_METHODS='["cwrap", "lengthBytesUTF8", "stringToUTF8"]' -s ASSERTIONS=2 -s SAFE_HEAP=1 -s DEMANGLE_SUPPORT=1 -s DISABLE_EXCEPTION_CATCHING=0 --source-map-base http://localhost/SkolarisUI.Web/Plugin/src/ -g4
+LDFLAGSBUILD = -s EXPORTED_RUNTIME_METHODS='["cwrap", "lengthBytesUTF8", "stringToUTF8"]' -s EXPORTED_FUNCTIONS='["_malloc", "_free"]' -s ASSERTIONS=2 -s SAFE_HEAP=1 -s DEMANGLE_SUPPORT=1 -s DISABLE_EXCEPTION_CATCHING=0 --source-map-base http://localhost/SkolarisUI.Web/Plugin/src/ -g4
 else
 CFLAGSBUILD = -DNDEBUG -O3 -s USE_PTHREADS=1
-LDFLAGSBUILD = -s EXPORTED_RUNTIME_METHODS='["cwrap", "lengthBytesUTF8", "stringToUTF8"]' -O3
+LDFLAGSBUILD = -s EXPORTED_RUNTIME_METHODS='["cwrap", "lengthBytesUTF8", "stringToUTF8"]' -s EXPORTED_FUNCTIONS='["_malloc", "_free"]' -O3
 endif
 
 ifeq "${MAKECMDGOALS}" "skolarisOneThread"
@@ -19,7 +19,7 @@ endif
 ifeq "${MAKECMDGOALS}" "skolarisOneThreadDebug"
 BUILD_DIR = build_one_thread_debug
 CFLAGSBUILD = -g4 -D_DEBUG -DUSE_ONE_THREAD -s DISABLE_EXCEPTION_CATCHING=0
-LDFLAGSBUILD = -s EXPORTED_RUNTIME_METHODS='["cwrap"]' -s ASSERTIONS=1 -s DEMANGLE_SUPPORT=1 -s DISABLE_EXCEPTION_CATCHING=0 --source-map-base http://localhost/SkolarisUI.Web/Plugin/src/ -g4
+LDFLAGSBUILD = -s EXPORTED_RUNTIME_METHODS='["cwrap", "lengthBytesUTF8", "stringToUTF8"]' -s EXPORTED_FUNCTIONS='["_malloc", "_free"]' -s ASSERTIONS=1 -s DEMANGLE_SUPPORT=1 -s DISABLE_EXCEPTION_CATCHING=0 --source-map-base http://localhost/SkolarisUI.Web/Plugin/src/ -g4
 endif
 
 #$(info $$BUILD_DIR is [${BUILD_DIR}])
