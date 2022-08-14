@@ -4,22 +4,22 @@ BUILD_DIR = build
 
 ifeq "${MAKECMDGOALS}" "skolarisDebug"
 BUILD_DIR = build_debug
-CFLAGSBUILD = -g4 -D_DEBUG -s USE_PTHREADS=1 -s DISABLE_EXCEPTION_CATCHING=0 -s ASSERTIONS=2 -s SAFE_HEAP=1
-LDFLAGSBUILD = -s EXPORTED_RUNTIME_METHODS='["cwrap", "lengthBytesUTF8", "stringToUTF8"]' -s EXPORTED_FUNCTIONS='["_malloc", "_free"]' -s ASSERTIONS=2 -s SAFE_HEAP=1 -s DEMANGLE_SUPPORT=1 -s DISABLE_EXCEPTION_CATCHING=0 --source-map-base http://localhost/SkolarisUI.Web/Plugin/src/ -g4
+CFLAGSBUILD = -gsource-map -D_DEBUG -pthread -sDISABLE_EXCEPTION_CATCHING=0
+LDFLAGSBUILD = -sDEMANGLE_SUPPORT -sDISABLE_EXCEPTION_CATCHING=0 --source-map-base https://localhost/SkolarisUI.Web/Plugin/src/ -gsource-map -sASSERTIONS=2 -sSAFE_HEAP
 else
-CFLAGSBUILD = -DNDEBUG -O3 -s USE_PTHREADS=1
-LDFLAGSBUILD = -s EXPORTED_RUNTIME_METHODS='["cwrap", "lengthBytesUTF8", "stringToUTF8"]' -s EXPORTED_FUNCTIONS='["_malloc", "_free"]' -O3
+CFLAGSBUILD = -DNDEBUG -O3 -pthread -flto
+LDFLAGSBUILD = -O3 -flto
 endif
 
 ifeq "${MAKECMDGOALS}" "skolarisOneThread"
 BUILD_DIR = build_one_thread
-CFLAGSBUILD = -DNDEBUG -O3 -DUSE_ONE_THREAD
+CFLAGSBUILD = -DNDEBUG -O3 -DUSE_ONE_THREAD -flto
 endif
 
 ifeq "${MAKECMDGOALS}" "skolarisOneThreadDebug"
 BUILD_DIR = build_one_thread_debug
-CFLAGSBUILD = -g4 -D_DEBUG -DUSE_ONE_THREAD -s DISABLE_EXCEPTION_CATCHING=0
-LDFLAGSBUILD = -s EXPORTED_RUNTIME_METHODS='["cwrap", "lengthBytesUTF8", "stringToUTF8"]' -s EXPORTED_FUNCTIONS='["_malloc", "_free"]' -s ASSERTIONS=1 -s DEMANGLE_SUPPORT=1 -s DISABLE_EXCEPTION_CATCHING=0 --source-map-base http://localhost/SkolarisUI.Web/Plugin/src/ -g4
+CFLAGSBUILD = -gsource-map -D_DEBUG -DUSE_ONE_THREAD -sDISABLE_EXCEPTION_CATCHING=0
+LDFLAGSBUILD = -sDEMANGLE_SUPPORT -sDISABLE_EXCEPTION_CATCHING=0 --source-map-base https://localhost/SkolarisUI.Web/Plugin/src/ -gsource-map -sASSERTIONS=2 -sSAFE_HEAP
 endif
 
 #$(info $$BUILD_DIR is [${BUILD_DIR}])
@@ -33,10 +33,10 @@ INCDIRS = -I${INCBOOST} -I${INCCTOOLHU} -I${INCLOCALSEARCH}
 
 CFLAGS = -Wall -std=c++20 -fno-rtti ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED -DBOOST_NO_RTTI -DBOOST_NO_TYPEID -MMD -MP
 
-LDFLAGS = --shell-file src/html_template/shell_minimal.html -s MODULARIZE=1
-LDFLAGSONETHREAD = -s ALLOW_MEMORY_GROWTH=1 -s WASM_MEM_MAX=512Mb -s EXPORT_NAME=SkolarisOneThreadModule
-LDFLAGSMULTITHREAD = -s TOTAL_MEMORY=384Mb -s USE_PTHREADS=1 -s PTHREAD_POOL_SIZE=6 -s EXPORT_NAME=SkolarisModule
-LDFLAGSUNUSED = -s VERBOSE=1
+LDFLAGS = -sMODULARIZE=1 -sEXPORTED_RUNTIME_METHODS='["cwrap", "lengthBytesUTF8", "stringToUTF8"]' -sEXPORTED_FUNCTIONS='["_malloc", "_free"]' -sTEXTDECODER=2 --shell-file src/html_template/shell_minimal.html
+LDFLAGSONETHREAD = -sALLOW_MEMORY_GROWTH=1 -sMAXIMUM_MEMORY=512Mb -sEXPORT_NAME=SkolarisOneThreadModule
+LDFLAGSMULTITHREAD = -sINITIAL_MEMORY=384Mb -pthread -sPTHREAD_POOL_SIZE=6 -sEXPORT_NAME=SkolarisModule
+LDFLAGSUNUSED = -sVERBOSE=1
 
 SOURCES_CC = $(wildcard src/*.cc)
 SOURCES_CPP = \
@@ -90,4 +90,4 @@ install:
 	
 .PHONY: install_debug
 install_debug:
-	cp debug/skolaris.* debug/skolarisOneThread* ~/Public/skolaris_wasm/debug
+	cp debug/skolaris.* debug/skolarisOneThread.* ~/Public/skolaris_wasm/debug
