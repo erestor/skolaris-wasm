@@ -11,7 +11,7 @@ const string SKOLARIS_VERSION_MINOR{"15"};
 const string SKOLARIS_VERSION_PATCH{"1"};
 
 const string SKOLARIS_VERSION = SKOLARIS_VERSION_MAJOR + "." + SKOLARIS_VERSION_MINOR + "." + SKOLARIS_VERSION_PATCH
-#ifdef DEBUG
+#ifdef _DEBUG
 	+ "debug"
 #endif
 ;
