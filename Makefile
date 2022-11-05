@@ -35,7 +35,7 @@ CFLAGS = -Wall -std=c++20 -fno-rtti ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED -DBO
 
 LDFLAGS = -sMODULARIZE=1 -sEXPORTED_RUNTIME_METHODS='["cwrap", "lengthBytesUTF8", "stringToUTF8"]' -sEXPORTED_FUNCTIONS='["_malloc", "_free"]' -sTEXTDECODER=2 --shell-file src/html_template/shell_minimal.html
 LDFLAGSONETHREAD = -sALLOW_MEMORY_GROWTH=1 -sMAXIMUM_MEMORY=512Mb -sEXPORT_NAME=SkolarisOneThreadModule
-LDFLAGSMULTITHREAD = -sINITIAL_MEMORY=384Mb -pthread -sPTHREAD_POOL_SIZE=6 -sEXPORT_NAME=SkolarisModule
+LDFLAGSMULTITHREAD = -sINITIAL_MEMORY=384Mb -pthread -sPTHREAD_POOL_SIZE='navigator.hardwareConcurrency+2' -sEXPORT_NAME=SkolarisModule
 LDFLAGSUNUSED = -sVERBOSE=1
 
 SOURCES_CC = $(wildcard src/*.cc)
