@@ -31,7 +31,7 @@ INCCTOOLHU = /usr/local/include/ctoolhu
 INCLOCALSEARCH = /usr/local/include/localsearch
 INCDIRS = -I${INCBOOST} -I${INCCTOOLHU} -I${INCLOCALSEARCH}
 
-CFLAGS = -Wall -std=c++20 -fno-rtti ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED -DBOOST_NO_RTTI -DBOOST_NO_TYPEID -MMD -MP
+CFLAGS = -Wall -std=c++20 -fexperimental-library -fno-rtti ${INCDIRS} -DBOOST_NO_CXX98_FUNCTION_BASE -DBOOST_SYSTEM_NO_DEPRECATED -DBOOST_NO_RTTI -DBOOST_NO_TYPEID -MMD -MP -Wno-deprecated-builtins
 
 LDFLAGS = -sMODULARIZE=1 -sEXPORTED_RUNTIME_METHODS='["cwrap", "lengthBytesUTF8", "stringToUTF8"]' -sEXPORTED_FUNCTIONS='["_malloc", "_free"]' -sTEXTDECODER=2 --shell-file src/html_template/shell_minimal.html
 LDFLAGSONETHREAD = -sALLOW_MEMORY_GROWTH=1 -sMAXIMUM_MEMORY=512Mb -sEXPORT_NAME=SkolarisOneThreadModule
