@@ -33,9 +33,9 @@ INCDIRS = -I${INCBOOST} -I${INCCTOOLHU} -I${INCLOCALSEARCH}
 
 CFLAGS = -Wall -std=c++20 -fexperimental-library -fno-rtti ${INCDIRS} -DBOOST_NO_CXX98_FUNCTION_BASE -DBOOST_SYSTEM_NO_DEPRECATED -DBOOST_NO_RTTI -DBOOST_NO_TYPEID -MMD -MP -Wno-deprecated-builtins
 
-LDFLAGS = -sMODULARIZE=1 -sEXPORTED_RUNTIME_METHODS='["cwrap", "lengthBytesUTF8", "stringToUTF8"]' -sEXPORTED_FUNCTIONS='["_malloc", "_free"]' -sTEXTDECODER=2 --shell-file src/html_template/shell_minimal.html
-LDFLAGSONETHREAD = -sALLOW_MEMORY_GROWTH=1 -sMAXIMUM_MEMORY=512Mb -sEXPORT_NAME=SkolarisOneThreadModule
-LDFLAGSMULTITHREAD = -sINITIAL_MEMORY=384Mb -pthread -sPTHREAD_POOL_SIZE='navigator.hardwareConcurrency+2' -sEXPORT_NAME=SkolarisModule
+LDFLAGS = -sALLOW_MEMORY_GROWTH -sINITIAL_MEMORY=64Mb -sMODULARIZE=1 -sEXPORTED_RUNTIME_METHODS='["cwrap", "lengthBytesUTF8", "stringToUTF8"]' -sEXPORTED_FUNCTIONS='["_malloc", "_free"]' -sTEXTDECODER=2 --shell-file src/html_template/shell_minimal.html
+LDFLAGSONETHREAD = -sEXPORT_NAME=SkolarisOneThreadModule
+LDFLAGSMULTITHREAD = -pthread -sPTHREAD_POOL_SIZE='navigator.hardwareConcurrency+2' -sEXPORT_NAME=SkolarisModule
 LDFLAGSUNUSED = -sVERBOSE=1
 
 SOURCES_CC = $(wildcard src/*.cc)
