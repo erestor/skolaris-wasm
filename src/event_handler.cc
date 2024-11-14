@@ -98,6 +98,6 @@ void PluginEventHandler::on(Control::Events::Resumed *)
 void PluginEventHandler::on(Timetabling::ConstraintEvents::AlphaChanged *ev)
 {
 	stringstream s;
-	s << "Constraint: " << ev->name << ", alpha: " << ev->oldAlpha << " -> " << ev->newAlpha << '\n';
+	s << "Constraint: " << ev->name << ", alpha -> " << ev->newAlpha << '\n';
 	_api->post_text(s.str());
 }

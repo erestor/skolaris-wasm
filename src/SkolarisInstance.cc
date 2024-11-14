@@ -8,17 +8,16 @@
 #include <stdexcept>
 #include <string>
 
-using namespace std;
 using namespace boost::property_tree;
 
 SkolarisInstance::~SkolarisInstance() = default;
 
 SkolarisInstance::SkolarisInstance()
 {
-	_eventHandler = make_unique<PluginEventHandler>(this);
+	_eventHandler = std::make_unique<PluginEventHandler>(this);
 }
 
-bool SkolarisInstance::stringifyFitnessSummary(string &result, Algorithm::ISolution *solutionPtr) const
+bool SkolarisInstance::stringifyFitnessSummary(std::string &result, Algorithm::ISolution *solutionPtr) const
 {
 	if (!solutionPtr) {
 		result = "Unable to stringify fitness summary: input is null";
@@ -28,18 +27,18 @@ bool SkolarisInstance::stringifyFitnessSummary(string &result, Algorithm::ISolut
 		ptree data;
 		data.put("fitness", solutionPtr->getFitness());
 		data.put("feasible", solutionPtr->isFeasible());
-		stringstream s;
+		std::stringstream s;
 		json_parser::write_json(s, data);
 		result = s.str();
 		return true;
 	}
-	catch (const exception &e) {
-		result = string("Unable to stringify fitness summary: ") + e.what();
+	catch (const std::exception &e) {
+		result = std::string{"Unable to stringify fitness summary: "} + e.what();
 	}
 	return false;
 }
 
-bool SkolarisInstance::stringifySolution(string &result, const Algorithm::ISolution *solutionPtr) const
+bool SkolarisInstance::stringifySolution(std::string &result, const Algorithm::ISolution *solutionPtr) const
 {
 	if (!solutionPtr) {
 		result = "Unable to stringify solution: input is null";
@@ -48,18 +47,18 @@ bool SkolarisInstance::stringifySolution(string &result, const Algorithm::ISolut
 	try {
 		ptree data;
 		solutionPtr->save(data);
-		stringstream s;
+		std::stringstream s;
 		json_parser::write_json(s, data);
 		result = s.str();
 		return true;
 	}
-	catch (const exception &e) {
-		result = string("Unable to stringify solution: ") + e.what();
+	catch (const std::exception &e) {
+		result = std::string{"Unable to stringify solution: "} + e.what();
 	}
 	return false;
 }
 
-string SkolarisInstance::stringifyMessages(const std::vector<boost::property_tree::ptree> &warnings) const
+std::string SkolarisInstance::stringifyMessages(const std::vector<boost::property_tree::ptree> &warnings) const
 {
 	ptree errors;
 	for (auto const &e : _errors) {
@@ -74,7 +73,7 @@ string SkolarisInstance::stringifyMessages(const std::vector<boost::property_tre
 	ptree messages;
 	messages.add_child("errors", errors);
 	messages.add_child("checkFails", checkFails);
-	stringstream s;
+	std::stringstream s;
 	json_parser::write_json(s, messages);
 	return s.str();
 }

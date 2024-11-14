@@ -88,12 +88,13 @@ class SkolarisInstance {
 	std::unique_ptr<Control::Controller<Timetabling::Schedule>> _controller;
 	std::shared_ptr<Algorithm::Storage::Store<Timetabling::Schedule>> _store;
 	std::shared_ptr<Timetabling::ConstraintHolder> _constraintHolder;
+	std::shared_ptr<Timetabling::ConstraintChecker> _constraintChecker;
 	std::shared_ptr<Timetabling::Timetable> _timetable;
 	std::unique_ptr<PluginEventHandler> _eventHandler;
 	std::vector<std::string> _errors;
 
 	std::string _jsonAlgorithm;
-	bool _benchmarkMode;
+	bool _benchmarkMode{false};
 };
 
 using SingleSkolarisInstance = Ctoolhu::Singleton::Holder<SkolarisInstance>;
