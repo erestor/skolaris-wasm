@@ -27,7 +27,7 @@ bool SkolarisInstance::stringifyFitnessSummary(std::string &result, Algorithm::I
 		ptree data;
 		data.put("fitness", solutionPtr->getFitness());
 		data.put("feasible", solutionPtr->isFeasible());
-		std::stringstream s;
+		std::ostringstream s;
 		json_parser::write_json(s, data);
 		result = s.str();
 		return true;
@@ -47,7 +47,7 @@ bool SkolarisInstance::stringifySolution(std::string &result, const Algorithm::I
 	try {
 		ptree data;
 		solutionPtr->save(data);
-		std::stringstream s;
+		std::ostringstream s;
 		json_parser::write_json(s, data);
 		result = s.str();
 		return true;
@@ -73,7 +73,7 @@ std::string SkolarisInstance::stringifyMessages(const std::vector<boost::propert
 	ptree messages;
 	messages.add_child("errors", errors);
 	messages.add_child("checkFails", checkFails);
-	std::stringstream s;
+	std::ostringstream s;
 	json_parser::write_json(s, messages);
 	return s.str();
 }

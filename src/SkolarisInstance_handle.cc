@@ -2,7 +2,7 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <string>
-//#include <stdio.h>
+#include <sstream>
 
 using namespace boost::property_tree;
 using namespace std;
@@ -10,7 +10,7 @@ using namespace std;
 void SkolarisInstance::handleMessage(const string &var_message)
 {
 	ptree message;
-	stringstream s(var_message);
+	istringstream s(var_message);
 	json_parser::read_json(s, message);
 
 	auto type = message.get<string>("type");
@@ -63,7 +63,7 @@ void SkolarisInstance::handleSetMessage(const ptree &msg)
 	}
 	else if (t == "algorithm") {
 		ptree payload;
-		stringstream s(p);
+		istringstream s(p);
 		json_parser::read_json(s, payload);
 		set_algorithm(payload);
 	}

@@ -28,7 +28,7 @@ void PluginEventHandler::on(Timetabling::TimetableEvents::AfterInit *)
 
 void PluginEventHandler::on(Algorithm::Events::Started *ev)
 {
-	stringstream s;
+	ostringstream s;
 	s << endl << "Executing " << ev->algorithmName << "..." << endl
 			<< "Initial fitness: " << ev->solutionPtr->getFitness() << (ev->solutionPtr->isFeasible() ? "F " : "") << endl;
 	_api->post_text(s.str());
@@ -47,7 +47,7 @@ void PluginEventHandler::on(Algorithm::Events::CurrentSolutionChanged *ev)
 void PluginEventHandler::on(Algorithm::Events::BestSolutionFound *ev)
 {
 	_api->post_bestsolutionfound(ev->solutionPtr);
-	stringstream s;
+	ostringstream s;
 	s << " " << ev->solutionPtr->getFitness() << (ev->solutionPtr->isFeasible() ? "F " : " ");
 	_api->post_text(s.str());
 }
@@ -64,7 +64,7 @@ void PluginEventHandler::on(Algorithm::RNA::Events::Tick *)
 
 void PluginEventHandler::on(Algorithm::TabuSearch::Events::StepExecuted *ev)
 {
-	stringstream s;
+	ostringstream s;
 	s << ev->stepDescription.data() << " (" << ev->currentSolutionPtr->getFitness() << ')' << endl;
 	_api->post_text(s.str());
 }
@@ -97,7 +97,7 @@ void PluginEventHandler::on(Control::Events::Resumed *)
 
 void PluginEventHandler::on(Timetabling::ConstraintEvents::AlphaChanged *ev)
 {
-	stringstream s;
+	ostringstream s;
 	s << "Constraint: " << ev->name << ", alpha -> " << ev->newAlpha << '\n';
 	_api->post_text(s.str());
 }

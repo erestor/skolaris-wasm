@@ -1,10 +1,10 @@
 #include "SkolarisInstance.h"
 #include "gascheduler/src/controller_builder.hpp"
 #include "gascheduler/src/timetable/constraint_holder.h"
-//#include <localsearch/events/events.h>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <string>
+#include <sstream>
 
 using namespace boost::property_tree;
 
@@ -13,7 +13,7 @@ bool SkolarisInstance::set_jsonData(const std::string &jsonData, int requestId)
 	ptree timetableData;
 	ptree controllerConfig;
 	try {
-		std::stringstream s(jsonData);
+		std::istringstream s(jsonData);
 		json_parser::read_json(s, timetableData);
 	}
 	catch (const std::exception &e) {
@@ -37,7 +37,7 @@ bool SkolarisInstance::set_jsonSchedules(const std::string &jsonSchedules, int r
 	}
 	ptree schedules;
 	try {
-		std::stringstream s(jsonSchedules);
+		std::istringstream s(jsonSchedules);
 		json_parser::read_json(s, schedules);
 	}
 	catch (const std::exception &e) {
@@ -65,7 +65,7 @@ bool SkolarisInstance::set_jsonConstraints(const std::string &jsonConstraints, i
 	}
 	ptree constraints;
 	try {
-		std::stringstream s(jsonConstraints);
+		std::istringstream s(jsonConstraints);
 		json_parser::read_json(s, constraints);
 	}
 	catch(const std::exception &e) {

@@ -2,13 +2,14 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <string>
+#include <sstream>
 
 using namespace boost::property_tree;
 using namespace std;
 
 constexpr static string SKOLARIS_VERSION_MAJOR{"11"};
-constexpr static string SKOLARIS_VERSION_MINOR{"0"};
-constexpr static string SKOLARIS_VERSION_PATCH{"3"};
+constexpr static string SKOLARIS_VERSION_MINOR{"1"};
+constexpr static string SKOLARIS_VERSION_PATCH{"0"};
 
 constexpr static string SKOLARIS_VERSION = SKOLARIS_VERSION_MAJOR + "." + SKOLARIS_VERSION_MINOR + "." + SKOLARIS_VERSION_PATCH
 #ifdef _DEBUG
@@ -18,7 +19,7 @@ constexpr static string SKOLARIS_VERSION = SKOLARIS_VERSION_MAJOR + "." + SKOLAR
 
 void SkolarisInstance::postMessage(const ptree &data) const
 {
-	std::stringstream s;
+	std::ostringstream s;
 	json_parser::write_json(s, data);
 	auto result = s.str();
 	postMessage(result.c_str());
