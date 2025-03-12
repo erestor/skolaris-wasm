@@ -5,7 +5,7 @@ BUILD_DIR = build
 ifeq "${MAKECMDGOALS}" "skolarisDebug"
 BUILD_DIR = build_debug
 CFLAGSBUILD = -gsource-map -D_DEBUG -pthread -sDISABLE_EXCEPTION_CATCHING=0
-LDFLAGSBUILD = -sDEMANGLE_SUPPORT -sDISABLE_EXCEPTION_CATCHING=0 --source-map-base https://localhost/SkolarisUI.Web/Plugin/src/ -gsource-map -sASSERTIONS=2 -sSAFE_HEAP
+LDFLAGSBUILD = -sDISABLE_EXCEPTION_CATCHING=0 --source-map-base https://skolaris.net/dev8/Plugin/src/ -gsource-map -sASSERTIONS=2 -sSAFE_HEAP
 else
 CFLAGSBUILD = -DNDEBUG -O3 -pthread -flto
 LDFLAGSBUILD = -O3 -flto
@@ -19,7 +19,7 @@ endif
 ifeq "${MAKECMDGOALS}" "skolarisOneThreadDebug"
 BUILD_DIR = build_one_thread_debug
 CFLAGSBUILD = -gsource-map -D_DEBUG -DUSE_ONE_THREAD -sDISABLE_EXCEPTION_CATCHING=0
-LDFLAGSBUILD = -sDEMANGLE_SUPPORT -sDISABLE_EXCEPTION_CATCHING=0 --source-map-base https://localhost/SkolarisUI.Web/Plugin/src/ -gsource-map -sASSERTIONS=2 -sSAFE_HEAP
+LDFLAGSBUILD = -sDISABLE_EXCEPTION_CATCHING=0 --source-map-base https://localhost/SkolarisUI.Web/Plugin/src/ -gsource-map -sASSERTIONS=2 -sSAFE_HEAP
 endif
 
 #$(info $$BUILD_DIR is [${BUILD_DIR}])
