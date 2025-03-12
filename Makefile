@@ -4,8 +4,8 @@ BUILD_DIR = build
 
 ifeq "${MAKECMDGOALS}" "skolarisDebug"
 BUILD_DIR = build_debug
-CFLAGSBUILD = -gsource-map -D_DEBUG -pthread -sDISABLE_EXCEPTION_CATCHING=0
-LDFLAGSBUILD = -sDISABLE_EXCEPTION_CATCHING=0 --source-map-base https://skolaris.net/dev8/Plugin/src/ -gsource-map -sASSERTIONS=2 -sSAFE_HEAP
+CFLAGSBUILD = -g -D_DEBUG -pthread -sDISABLE_EXCEPTION_CATCHING=0
+LDFLAGSBUILD = -sDISABLE_EXCEPTION_CATCHING=0 --source-map-base https://skolaris.net/dev8/Plugin/src/ -g -sASSERTIONS=2 -sSAFE_HEAP
 else
 CFLAGSBUILD = -DNDEBUG -O3 -pthread -flto
 LDFLAGSBUILD = -O3 -flto
