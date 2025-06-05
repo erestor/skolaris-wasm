@@ -1,5 +1,6 @@
 #include "SkolarisInstance.h"
 #include "gascheduler/src/plugin/algorithm_builder.h"
+#include <ctoolhu/random/engine.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <string>

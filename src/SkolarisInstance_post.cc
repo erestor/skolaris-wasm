@@ -5,15 +5,13 @@
 #include <sstream>
 
 using namespace boost::property_tree;
-using namespace std;
 
-constexpr static string SKOLARIS_VERSION_MAJOR{"11"};
-constexpr static string SKOLARIS_VERSION_MINOR{"1"};
-constexpr static string SKOLARIS_VERSION_PATCH{"1"};
-
-constexpr static string SKOLARIS_VERSION = SKOLARIS_VERSION_MAJOR + "." + SKOLARIS_VERSION_MINOR + "." + SKOLARIS_VERSION_PATCH
+constexpr const static std::string SKOLARIS_VERSION_MAJOR{"12"};
+constexpr const static std::string SKOLARIS_VERSION_MINOR{"0"};
+constexpr const static std::string SKOLARIS_VERSION_PATCH{"0rc"};
+constexpr const static std::string SKOLARIS_VERSION{SKOLARIS_VERSION_MAJOR + "." + SKOLARIS_VERSION_MINOR + "." + SKOLARIS_VERSION_PATCH}
 #ifdef _DEBUG
-	+ "d"
++ "D"
 #endif
 ;
 
@@ -39,7 +37,7 @@ void SkolarisInstance::post_message(const std::string &type) const
 	postMessage(dictionary);
 }
 
-void SkolarisInstance::post_message(const std::string &type, const string &payload) const
+void SkolarisInstance::post_message(const std::string &type, const std::string &payload) const
 {
 	ptree dictionary;
 	dictionary.put("type", type);
@@ -63,7 +61,7 @@ void SkolarisInstance::post_message(int requestId, const std::string &type) cons
 	postMessage(dictionary);
 }
 
-void SkolarisInstance::post_message(int requestId, const std::string &type, const string &payload) const
+void SkolarisInstance::post_message(int requestId, const std::string &type, const std::string &payload) const
 {
 	ptree dictionary;
 	dictionary.put("reqId", requestId);
@@ -104,7 +102,7 @@ void SkolarisInstance::post_version(int requestId) const
 
 void SkolarisInstance::post_currentsolution(int requestId) const
 {
-	string s;
+	std::string s;
 	if (stringifySolution(s, lockStore()->getCurrentSolution()))
 		post_message(requestId, "currentsolution", s);
 	else
@@ -113,7 +111,7 @@ void SkolarisInstance::post_currentsolution(int requestId) const
 
 void SkolarisInstance::post_bestsolution(int requestId) const
 {
-	string s;
+	std::string s;
 	if (stringifySolution(s, lockStore()->getBestSolution()))
 		post_message(requestId, "bestsolution", s);
 	else
@@ -122,7 +120,7 @@ void SkolarisInstance::post_bestsolution(int requestId) const
 
 void SkolarisInstance::post_feasiblesolution(int requestId) const
 {
-	string s;
+	std::string s;
 	if (stringifySolution(s, lockStore()->getFeasibleSolution()))
 		post_message(requestId, "feasiblesolution", s);
 	else
@@ -131,7 +129,7 @@ void SkolarisInstance::post_feasiblesolution(int requestId) const
 
 void SkolarisInstance::post_bestoverallsolution(int requestId) const
 {
-	string s;
+	std::string s;
 	if (stringifySolution(s, lockStore()->getBestOverallSolution()))
 		post_message(requestId, "bestoverallsolution", s);
 	else
@@ -140,7 +138,7 @@ void SkolarisInstance::post_bestoverallsolution(int requestId) const
 
 void SkolarisInstance::post_feasibleoverallsolution(int requestId) const
 {
-	string s;
+	std::string s;
 	if (stringifySolution(s, lockStore()->getFeasibleOverallSolution()))
 		post_message(requestId, "feasibleoverallsolution", s);
 	else
@@ -149,7 +147,7 @@ void SkolarisInstance::post_feasibleoverallsolution(int requestId) const
 
 void SkolarisInstance::post_currentsolutionchanged(Algorithm::ISolution *solutionPtr) const
 {
-	string s;
+	std::string s;
 	if (stringifyFitnessSummary(s, solutionPtr))
 		post_message("currentsolutionchanged", s);
 	else
@@ -158,7 +156,7 @@ void SkolarisInstance::post_currentsolutionchanged(Algorithm::ISolution *solutio
 
 void SkolarisInstance::post_bestsolutionfound(Algorithm::ISolution *solutionPtr) const
 {
-	string s;
+	std::string s;
 	if (stringifyFitnessSummary(s, solutionPtr))
 		post_message("bestsolutionfound", s);
 	else
@@ -167,7 +165,7 @@ void SkolarisInstance::post_bestsolutionfound(Algorithm::ISolution *solutionPtr)
 
 void SkolarisInstance::post_feasiblesolutionfound(Algorithm::ISolution *solutionPtr) const
 {
-	string s;
+	std::string s;
 	if (stringifyFitnessSummary(s, solutionPtr))
 		post_message("feasiblesolutionfound", s);
 	else
