@@ -48,6 +48,7 @@ SOURCES_CPP = \
 	$(wildcard src/gascheduler/src/timetable/constraints/*.cpp) \
 	$(wildcard src/gascheduler/src/timetable/fitness/*.cpp) \
 	$(wildcard src/gascheduler/src/timetable/model/*.cpp) \
+	$(wildcard src/gascheduler/src/timetable/prep/*.cpp) \
 	$(wildcard src/gascheduler/src/timetable/solution/*.cpp)
 
 SOURCES = $(SOURCES_CC) $(SOURCES_CPP)
