@@ -22,6 +22,20 @@ CFLAGSBUILD = -gsource-map -D_DEBUG -DUSE_ONE_THREAD -sDISABLE_EXCEPTION_CATCHIN
 LDFLAGSBUILD = -sDISABLE_EXCEPTION_CATCHING=0 --source-map-base https://localhost/SkolarisUI.Web/Plugin/src/ -gsource-map -sASSERTIONS=2 -sSAFE_HEAP
 endif
 
+ifeq "${MAKECMDGOALS}" "skolarisConsole"
+CXX = g++
+BUILD_DIR = build_console
+CFLAGSBUILD = -DNDEBUG -O3 -pthread -flto
+LDFLAGSBUILD = -O3 -flto -pthread
+endif
+
+ifeq "${MAKECMDGOALS}" "skolarisConsoleDebug"
+CXX = g++
+BUILD_DIR = build_console_debug
+CFLAGSBUILD = -g -D_DEBUG -pthread
+LDFLAGSBUILD = -pthread
+endif
+
 #$(info $$BUILD_DIR is [${BUILD_DIR}])
 
 MKDIR_P = @mkdir -p
@@ -55,6 +69,12 @@ SOURCES = $(SOURCES_CC) $(SOURCES_CPP)
 OBJS = $(SOURCES:%=$(BUILD_DIR)/%.o)
 DEPS = $(OBJS:.o=.d)
 
+SOURCES_CC_LINUX = $(filter-out src/wasm.cc, $(SOURCES_CC))
+SOURCES_CPP_LINUX = $(SOURCES_CPP) $(wildcard src/gascheduler/src/timetable/console/*.cpp)
+SOURCES_LINUX = $(SOURCES_CC_LINUX) $(SOURCES_CPP_LINUX)
+OBJS_LINUX = $(SOURCES_LINUX:%=$(BUILD_DIR)/%.o)
+DEPS_LINUX = $(OBJS_LINUX:.o=.d)
+
 $(BUILD_DIR)/%.cc.o: %.cc
 	$(MKDIR_P) $(dir $@)
 	$(CXX) $(CFLAGS) $(CFLAGSBUILD) -c $< -o $@
@@ -79,11 +99,20 @@ skolarisOneThreadDebug: $(OBJS)
 	$(MKDIR_P) debug
 	$(CXX) $(OBJS) -o debug/skolarisOneThread.html $(LDFLAGS) $(LDFLAGSONETHREAD) $(LDFLAGSBUILD)
 
+skolarisConsole: $(OBJS_LINUX)
+	$(MKDIR_P) release
+	$(CXX) $(OBJS_LINUX) -o release/skolarisConsole $(LDFLAGSBUILD)
+
+skolarisConsoleDebug: $(OBJS_LINUX)
+	$(MKDIR_P) debug
+	$(CXX) $(OBJS_LINUX) -o debug/skolarisConsole $(LDFLAGSBUILD)
+
 -include $(DEPS)
+-include $(DEPS_LINUX)
 
 .PHONY: clean
 clean:
-	@rm -rf build build_debug build_one_thread build_one_thread_debug release debug
+	@rm -rf build build_debug build_one_thread build_one_thread_debug build_console build_console_debug release debug
 
 .PHONY: install
 install:
