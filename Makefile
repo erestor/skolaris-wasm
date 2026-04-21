@@ -25,8 +25,8 @@ endif
 ifeq "${MAKECMDGOALS}" "skolarisConsole"
 CXX = g++
 BUILD_DIR = build_console
-CFLAGSBUILD = -DNDEBUG -O3 -pthread -flto
-LDFLAGSBUILD = -O3 -flto -pthread
+CFLAGSBUILD = -DNDEBUG -O3 -flto
+LDFLAGSBUILD = -O3 -flto
 endif
 
 ifeq "${MAKECMDGOALS}" "skolarisConsoleDebug"
@@ -45,7 +45,7 @@ INCCTOOLHU = /usr/local/include/ctoolhu
 INCLOCALSEARCH = /usr/local/include/localsearch
 INCDIRS = -I${INCBOOST} -I${INCCTOOLHU} -I${INCLOCALSEARCH}
 
-CFLAGS = -Wall -std=c++23 -fno-rtti ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED -DBOOST_NO_RTTI -DBOOST_NO_TYPEID -MMD -MP -Wno-deprecated-builtins
+CFLAGS = -Wall -std=c++23 -fno-rtti ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED -DBOOST_NO_RTTI -DBOOST_NO_TYPEID -MMD -MP
 
 LDFLAGS = -sALLOW_MEMORY_GROWTH -sINITIAL_MEMORY=64Mb -sMODULARIZE=1 -sTEXTDECODER=2 -sEXPORTED_FUNCTIONS='["_malloc", "_free"]' --shell-file src/html_template/shell_minimal.html
 LDFLAGSONETHREAD = -sEXPORT_NAME=SkolarisOneThreadModule -sEXPORTED_RUNTIME_METHODS='["cwrap", "lengthBytesUTF8", "stringToUTF8"]'

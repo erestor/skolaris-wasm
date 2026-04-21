@@ -6,9 +6,9 @@
 
 using namespace boost::property_tree;
 
-constexpr const static std::string SKOLARIS_VERSION_MAJOR{"12"};
-constexpr const static std::string SKOLARIS_VERSION_MINOR{"3"};
-constexpr const static std::string SKOLARIS_VERSION_PATCH{"1"};
+constexpr const static std::string SKOLARIS_VERSION_MAJOR{"13"};
+constexpr const static std::string SKOLARIS_VERSION_MINOR{"0"};
+constexpr const static std::string SKOLARIS_VERSION_PATCH{"0"};
 constexpr const static std::string SKOLARIS_VERSION{SKOLARIS_VERSION_MAJOR + "." + SKOLARIS_VERSION_MINOR + "." + SKOLARIS_VERSION_PATCH
 #ifdef _DEBUG
 + "D"
