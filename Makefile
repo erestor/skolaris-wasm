@@ -25,8 +25,8 @@ endif
 ifeq "${MAKECMDGOALS}" "skolarisConsole"
 CXX = g++
 BUILD_DIR = build_console
-CFLAGSBUILD = -DNDEBUG -O3 -pthread -flto
-LDFLAGSBUILD = -O3 -flto -pthread -L${LIBBOOST} -lboost_system
+CFLAGSBUILD = -DNDEBUG -O3 -flto
+LDFLAGSBUILD = -O3 -flto -L${LIBBOOST} -lboost_system
 endif
 
 ifeq "${MAKECMDGOALS}" "skolarisConsoleDebug"
@@ -46,7 +46,7 @@ INCCTOOLHU = /usr/local/include/ctoolhu
 INCLOCALSEARCH = /usr/local/include/localsearch
 INCDIRS = -I${INCBOOST} -I${INCCTOOLHU} -I${INCLOCALSEARCH}
 
-CFLAGS = -Wall -std=c++23 -fno-rtti ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED -DBOOST_NO_RTTI -DBOOST_NO_TYPEID -MMD -MP -Wno-deprecated-builtins
+CFLAGS = -Wall -std=c++23 -fno-rtti ${INCDIRS} -DBOOST_SYSTEM_NO_DEPRECATED -DBOOST_NO_RTTI -DBOOST_NO_TYPEID -MMD -MP
 
 LDFLAGS = -sALLOW_MEMORY_GROWTH -sINITIAL_MEMORY=64Mb -sMODULARIZE=1 -sTEXTDECODER=2 -sEXPORTED_FUNCTIONS='["_malloc", "_free"]' --shell-file src/html_template/shell_minimal.html
 LDFLAGSONETHREAD = -sEXPORT_NAME=SkolarisOneThreadModule -sEXPORTED_RUNTIME_METHODS='["cwrap", "lengthBytesUTF8", "stringToUTF8"]'
@@ -71,7 +71,7 @@ OBJS = $(SOURCES:%=$(BUILD_DIR)/%.o)
 DEPS = $(OBJS:.o=.d)
 
 SOURCES_CC_LINUX = $(filter-out src/wasm.cc, $(SOURCES_CC))
-SOURCES_CPP_LINUX = $(SOURCES_CPP) $(wildcard src/gascheduler/src/timetable/console/*.cpp)
+SOURCES_CPP_LINUX = $(SOURCES_CPP) $(wildcard src/gascheduler/src/console/*.cpp)
 SOURCES_LINUX = $(SOURCES_CC_LINUX) $(SOURCES_CPP_LINUX)
 OBJS_LINUX = $(SOURCES_LINUX:%=$(BUILD_DIR)/%.o)
 DEPS_LINUX = $(OBJS_LINUX:.o=.d)

@@ -1,6 +1,7 @@
 # Compiled source #
 ###################
 build/
+build_console/
 build_debug/
 build_one_thread/
 build_one_thread_debug/
