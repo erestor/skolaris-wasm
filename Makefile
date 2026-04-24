@@ -26,14 +26,14 @@ ifeq "${MAKECMDGOALS}" "skolarisConsole"
 CXX = g++
 BUILD_DIR = build_console
 CFLAGSBUILD = -DNDEBUG -O3 -flto
-LDFLAGSBUILD = -O3 -flto
+LDFLAGSBUILD = -O3 -flto -L${LIBBOOST} -lboost_system
 endif
 
 ifeq "${MAKECMDGOALS}" "skolarisConsoleDebug"
 CXX = g++
 BUILD_DIR = build_console_debug
 CFLAGSBUILD = -g -D_DEBUG -pthread
-LDFLAGSBUILD = -pthread
+LDFLAGSBUILD = -pthread -L${LIBBOOST} -lboost_system
 endif
 
 #$(info $$BUILD_DIR is [${BUILD_DIR}])
@@ -41,6 +41,7 @@ endif
 MKDIR_P = @mkdir -p
 
 INCBOOST = /usr/local/include
+LIBBOOST = /usr/local/lib
 INCCTOOLHU = /usr/local/include/ctoolhu
 INCLOCALSEARCH = /usr/local/include/localsearch
 INCDIRS = -I${INCBOOST} -I${INCCTOOLHU} -I${INCLOCALSEARCH}
