@@ -70,7 +70,7 @@ OBJS = $(SOURCES:%=$(BUILD_DIR)/%.o)
 DEPS = $(OBJS:.o=.d)
 
 SOURCES_CC_LINUX = $(filter-out src/wasm.cc, $(SOURCES_CC))
-SOURCES_CPP_LINUX = $(SOURCES_CPP) $(wildcard src/gascheduler/src/timetable/console/*.cpp)
+SOURCES_CPP_LINUX = $(SOURCES_CPP) $(wildcard src/gascheduler/src/console/*.cpp)
 SOURCES_LINUX = $(SOURCES_CC_LINUX) $(SOURCES_CPP_LINUX)
 OBJS_LINUX = $(SOURCES_LINUX:%=$(BUILD_DIR)/%.o)
 DEPS_LINUX = $(OBJS_LINUX:.o=.d)
