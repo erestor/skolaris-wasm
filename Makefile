@@ -1,4 +1,4 @@
-CXX = emcc
+CXX = em++
 TARGET = skolaris
 BUILD_DIR = build
 
